@@ -1,16 +1,16 @@
 import React from "react";
+import Link from "next/link";
 import { BlogPostItem } from "@/data/portfolio";
 
 export function BlogItem({ post }: { post: BlogPostItem }) {
   const clapsCount = post.claps ?? 0;
   const hasTags = post.tags && post.tags.length > 0;
+  const targetHref = post.slug ? `/blog/${post.slug}` : (post.url || "/blog");
 
   return (
     <div className="m-1">
-      <a
-        href={post.url || "https://github.com/GabrielBaiano"}
-        target={post.url?.startsWith("http") ? "_blank" : undefined}
-        rel={post.url?.startsWith("http") ? "noopener noreferrer" : undefined}
+      <Link
+        href={targetHref}
         data-cuelume-hover="tick"
         data-cuelume-press="true"
         className="block"
@@ -99,7 +99,7 @@ export function BlogItem({ post }: { post: BlogPostItem }) {
             </svg>
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   );
 }
