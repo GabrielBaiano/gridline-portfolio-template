@@ -91,3 +91,25 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes nav-title-bounce {
+  0%, 18% {
+    transform: translateX(0);
+  }
+  48%, 68% {
+    transform: translateX(calc(-1 * var(--marquee-offset, 0px)));
+  }
+  92%, 100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-nav-marquee {
+  animation: nav-title-bounce var(--marquee-duration, 8s) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform;
+}
+
+.animate-nav-marquee:hover {
+  animation-play-state: paused;
+}
+
