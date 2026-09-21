@@ -125,9 +125,9 @@ export const portfolioData: PortfolioConfig = {
     {
       company: "Flash",
       role: "Frontend Software Engineer (Mid-level)",
-      type: "Tempo integral",
-      period: "Jun 2025 - Ago 2026 · 1 ano 3 meses",
-      location: "São Paulo, Brasil · Híbrido",
+      type: "Full-time",
+      period: "Jun 2025 - Aug 2026 · 1 yr 3 mos",
+      location: "São Paulo, Brazil · Hybrid",
       bullets: [
         "Designed and implemented scalable frontend architecture using React.js, Next.js, and TypeScript with Micro Frontends",
         "Improved Core Web Vitals and reduced page load time by 40% using lazy loading, code splitting, and bundle optimization",
@@ -141,9 +141,9 @@ export const portfolioData: PortfolioConfig = {
     {
       company: "Compass UOL",
       role: "Mobile Developer Intern",
-      type: "Estágio",
-      period: "Out 2024 - Abr 2025 · 7 meses",
-      location: "São Paulo, Brasil · Remoto",
+      type: "Internship",
+      period: "Oct 2024 - Apr 2025 · 7 mos",
+      location: "São Paulo, Brazil · Remote",
       bullets: [
         "Developed cross-platform mobile applications using React Native and TypeScript",
         "Implemented navigation, async data handling, and API integration",
@@ -155,16 +155,16 @@ export const portfolioData: PortfolioConfig = {
     {
       company: "TECHSOLUTION",
       role: "Frontend Developer",
-      type: "Tempo integral",
-      period: "Mai 2023 - Nov 2024 · 1 ano 7 meses",
-      location: "Curitiba, Paraná, Brasil · Remoto",
+      type: "Full-time",
+      period: "May 2023 - Nov 2024 · 1 yr 7 mos",
+      location: "Curitiba, Paraná, Brazil · Remote",
       bullets: [
-        "Built scalable web applications using React.js, TypeScript, HTML, and CSS",
-        "Implemented BFF (Backend for Frontend) using Node.js and Prisma ORM, improving data flow efficiency by 15%",
-        "Managed complex application state using Redux and Context API",
-        "Integrated RESTful APIs and contributed to full feature lifecycle (development, testing, deployment)"
+        "Built responsive, accessible web applications using React.js, Next.js, and TypeScript",
+        "Developed Backend-for-Frontend (BFF) layers with Node.js and Prisma ORM to optimize client data pipelines",
+        "Maintained robust application state using Redux Toolkit, Context API, and custom hooks",
+        "Participated in code reviews, sprint planning, and architectural discussions"
       ],
-      skills: ["React.js", "TypeScript", "Node.js", "Prisma ORM", "Redux", "REST APIs"]
+      skills: ["React.js", "Next.js", "TypeScript", "Node.js", "Prisma", "Redux", "REST API", "Git"]
     }
   ],
 
@@ -243,299 +243,125 @@ export const portfolioData: PortfolioConfig = {
 
   blogs: [
     {
-      slug: "nextjs-15-architecture-server-actions",
-      title: "Next.js 15 & Architecture: Server Actions and Partial Prerendering",
+      slug: "the-frontend-performance-paradox-and-the-duck",
+      title: "The Frontend Performance Paradox and the Duck",
       date: "Sep 2026",
-      readTime: "5 min read",
-      claps: 14,
-      tags: ["Next.js", "React 19", "Architecture", "Performance"],
-      url: "/blog/nextjs-15-architecture-server-actions",
-      summary: "A deep dive into scalable frontend architecture using Next.js 15, React 19 Server Actions, and Partial Prerendering (PPR) for high-performance web applications.",
+      readTime: "12 min read",
+      claps: 74,
+      tags: ["Frontend", "Performance", "Architecture", "Engineering"],
+      url: "https://www.tabnews.com.br/gabrielbaiano/o-paradoxo-da-performance-no-frontend-e-o-pato",
+      summary: "A deep reflection on why modern frontend engineering normalized throwing abstractions, dependencies, and hundreds of kilobytes of JavaScript at every problem until the developer itself became a duck: able to swim, walk, and fly, but master of none.",
       sections: [
         {
-          heading: "The Shift to React 19 and Next.js 15",
+          heading: "The Paradox of Modern Web Performance",
           paragraphs: [
-            "With Next.js 15 and React 19 now in general availability, the mental model for full-stack frontend architecture has matured. The earlier friction between client-side state and server components has crystallized into a clean separation of concerns: heavy compute, data fetching, and security-critical operations live on the server, while client components are reserved for genuinely interactive DOM primitives.",
-            "One of the most consequential changes in Next.js 15 is the deprecation of aggressive default request caching. In Next.js 14, `fetch` requests were cached by default unless specified otherwise. In Next.js 15, requests are uncached by default (`cache: 'no-store'`), eliminating subtle stale data bugs in production dashboards."
+            "Front-end... We are probably one of the disciplines that talk the most about performance and, at the same time, one of the most normalized when it comes to throwing abstractions, dependencies, and JavaScript at a problem until it disappears.",
+            "We talk about Core Web Vitals. We talk about tree shaking. We talk about lazy loading, code splitting, Server Components, SSR, streaming, hydration, and bundle reduction.",
+            "Then Monday arrives and we need to render a seven-bar chart in an administrative dashboard:"
+          ],
+          code: {
+            language: "bash",
+            code: "npm install some-heavy-charting-library"
+          }
+        },
+        {
+          paragraphs: [
+            "Suddenly, we inherit dozens or hundreds of kilobytes of JavaScript, transitive dependencies, abstractions we will never touch, and a massive API surface to solve what is, conceptually, drawing seven rectangles on a screen.",
+            "This is where the Frontend Performance Paradox is born: we care deeply about performance — right after building systems that require relentless optimization just to recover it."
           ],
           callout: {
             icon: "💡",
-            text: "Explicit caching is now the golden rule. Use `unstable_cache` or route segment configs when you deliberately want persistence, rather than relying on framework magic."
+            text: "Architecture is the cumulative sum of hundreds of locally reasonable decisions. Nobody decides to add 2 MB of JS in one go — it happens through 30 decisions of 'not reinventing the wheel.'"
           }
         },
         {
-          heading: "Eliminating API Boilerplate with Server Actions",
+          heading: "Frontend Is Not Just 'Building Little Screens'",
           paragraphs: [
-            "Before Server Actions, updating a single record required authoring a route handler (`/api/records/route.ts`), configuring request validation, writing a client-side fetcher with SWR or React Query, and managing loading states manually.",
-            "With Server Actions, the mutation function is colocated with your feature logic. Using React 19's `useActionState` and `useFormStatus`, we achieve native progressive enhancement with full type inference across the network boundary."
+            "There is still a curious misconception that frontend is simply the visual presentation layer of software: buttons, modals, forms, tables, and charts.",
+            "Modern frontend stopped being merely presentation a long time ago. A modern React application manages complex client-side caching, server state synchronization, authentication, routing, validation, optimistic updates, internationalization, accessibility (a11y), observability, telemetry, and a considerable amount of critical business logic.",
+            "React, Next.js, Angular, Vue, Nuxt, and SvelteKit do not exist simply because developers wanted different syntaxes for writing a button. They exist because we are attempting to solve a difficult organizational problem: how to build increasingly complex applications, with more features, across larger teams, without losing the ability to ship software.",
+            "This fostered a pervasive culture in frontend: ship fast, optimize later. Not out of negligence, but incentives. A feature shipped today provides immediate, measurable business value. An extra dependency that adds 80 kB to the bundle rarely triggers an emergency retro."
+          ]
+        },
+        {
+          heading: "The Frontend Is Full of Ducks",
+          paragraphs: [
+            "There is a metaphor I frequently return to: modern frontend is full of ducks.",
+            "The duck swims. The duck walks. The duck flies. It can do practically everything. Yet it is rarely the best animal at any single one of those tasks.",
+            "Most modern frontend tooling behaves precisely like this: extraordinarily generalist. Need server-side rendering? Supported. Single Page App? Supported. Static generation? Supported. API routes? Streaming? Middleware? Caching? Hybrid architecture? All included out of the box.",
+            "Convenience is an essential quality in developer tooling. But the problem begins when convenience is conflated with efficiency. We no longer choose the tool that performs a specific task best; we choose the one that solves the greatest number of problems adequately well.",
+            "Economically, this makes sense for organizations: companies want engineers who deliver across an ecosystem where every problem has an existing package: npm install solved-problem."
+          ]
+        },
+        {
+          heading: "The Sprint Needs to Finish",
+          paragraphs: [
+            "Corporate software operates against non-negotiable deadlines. If a third-party library solves a problem in an afternoon and crafting a lightweight custom implementation takes three days, there is rational business pressure to import the library.",
+            "Multiply this across forms, tables, charts, dates, auth, analytics, state management, i18n, validation, and animations. In isolation, practically none of those individual decisions were wrong. But collectively, they construct the monster."
+          ]
+        },
+        {
+          heading: "When Even the Frontend Gets Divided (Micro Frontends)",
+          paragraphs: [
+            "Consider micro frontends: bringing microservices philosophy to the user interface. Dividing an application into smaller units that can be developed, tested, and deployed independently.",
+            "We built systems so massive that we had to introduce architectural fault lines within the user interface itself just to preserve organizational autonomy.",
+            "Micro frontends reduce the blast radius of changes and unlock decoupled CI/CD pipelines. But they introduce their own overhead: cross-application contracts, runtime orchestration, duplicated shared dependencies, and heightened operational complexity.",
+            "We trade technical simplicity for organizational independence. Frontend architecture is rarely determined solely by performance; it is shaped by team topology and delivery velocity."
+          ]
+        },
+        {
+          heading: "The Web Wasn't Always Built Like This",
+          paragraphs: [
+            "There is an easy nostalgia trap here: claiming that 'things were better in the old days.' They were not. Browser compatibility was brutal, Internet Explorer required dark magic, and CSS had severe limitations.",
+            "However, there was a foundational architectural difference: the browser was not expected to be the container where the entire application lived.",
+            "For decades, the web operated with brutal simplicity: the server received a request, fetched data, injected it into a template, and returned static HTML to the client."
           ],
           code: {
-            language: "typescript",
-            code: `'use server';
-
-import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-
-const UpdateProfileSchema = z.object({
-  name: z.string().min(2),
-  bio: z.string().max(280),
-});
-
-export async function updateProfile(prevState: unknown, formData: FormData) {
-  const parsed = UpdateProfileSchema.safeParse({
-    name: formData.get('name'),
-    bio: formData.get('bio'),
-  });
-
-  if (!parsed.success) {
-    return { error: parsed.error.flatten().fieldErrors };
-  }
-
-  await db.user.update({ where: { id: userId }, data: parsed.data });
-  revalidatePath('/profile');
-  return { success: true };
-}`
+            language: "text",
+            code: "Traditional Model:\nRequest -> Server -> Database -> Template -> HTML -> Browser\n\nModern Client Hydration Pipeline:\nRequest -> CDN -> SSR / RSC -> API -> Client Component -> Hydration -> State -> Cache -> Re-render"
           }
         },
         {
-          heading: "Partial Prerendering (PPR) in Production",
+          heading: "The Curious Return of Old Principles",
           paragraphs: [
-            "Partial Prerendering combines the speed of static site generation (SSG) with the dynamism of server-side streaming. The static shell—including navigation, hero banners, and dashed container layouts—is served immediately from edge CDNs.",
-            "Dynamic holes wrapped in `<Suspense>` stream in asynchronously over the same HTTP response. For high-traffic portfolios and e-commerce platforms, this yields sub-100ms Time to First Byte (TTFB) while preserving personalized real-time user data."
-          ]
-        }
-      ]
-    },
-    {
-      slug: "building-reactive-charts-pure-svg",
-      title: "Building Reactive Charts with Pure SVG and React",
-      date: "Jul 2026",
-      readTime: "7 min read",
-      claps: 7,
-      tags: ["SVG", "React", "TypeScript", "Performance"],
-      url: "/blog/building-reactive-charts-pure-svg",
-      summary: "Why and how we built pure-svg-charts with zero canvas or third-party visualization dependencies, achieving sub-millisecond renders and accessible DOM nodes.",
-      sections: [
-        {
-          heading: "Why Avoid Heavy Canvas and Chart Libraries?",
-          paragraphs: [
-            "When building performance-sensitive frontends, importing Chart.js, D3, or ECharts often introduces 150KB–400KB of minified JavaScript. Canvas-based charts also treat your data as a black box of pixels, forfeiting semantic accessibility, clean dark-mode CSS variable integration, and sharp rendering across high-DPI displays.",
-            "We wanted an alternative: a chart primitive library written strictly in SVG, with zero runtime dependencies, O(1) DOM overhead, and native responsive scaling through SVG's built-in `viewBox` coordinate system."
+            "After years of offloading execution to the client, frontend has rediscovered the server: SSR, Static Site Generation, React Server Components, Streaming HTML, Server Actions, Islands Architecture, and Progressive Enhancement.",
+            "If computation can be resolved before reaching the client, why force the user's browser to do the heavy lifting? Perhaps classic server-driven architecture wasn't so obsolete after all."
           ]
         },
         {
-          heading: "The Geometry: Bezier Curves & Coordinate Mapping",
+          heading: "How pure-svg-charts Started",
           paragraphs: [
-            "To render smooth cubic bezier lines without external math dependencies, we map raw data tuples `[x, y]` into a normalized SVG bounding box. For any series of points, cubic control points are calculated using Catmull-Rom or cardinal spline interpolation.",
-            "Because SVG elements are standard DOM nodes, styling themes is as effortless as `fill=\"var(--brand)\"` and `stroke=\"var(--border)\"`. Dark mode switches happen instantaneously with 0 milliseconds of JavaScript re-computation."
+            "This entire reflection began for me from a straightforward requirement: I needed to render interactive charts in React.",
+            "Libraries like Recharts, Chart.js, D3, and Victory are powerful, but for most dashboards, the core requirements are simple: line, bar, area, axis, tooltip.",
+            "I ran a personal experiment: how far can a React chart library go if the primary architectural constraint is doing less?",
+            "That led to pure-svg-charts: native SVG, zero runtime dependencies, and a bundle footprint under 12 kB gzip."
           ],
           code: {
-            language: "typescript",
-            code: `export function generateBezierPath(points: [number, number][]): string {
-  if (points.length < 2) return '';
-  return points.reduce((acc, [x, y], i, arr) => {
-    if (i === 0) return \`M \${x} \${y}\`;
-    const [prevX, prevY] = arr[i - 1];
-    const cpX = (prevX + x) / 2;
-    return \`\${acc} C \${cpX} \${prevY}, \${cpX} \${y}, \${x} \${y}\`;
-  }, '');
-}`
-          },
-          callout: {
-            icon: "⚡",
-            text: "By using SVG viewBox dimensions (e.g. 0 0 600 200), charts scale smoothly from mobile viewports to 4K displays without blurring or manual canvas resolution re-rendering."
+            language: "text",
+            code: "Benchmark Comparison (5,000 Data Points):\n----------------------------------------------------------------------------------\nLibrary              Engine        Gzip       Dependencies   Mount Time   DOM Nodes\n----------------------------------------------------------------------------------\npure-svg-charts      SVG           11.1 kB    0              1.45 ms      33\nRecharts             SVG + D3      162.4 kB   14             132.50 ms    106\nChart.js + react     Canvas        68.2 kB    4              0.45 ms      7\nVictory              SVG + D3      184.6 kB   22             48.20 ms     69\n----------------------------------------------------------------------------------"
           }
         },
         {
-          heading: "Accessibility by Default",
+          heading: "In the End, the Developer Became the Duck",
           paragraphs: [
-            "Every generated chart outputs `<desc>` and `<title>` elements with detailed summary statistics. Keyboard navigability allows screen reader users to tab across individual data points and inspect numerical values natively."
-          ]
-        }
-      ]
-    },
-    {
-      slug: "mastering-typescript-generics",
-      title: "Mastering TypeScript Generics and Clean Architecture",
-      date: "Jul 2026",
-      readTime: "6 min read",
-      claps: 5,
-      tags: ["TypeScript", "JavaScript", "React", "Architecture"],
-      url: "/blog/mastering-typescript-generics",
-      summary: "Practical generic constraints, mapped types, and conditional typing patterns for designing robust frontend architecture without excessive type gymnastics.",
-      sections: [
-        {
-          heading: "The Pragmatic Boundary of Generics",
-          paragraphs: [
-            "Generics are one of TypeScript's most celebrated features, yet they are frequently misused. Over-engineered generic types often degrade editor LSP performance, generate opaque compiler errors, and create steep cognitive friction for teams.",
-            "Senior frontend engineering is about finding the pragmatic sweet spot: writing generics that amplify developer productivity, ensure strict API contracts, and fade into the background during everyday feature work."
+            "Look at a modern Frontend Engineer job posting:",
+            "HTML, CSS, JavaScript, TypeScript, React... Next.js, SSR, SSG, React Query, Redux, WebSockets... Jest, RTL, Cypress, Playwright, Storybook, Design Systems, A11y, Core Web Vitals... Node.js, Docker, CI/CD, GitHub Actions, AWS/GCP, Kubernetes, Observability, Datadog, OpenTelemetry... Kafka, Redis, BFF, OAuth, Terraform.",
+            "At some point, you read the spec and wonder: am I still applying for frontend?",
+            "The frontend engineer became the duck of software engineering: swimming, walking, and occasionally flying whenever someone puts Kubernetes on the job description."
           ]
         },
         {
-          heading: "Type-Safe API Contracts and Response Unwrapping",
+          heading: "Learning to Do Less",
           paragraphs: [
-            "A common pattern in production React applications is standardizing API client responses. By combining generic constraints with conditional unwrapping, we guarantee that consumers cannot access payload properties without first narrowing the success state."
-          ],
-          code: {
-            language: "typescript",
-            code: `export type ApiResponse<T> =
-  | { success: true; data: T; timestamp: number }
-  | { success: false; error: { code: string; message: string } };
-
-export async function fetchApi<T>(
-  url: string,
-  options?: RequestInit
-): Promise<ApiResponse<T>> {
-  try {
-    const res = await fetch(url, options);
-    const json = await res.json();
-    if (!res.ok) {
-      return { success: false, error: json.error ?? { code: 'HTTP_ERR', message: res.statusText } };
-    }
-    return { success: true, data: json as T, timestamp: Date.now() };
-  } catch (err) {
-    return { success: false, error: { code: 'NETWORK_ERR', message: (err as Error).message } };
-  }
-}`
-          },
-          callout: {
-            icon: "🛡️",
-            text: "Favor discriminating unions over optional nullables. Discriminated unions force compiler-checked exhaustiveness and eliminate runtime 'cannot read property of undefined' errors."
-          }
-        }
-      ]
-    },
-    {
-      slug: "claude-code-agentic-workflow-engineering",
-      title: "Claude Code & Agentic Workflow Engineering",
-      date: "Mar 2026",
-      readTime: "6 min read",
-      claps: 19,
-      tags: ["AI", "Agents", "Next.js", "Automation"],
-      url: "/blog/claude-code-agentic-workflow-engineering",
-      summary: "Engineering deterministic software development workflows with agentic AI tooling, terminal loops, and automated verification.",
-      sections: [
-        {
-          heading: "Beyond Conversational Code Generation",
-          paragraphs: [
-            "The shift from conversational AI coding assistants to autonomous agentic tools represents a paradigm leap in software engineering. Instead of asking for code snippets and pasting them by hand, modern agentic environments operate directly in the workspace: inspecting directories, running lint suites, executing tests, and verifying runtime DOM states.",
-            "However, agents are only as reliable as their verification loop. Without strict feedback mechanisms, agents risk accumulating subtle regressions."
-          ]
-        },
-        {
-          heading: "Deterministic Verification Pipelines",
-          paragraphs: [
-            "In our development setup, we institute three automated checkpoints before declaring any task complete:",
-            "1. Static type checking with `tsc --noEmit` and build bundle analysis with `next build`.",
-            "2. Headless browser inspection via the Chrome DevTools Protocol (CDP) to measure actual layout bounding rects and verify pixel symmetry.",
-            "3. Automated runtime error interceptors that trap unhandled exceptions and console warnings across all routes."
+            "The takeaway isn't to abandon modern frameworks or hand-craft every dropdown from scratch.",
+            "It is about asking the question that modern hype often obscures: what is the minimal amount of technology required to solve this problem well?",
+            "Every abstraction, layer, and third-party dependency carries a non-zero operational and cognitive cost. Convenience doesn't make that cost vanish; it just makes it invisible until production.",
+            "Technical responsibility isn't blindly chasing raw performance, nor is it shipping at any cost. It is consciously understanding what we are buying and what we are paying with every architectural decision."
           ],
           callout: {
-            icon: "🤖",
-            text: "Treat agentic AI like an enthusiastic mid-level developer: provide crystal-clear design constraints, enforce automated test gates, and verify the resulting work before committing."
+            icon: "🚀",
+            text: "Read the original publication and join the discussion on TabNews: https://www.tabnews.com.br/gabrielbaiano/o-paradoxo-da-performance-no-frontend-e-o-pato"
           }
-        }
-      ]
-    },
-    {
-      slug: "high-precision-svg-visualizations",
-      title: "High-Precision SVG Visualizations without Heavy Canvas",
-      date: "Feb 2026",
-      readTime: "5 min read",
-      claps: 11,
-      tags: ["SVG", "Frontend", "Math", "Zero-Dependency"],
-      url: "/blog/high-precision-svg-visualizations",
-      summary: "A quantitative comparison between HTML5 Canvas and native SVG for developer dashboards, DOM node budgeting, and crisp rendering across high-DPI displays.",
-      sections: [
-        {
-          heading: "Canvas vs. SVG: The Performance Reality",
-          paragraphs: [
-            "A common myth in web development is that `<canvas>` is always faster than SVG. While canvas shines when rendering 100,000 continuous particles in 60fps WebGL simulations, typical developer dashboards render between 50 and 500 data points.",
-            "Within this range, SVG consistently outperforms Canvas in perceptual responsiveness, memory footprint, and CSS theme integration."
-          ]
-        },
-        {
-          heading: "Retina Scaling and Zero-Memory Overhead",
-          paragraphs: [
-            "To make a `<canvas>` look sharp on an Apple Retina screen, you must scale its width and height by `window.devicePixelRatio` (usually 2x or 3x) and multiply the canvas 2D context by the scale factor. This quadruples the backing bitmap memory buffer.",
-            "SVG requires zero pixel buffers. Vector math renders directly through GPU rasterization pipelines at native display resolution, consuming negligible RAM."
-          ]
-        }
-      ]
-    },
-    {
-      slug: "micro-interactions-audio-ux",
-      title: "Micro-interactions & Audio UX with Web Audio API",
-      date: "Jan 2026",
-      readTime: "4 min read",
-      claps: 8,
-      tags: ["Web Audio API", "UX", "Micro-interactions"],
-      url: "/blog/micro-interactions-audio-ux",
-      summary: "Implementing tactile sound effects directly via synthetic audio waveforms, avoiding static MP3 network requests and delivering zero-latency feedback.",
-      sections: [
-        {
-          heading: "Tactile Digital Physicality",
-          paragraphs: [
-            "Software feels more tangible when visual feedback is coupled with auditory confirmation. However, traditional approaches to web sound—loading external `.mp3` or `.wav` files—introduce network latency, audio decode delays, and mobile autoplay restrictions.",
-            "By synthesizing mechanical click and tick waveforms using the Web Audio API (`AudioContext`), we achieve instantaneous sub-5ms feedback with zero asset downloads."
-          ],
-          code: {
-            language: "typescript",
-            code: `export function playSyntheticTick(ctx: AudioContext) {
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(1800, ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.03);
-
-  gain.gain.setValueAtTime(0.08, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start();
-  osc.stop(ctx.currentTime + 0.03);
-}`
-          }
-        }
-      ]
-    },
-    {
-      slug: "scalable-design-systems-tailwind",
-      title: "Scalable Design Systems with Tailwind CSS & CSS Variables",
-      date: "Nov 2025",
-      readTime: "5 min read",
-      claps: 12,
-      tags: ["Design Systems", "TailwindCSS", "CSS", "Theming"],
-      url: "/blog/scalable-design-systems-tailwind",
-      summary: "Structuring design token primitives with CSS variables and Tailwind utility mapping for instant, flicker-free dark mode and consistent spacing scales.",
-      sections: [
-        {
-          heading: "Decoupling Tokens from Utility Classes",
-          paragraphs: [
-            "Hardcoding hex colors like `bg-[#181818]` across dozens of components creates tech debt that slows refactors to a crawl. A scalable design system declares high-level tokens in root CSS variables (`:root` and `.dark`), mapping them cleanly into `tailwind.config.ts`.",
-            "This enables immediate global theme changes, seamless dark mode transitions, and architectural consistency across all pages and subpages."
-          ]
-        }
-      ]
-    },
-    {
-      slug: "automated-github-releases-tabnews",
-      title: "Automated GitHub Release Publisher for Developer Communities",
-      date: "Oct 2025",
-      readTime: "4 min read",
-      claps: 9,
-      tags: ["Automation", "Open Source", "CLI", "Node.js"],
-      url: "/blog/automated-github-releases-tabnews",
-      summary: "Automating GitHub release notifications and markdown translation to TabNews using GitHub Actions, LLM prompt engineering, and resilient REST clients.",
-      sections: [
-        {
-          heading: "Connecting Developer Workflows to Communities",
-          paragraphs: [
-            "Publishing software releases manually across developer portals is repetitive and error-prone. `tabnews-release-publisher` automates this entire lifecycle by capturing GitHub release webhooks, preserving code formatting, and translating technical release summaries seamlessly."
-          ]
         }
       ]
     }

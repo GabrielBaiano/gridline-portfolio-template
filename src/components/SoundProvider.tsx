@@ -36,11 +36,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("soundEffectsEnabled");
-      if (saved !== null) {
-        const enabled = saved !== "false";
+      const saved1 = localStorage.getItem("soundEffectsEnabled");
+      const saved2 = localStorage.getItem("portfolio_sound_muted");
+      if (saved1 !== null) {
+        const enabled = saved1 !== "false";
         setIsMuted(!enabled);
         isMutedRef.current = !enabled;
+      } else if (saved2 !== null) {
+        const muted = saved2 === "true";
+        setIsMuted(muted);
+        isMutedRef.current = muted;
       }
     } catch {
       // ignore
@@ -60,9 +65,6 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         return null;
       }
     }
-    if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
-      audioCtxRef.current.resume().catch(() => {});
-    }
     return audioCtxRef.current;
   }, []);
 
@@ -76,235 +78,149 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     };
     window.addEventListener("pointerdown", unlock, { once: true, passive: true });
     window.addEventListener("keydown", unlock, { once: true, passive: true });
+    window.addEventListener("touchstart", unlock, { once: true, passive: true });
     return () => {
       window.removeEventListener("pointerdown", unlock);
       window.removeEventListener("keydown", unlock);
+      window.removeEventListener("touchstart", unlock);
     };
   }, [getAudioContext]);
 
-  // Noise generator helper
-  const createNoiseBuffer = useCallback((ctx: AudioContext): AudioBuffer => {
-    const bufferSize = ctx.sampleRate * 0.1; // 100ms noise
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const output = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      output[i] = Math.random() * 2 - 1;
+  const executeSound = useCallback((ctx: AudioContext, type: SoundType) => {
+    const now = ctx.currentTime;
+
+    switch (type) {
+      case "tick": {
+        // Crisp, tactile UI hover blip (800Hz down to 400Hz)
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(850, now);
+        osc.frequency.exponentialRampToValueAtTime(420, now + 0.025);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.026);
+        break;
+      }
+
+      case "press": {
+        // Satisfying mechanical click (450Hz down to 180Hz)
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.045);
+
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.046);
+        break;
+      }
+
+      case "release": {
+        // Subtle upward chirp
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(520, now + 0.03);
+
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.031);
+        break;
+      }
+
+      case "toggle": {
+        // Distinct two-tone switch blip
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = "sine";
+        osc1.frequency.setValueAtTime(520, now);
+        osc1.frequency.exponentialRampToValueAtTime(380, now + 0.02);
+        gain1.gain.setValueAtTime(0.09, now);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.021);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = "sine";
+        osc2.frequency.setValueAtTime(740, now + 0.025);
+        osc2.frequency.exponentialRampToValueAtTime(560, now + 0.05);
+        gain2.gain.setValueAtTime(0.09, now + 0.025);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.025);
+        osc2.stop(now + 0.051);
+        break;
+      }
+
+      case "chime": {
+        // Melodic chime for milestones / claps
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = "sine";
+        osc1.frequency.setValueAtTime(1046.5, now); // C6
+        gain1.gain.setValueAtTime(0.1, now);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.23);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = "sine";
+        osc2.frequency.setValueAtTime(1568, now + 0.06); // G6
+        gain2.gain.setValueAtTime(0.09, now + 0.06);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.06);
+        osc2.stop(now + 0.33);
+        break;
+      }
     }
-    return buffer;
   }, []);
 
   const playSound = useCallback(
     (type: SoundType) => {
       if (isMutedRef.current) return;
       const ctx = getAudioContext();
-      if (!ctx || ctx.state !== "running") return;
+      if (!ctx) return;
 
-      const now = ctx.currentTime;
-
-      switch (type) {
-        case "tick": {
-          // Bandpass noise + soft high sine tone
-          const master = ctx.createGain();
-          master.gain.value = 0.4;
-          master.connect(ctx.destination);
-
-          // Noise layer
-          const noise = ctx.createBufferSource();
-          noise.buffer = createNoiseBuffer(ctx);
-          const filter = ctx.createBiquadFilter();
-          filter.type = "bandpass";
-          filter.frequency.value = 5400;
-          filter.Q.value = 1.8;
-
-          const noiseGain = ctx.createGain();
-          noiseGain.gain.setValueAtTime(0.0001, now);
-          noiseGain.gain.exponentialRampToValueAtTime(0.14, now + 0.001);
-          noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.019);
-
-          noise.connect(filter).connect(noiseGain).connect(master);
-          noise.start(now);
-          noise.stop(now + 0.02);
-
-          // Tone layer
-          const osc = ctx.createOscillator();
-          osc.type = "sine";
-          osc.frequency.value = 2600;
-
-          const toneGain = ctx.createGain();
-          toneGain.gain.setValueAtTime(0.0001, now);
-          toneGain.gain.exponentialRampToValueAtTime(0.018, now + 0.001);
-          toneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.013);
-
-          osc.connect(toneGain).connect(master);
-          osc.start(now);
-          osc.stop(now + 0.015);
-
-          setTimeout(() => master.disconnect(), 100);
-          break;
-        }
-
-        case "press": {
-          const master = ctx.createGain();
-          master.gain.value = 0.4;
-          master.connect(ctx.destination);
-
-          const noise = ctx.createBufferSource();
-          noise.buffer = createNoiseBuffer(ctx);
-          const filter = ctx.createBiquadFilter();
-          filter.type = "bandpass";
-          filter.frequency.value = 1700;
-          filter.Q.value = 1.4;
-
-          const noiseGain = ctx.createGain();
-          noiseGain.gain.setValueAtTime(0.0001, now);
-          noiseGain.gain.exponentialRampToValueAtTime(0.13, now + 0.001);
-          noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.021);
-
-          noise.connect(filter).connect(noiseGain).connect(master);
-          noise.start(now);
-          noise.stop(now + 0.025);
-
-          setTimeout(() => master.disconnect(), 100);
-          break;
-        }
-
-        case "release": {
-          const master = ctx.createGain();
-          master.gain.value = 0.4;
-          master.connect(ctx.destination);
-
-          const noise = ctx.createBufferSource();
-          noise.buffer = createNoiseBuffer(ctx);
-          const filter = ctx.createBiquadFilter();
-          filter.type = "bandpass";
-          filter.frequency.value = 4600;
-          filter.Q.value = 1.8;
-
-          const noiseGain = ctx.createGain();
-          noiseGain.gain.setValueAtTime(0.0001, now);
-          noiseGain.gain.exponentialRampToValueAtTime(0.12, now + 0.001);
-          noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.017);
-
-          noise.connect(filter).connect(noiseGain).connect(master);
-          noise.start(now);
-          noise.stop(now + 0.02);
-
-          const osc = ctx.createOscillator();
-          osc.type = "sine";
-          osc.frequency.value = 3200;
-
-          const toneGain = ctx.createGain();
-          toneGain.gain.setValueAtTime(0.0001, now + 0.006);
-          toneGain.gain.exponentialRampToValueAtTime(0.02, now + 0.007);
-          toneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.057);
-
-          osc.connect(toneGain).connect(master);
-          osc.start(now + 0.006);
-          osc.stop(now + 0.06);
-
-          setTimeout(() => master.disconnect(), 120);
-          break;
-        }
-
-        case "toggle": {
-          const master = ctx.createGain();
-          master.gain.value = 0.4;
-          master.connect(ctx.destination);
-
-          // Click 1
-          const noise1 = ctx.createBufferSource();
-          noise1.buffer = createNoiseBuffer(ctx);
-          const filter1 = ctx.createBiquadFilter();
-          filter1.type = "bandpass";
-          filter1.frequency.value = 2200;
-          filter1.Q.value = 1.6;
-
-          const gain1 = ctx.createGain();
-          gain1.gain.setValueAtTime(0.0001, now);
-          gain1.gain.exponentialRampToValueAtTime(0.12, now + 0.001);
-          gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.017);
-
-          noise1.connect(filter1).connect(gain1).connect(master);
-          noise1.start(now);
-          noise1.stop(now + 0.02);
-
-          // Click 2
-          const noise2 = ctx.createBufferSource();
-          noise2.buffer = createNoiseBuffer(ctx);
-          const filter2 = ctx.createBiquadFilter();
-          filter2.type = "bandpass";
-          filter2.frequency.value = 3800;
-          filter2.Q.value = 1.6;
-
-          const gain2 = ctx.createGain();
-          gain2.gain.setValueAtTime(0.0001, now + 0.024);
-          gain2.gain.exponentialRampToValueAtTime(0.1, now + 0.025);
-          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
-
-          noise2.connect(filter2).connect(gain2).connect(master);
-          noise2.start(now + 0.024);
-          noise2.stop(now + 0.05);
-
-          setTimeout(() => master.disconnect(), 150);
-          break;
-        }
-
-        case "chime": {
-          const master = ctx.createGain();
-          master.gain.value = 0.5;
-          master.connect(ctx.destination);
-
-          // Shimmer delay
-          const delay = ctx.createDelay(1);
-          delay.delayTime.value = 0.12;
-          const shimmerFilter = ctx.createBiquadFilter();
-          shimmerFilter.type = "lowpass";
-          shimmerFilter.frequency.value = 4000;
-          const feedback = ctx.createGain();
-          feedback.gain.value = 0.25;
-          const wet = ctx.createGain();
-          wet.gain.value = 0.18;
-
-          master.connect(delay);
-          delay.connect(shimmerFilter).connect(feedback).connect(delay);
-          shimmerFilter.connect(wet).connect(ctx.destination);
-
-          // Tone 1: 1046.5Hz
-          const osc1 = ctx.createOscillator();
-          osc1.type = "sine";
-          osc1.frequency.value = 1046.5;
-          const gain1 = ctx.createGain();
-          gain1.gain.setValueAtTime(0.0001, now);
-          gain1.gain.exponentialRampToValueAtTime(0.09, now + 0.006);
-          gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.226);
-          osc1.connect(gain1).connect(master);
-          osc1.start(now);
-          osc1.stop(now + 0.25);
-
-          // Tone 2: 1568Hz
-          const osc2 = ctx.createOscillator();
-          osc2.type = "sine";
-          osc2.frequency.value = 1568;
-          const gain2 = ctx.createGain();
-          gain2.gain.setValueAtTime(0.0001, now + 0.09);
-          gain2.gain.exponentialRampToValueAtTime(0.08, now + 0.096);
-          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.356);
-          osc2.connect(gain2).connect(master);
-          osc2.start(now + 0.09);
-          osc2.stop(now + 0.38);
-
-          setTimeout(() => {
-            master.disconnect();
-            delay.disconnect();
-            shimmerFilter.disconnect();
-            feedback.disconnect();
-            wet.disconnect();
-          }, 800);
-          break;
-        }
+      if (ctx.state === "suspended") {
+        ctx
+          .resume()
+          .then(() => {
+            executeSound(ctx, type);
+          })
+          .catch(() => {});
+      } else {
+        executeSound(ctx, type);
       }
     },
-    [getAudioContext, createNoiseBuffer]
+    [getAudioContext, executeSound]
   );
 
   // Global event delegation for data-cuelume attributes
@@ -312,12 +228,12 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     if (typeof document === "undefined") return;
 
     const handlePointerEnter = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") return;
+      if (e.pointerType !== "mouse" && e.pointerType !== "") return;
       const target = (e.target as Element)?.closest?.("[data-cuelume-hover]");
       if (!target) return;
 
       const now = performance.now();
-      if (now - lastHoverTime.current < 150) return;
+      if (now - lastHoverTime.current < 120) return;
       lastHoverTime.current = now;
 
       const sound = (target.getAttribute("data-cuelume-hover") || "tick") as SoundType;
@@ -361,6 +277,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     setIsMuted(next);
     try {
       localStorage.setItem("soundEffectsEnabled", String(!next));
+      localStorage.setItem("portfolio_sound_muted", String(next));
     } catch {
       // ignore
     }
