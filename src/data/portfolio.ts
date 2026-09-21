@@ -116,8 +116,6 @@ export const portfolioData: PortfolioConfig = {
 
   socials: [
     { name: "GitHub", url: "https://github.com/GabrielBaiano", icon: "github" },
-    { name: "Twitter", url: "https://x.com/GabrielBaiano", icon: "twitter" },
-    { name: "LinkedIn", url: "https://www.linkedin.com/in/gabriel-gama-6301633b2/", icon: "linkedin" },
     { name: "Email", url: "mailto:gabrielngama@gmail.com", icon: "mail" },
   ],
 
@@ -393,7 +391,7 @@ export const portfolioData: PortfolioConfig = {
   ],
 
   quote: {
-    text: "Do so much work that it would be unreasonable for you to not be successful.",
-    author: "Alex Hormozi"
+    text: "To succeed, planning alone is insufficient. One must improvise as well.",
+    author: "Salvor Hardin, Foundation"
   }
 };
