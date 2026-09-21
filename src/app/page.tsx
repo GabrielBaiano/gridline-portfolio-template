@@ -5,7 +5,6 @@ import { HeroSection } from "@/components/HeroSection";
 import { ActivityCalendar } from "@/components/ActivityCalendar";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
-import { WikiSection } from "@/components/WikiSection";
 import { BlogSection } from "@/components/BlogSection";
 import { SkillsSection } from "@/components/SkillsSection";
 import { NewsletterSection } from "@/components/NewsletterSection";
@@ -41,12 +40,7 @@ export default function Home() {
 
         <div className="divider-dashed"></div>
 
-        {/* Wiki Section */}
-        <WikiSection />
-
-        <div className="divider-dashed"></div>
-
-        {/* Blog Section (2x3 Grid with Crosshairs) */}
+        {/* Blog Section (4 items on home, View All -> /blog) */}
         <BlogSection />
 
         <div className="divider-dashed"></div>

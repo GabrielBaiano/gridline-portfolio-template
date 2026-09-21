@@ -41,8 +41,10 @@ export interface WikiItem {
 export interface BlogPostItem {
   title: string;
   date: string;
-  image: string;
+  claps?: number;
+  tags?: string[];
   url: string;
+  image?: string;
 }
 
 export interface SkillItem {
@@ -98,51 +100,54 @@ export const portfolioData: PortfolioConfig = {
   socials: [
     { name: "GitHub", url: "https://github.com/GabrielBaiano", icon: "github" },
     { name: "Twitter", url: "https://x.com/GabrielBaiano", icon: "twitter" },
-    { name: "LinkedIn", url: "https://linkedin.com/in/gabrielbaiano", icon: "linkedin" },
+    { name: "LinkedIn", url: "https://www.linkedin.com/in/gabriel-gama-6301633b2/", icon: "linkedin" },
     { name: "Email", url: "mailto:gabrielngama@gmail.com", icon: "mail" },
   ],
 
   experiences: [
     {
-      company: "Open Source Software",
-      role: "Frontend Software Engineer & Maintainer",
-      type: "Remote",
-      period: "2024 - Present",
-      location: "Brazil",
+      company: "Flash",
+      role: "Frontend Software Engineer (Mid-level)",
+      type: "Tempo integral",
+      period: "Jun 2025 - Ago 2026 · 1 ano 3 meses",
+      location: "São Paulo, Brasil · Híbrido",
       bullets: [
-        "Architected pure-svg-charts, a zero-dependency SVG charting primitive library for React with sub-millisecond rendering and full keyboard accessibility",
-        "Developed production-ready developer templates, CLI utilities, and automated publishing workflows using Node.js and TypeScript",
-        "Engineered responsive UI systems with Tailwind CSS, custom dashed-grid designs, and accessible color tokens",
-        "Contributed to scientific open-data platforms and bibliographic research visualization tools"
+        "Designed and implemented scalable frontend architecture using React.js, Next.js, and TypeScript with Micro Frontends",
+        "Improved Core Web Vitals and reduced page load time by 40% using lazy loading, code splitting, and bundle optimization",
+        "Developed and maintained a Design System with reusable components, ensuring accessibility (a11y) and responsive design",
+        "Implemented unit and integration tests using Jest and React Testing Library",
+        "Built and maintained CI/CD pipelines using GitHub Actions",
+        "Collaborated with backend teams on REST API integration, API contracts, and application observability"
       ],
-      skills: ["Next.js", "React", "TypeScript", "Tailwind CSS", "SVG", "Node.js"]
+      skills: ["React.js", "Next.js", "TypeScript", "Micro Frontends", "Jest", "CI/CD", "GitHub Actions", "Linux"]
     },
     {
-      company: "Digital Studio & Labs",
+      company: "Compass UOL",
+      role: "Mobile Developer Intern",
+      type: "Estágio",
+      period: "Out 2024 - Abr 2025 · 7 meses",
+      location: "São Paulo, Brasil · Remoto",
+      bullets: [
+        "Developed cross-platform mobile applications using React Native and TypeScript",
+        "Implemented navigation, async data handling, and API integration",
+        "Delivered pixel-perfect UI and smooth animations aligned with design systems",
+        "Worked in Agile/Scrum environments with version control using Git/GitHub"
+      ],
+      skills: ["React Native", "TypeScript", "React.js", "Git", "Scrum"]
+    },
+    {
+      company: "TECHSOLUTION",
       role: "Frontend Developer",
-      type: "Full Time",
-      period: "2022 - 2024",
-      location: "Remote",
+      type: "Tempo integral",
+      period: "Mai 2023 - Nov 2024 · 1 ano 7 meses",
+      location: "Curitiba, Paraná, Brasil · Remoto",
       bullets: [
-        "Led client frontend initiatives, building responsive web apps, single-page dashboards, and custom CMS integrations",
-        "Implemented dark mode theming, Web Audio API sound feedback, and fluid layout micro-interactions",
-        "Optimized client-side bundle sizes and server-side rendering pipelines for 99+ Lighthouse performance scores",
-        "Created shared design token systems and reusable component primitives"
+        "Built scalable web applications using React.js, TypeScript, HTML, and CSS",
+        "Implemented BFF (Backend for Frontend) using Node.js and Prisma ORM, improving data flow efficiency by 15%",
+        "Managed complex application state using Redux and Context API",
+        "Integrated RESTful APIs and contributed to full feature lifecycle (development, testing, deployment)"
       ],
-      skills: ["React", "TypeScript", "Next.js", "Docker", "REST APIs", "CI/CD"]
-    },
-    {
-      company: "Tech Solutions",
-      role: "Junior Web Developer",
-      type: "Full Time",
-      period: "2020 - 2022",
-      location: "Brazil",
-      bullets: [
-        "Collaborated on internal analytics tooling, automated report generators, and dashboard interfaces",
-        "Authored unit and integration test suites, ensuring high reliability and code quality across deployments",
-        "Maintained documentation, code style guidelines, and continuous integration pipelines"
-      ],
-      skills: ["JavaScript", "React", "HTML5/CSS3", "Git", "Jest"]
+      skills: ["React.js", "TypeScript", "Node.js", "Prisma ORM", "Redux", "REST APIs"]
     }
   ],
 
@@ -217,7 +222,16 @@ export const portfolioData: PortfolioConfig = {
     },
   ],
 
-  wikis: [
+  wikis: [],
+
+  blogs: [
+    {
+      title: "Next.js 15 & Architecture: Server Actions and Partial Prerendering",
+      date: "Sep 2026",
+      claps: 14,
+      tags: ["Next.js", "React 19", "Architecture"],
+      url: "https://github.com/GabrielBaiano"
+    },
     {
       title: "Building Reactive Charts with Pure SVG and React",
       date: "Jul 2026",
@@ -236,47 +250,37 @@ export const portfolioData: PortfolioConfig = {
       title: "Claude Code & Agentic Workflow Engineering",
       date: "Mar 2026",
       claps: 19,
+      tags: ["AI", "Agents", "Next.js", "Automation"],
       url: "https://github.com/GabrielBaiano/gridline-portifolio-template"
+    },
+    {
+      title: "High-Precision SVG Visualizations without Heavy Canvas",
+      date: "Feb 2026",
+      claps: 11,
+      tags: ["SVG", "Frontend", "Math", "Zero-Dependency"],
+      url: "https://github.com/GabrielBaiano/pure-svg-charts"
+    },
+    {
+      title: "Micro-interactions & Audio UX with Web Audio API",
+      date: "Jan 2026",
+      claps: 8,
+      tags: ["Web Audio API", "UX", "Micro-interactions"],
+      url: "https://github.com/GabrielBaiano/gridline-portifolio-template"
+    },
+    {
+      title: "Scalable Design Systems with Tailwind CSS & CSS Variables",
+      date: "Nov 2025",
+      claps: 12,
+      tags: ["Design Systems", "TailwindCSS", "CSS"],
+      url: "https://github.com/GabrielBaiano"
+    },
+    {
+      title: "Automated GitHub Release Publisher for Developer Communities",
+      date: "Oct 2025",
+      claps: 9,
+      tags: ["Automation", "Open Source", "CLI", "Node.js"],
+      url: "https://github.com/GabrielBaiano/tabnews-release-publisher"
     }
-  ],
-
-  blogs: [
-    {
-      title: "Next.js 15 & Architecture",
-      date: "Sep 2026",
-      image: "/images/blog/blog1.svg",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      title: "High-Precision SVG Visualizations",
-      date: "Aug 2026",
-      image: "/images/blog/blog2.svg",
-      url: "https://github.com/GabrielBaiano/pure-svg-charts",
-    },
-    {
-      title: "Micro-interactions & Audio UX",
-      date: "Jul 2026",
-      image: "/images/blog/blog3.svg",
-      url: "https://github.com/GabrielBaiano/gridline-portifolio-template",
-    },
-    {
-      title: "Scalable Design Systems",
-      date: "Jun 2026",
-      image: "/images/blog/blog4.svg",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      title: "Open Source Tooling",
-      date: "May 2026",
-      image: "/images/blog/blog5.svg",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      title: "React 19 & Server Components",
-      date: "Apr 2026",
-      image: "/images/blog/blog6.svg",
-      url: "https://github.com/GabrielBaiano",
-    },
   ],
 
   skills: [
