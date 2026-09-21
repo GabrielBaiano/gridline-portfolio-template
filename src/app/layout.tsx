@@ -4,6 +4,7 @@ import { SoundProvider } from "@/components/SoundProvider";
 import { portfolioData } from "@/data/portfolio";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://github.com/GabrielBaiano/gridline-portifolio-template"),
   title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
   description: portfolioData.personal.bio[0],
 };

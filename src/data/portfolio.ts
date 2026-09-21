@@ -17,13 +17,17 @@ export interface Experience {
 
 export interface ProjectItem {
   name: string;
+  slug?: string;
   status: "Live" | "Building";
   label: string;
   description: string;
+  longDescription?: string[];
   screenshot: string;
   bgImage: string;
   websiteUrl?: string;
   githubUrl?: string;
+  postUrl?: string;
+  stack?: string[];
 }
 
 export interface WikiItem {
@@ -138,43 +142,71 @@ export const portfolioData: PortfolioConfig = {
   projects: [
     {
       name: "pure-svg-charts",
+      slug: "pure-svg-charts",
       status: "Live",
       label: "Open Source Library",
       description: "Lightweight, accessible, and reactive SVG chart primitives for React and Next.js without heavy canvas dependencies.",
+      longDescription: [
+        "pure-svg-charts is an accessible, high-performance charting library built entirely on native SVG elements for React and Next.js applications.",
+        "Engineered with zero third-party visualization dependencies, it provides sub-millisecond render times, O(1) DOM node counts with dynamic hover dots, strict TypeScript autocomplete generics, and automatic responsive layout observation via ResizeObserver.",
+        "Features shaded background zones, dark mode compatibility, and built-in Retina 2x PNG and SVG image export."
+      ],
       screenshot: "/images/project/screenshots/pure-svg-charts.svg",
       bgImage: "/images/project/background/bg-gradient-1.svg",
       websiteUrl: "https://github.com/GabrielBaiano/pure-svg-charts",
       githubUrl: "https://github.com/GabrielBaiano/pure-svg-charts",
+      stack: ["React", "TypeScript", "Next.js", "SVG", "TailwindCSS"]
     },
     {
       name: "gridline-portifolio-template",
+      slug: "gridline-portifolio-template",
       status: "Live",
       label: "Portfolio Template",
       description: "A clean, modern developer portfolio template featuring dashed borders, sound effects, contribution graph, and dark mode.",
+      longDescription: [
+        "Gridline Portfolio Template is an architectural developer portfolio crafted with Next.js 15, React 19, and Tailwind CSS.",
+        "It introduces an engineering-inspired visual identity with dashed borders, dot-grid banners, interactive Web Audio API click/tick micro-interactions, and a GitHub-style contribution calendar.",
+        "All user content, social profiles, projects, blogs, and experiences are decoupled into a single configuration file for instant customization and one-click Vercel deployments."
+      ],
       screenshot: "/images/project/screenshots/gridline-template.svg",
       bgImage: "/images/project/background/bg-gradient-2.svg",
       websiteUrl: "https://github.com/GabrielBaiano/gridline-portifolio-template",
       githubUrl: "https://github.com/GabrielBaiano/gridline-portifolio-template",
+      stack: ["Next.js", "React", "TypeScript", "TailwindCSS", "Web Audio API"]
     },
     {
       name: "EBBC-OpenData",
+      slug: "ebbc-opendata",
       status: "Live",
       label: "Scientific Web Platform",
       description: "Public open data API and platform providing scientometrics, metadata, and analytics for academic research.",
+      longDescription: [
+        "EBBC OpenData is a public data platform and RESTful API that aggregates, indexes, and visualizes scientometric data from the Encontro Brasileiro de Bibliometria e Cientometria.",
+        "Allows researchers to explore metadata, author collaboration networks, keyword trends, institutional metrics, and publication histories.",
+        "Built to foster Open Science practices and enable quantitative bibliometric studies."
+      ],
       screenshot: "/images/project/screenshots/ebbc-opendata.svg",
       bgImage: "/images/project/background/bg-gradient-3.svg",
       websiteUrl: "https://ebbcopendata.vercel.app/",
       githubUrl: "https://github.com/GabrielBaiano/EBBC-OpenData",
+      stack: ["JavaScript", "React", "Node.js", "Open Data", "REST API"]
     },
     {
       name: "tabnews-release-publisher",
+      slug: "tabnews-release-publisher",
       status: "Live",
       label: "Automation Tool",
       description: "Automated GitHub release publisher with AI translation and markdown parsing for developer communities.",
+      longDescription: [
+        "tabnews-release-publisher automates publishing GitHub repository release notes directly to the Brazilian developer platform TabNews.",
+        "Integrates intelligent LLM translation into Portuguese while preserving 100% of markdown formatting, code snippets, badge links, and release semantics.",
+        "Can be executed as a GitHub Action or local CLI tool to streamline developer community announcements."
+      ],
       screenshot: "/images/project/screenshots/tabnews-publisher.svg",
       bgImage: "/images/project/background/bg-gradient-4.svg",
       websiteUrl: "https://github.com/GabrielBaiano/tabnews-release-publisher",
       githubUrl: "https://github.com/GabrielBaiano/tabnews-release-publisher",
+      stack: ["TypeScript", "Node.js", "GitHub Actions", "OpenAI API"]
     },
   ],
 
