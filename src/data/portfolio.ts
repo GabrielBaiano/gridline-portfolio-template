@@ -106,9 +106,9 @@ export const portfolioData: PortfolioConfig = {
     ],
     avatar: "/images/logo/avatar.jpg",
     bio: [
-      "Hey, I'm Gabriel, a frontend software engineer dedicated to building clean, accessible web applications and developer tooling where design, precision, and performance meet.",
+      "Hey, I'm Gabriel, a frontend software developer based in Brazil specializing in performance, dedicated to building clean web applications and component & web design.",
       "Coding with the persistence of a Soulslike player. Specialized in React, Next.js, TypeScript, reactive SVG architectures, and design systems.",
-      "Passionate about open-source contribution, micro-interactions, sound-enhanced interfaces, and clean UI engineering."
+      "Passionate about open-source contribution, music and literature."
     ],
     email: "gabrielngama@gmail.com",
     calendarUrl: "https://cal.com/gabrielbaiano",
