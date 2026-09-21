@@ -117,7 +117,7 @@ export function ActivityCalendar() {
                     rx="2"
                     ry="2"
                     fill={`var(--cal-l${day.level})`}
-                    style={{ stroke: "rgba(0, 0, 0, 0.06)" }}
+                    style={{ stroke: "rgba(0, 0, 0, 0.08)" }}
                     className="transition-opacity duration-150 hover:opacity-80"
                   >
                     <title>{`${day.count} contributions on ${day.date}`}</title>
