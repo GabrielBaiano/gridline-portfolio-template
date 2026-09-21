@@ -80,9 +80,21 @@ async function main() {
     process.exit(1);
   }
 
+  const currentYear = new Date().getFullYear();
+  let yearContributions = 0;
+  calendar.weeks.forEach((week) => {
+    week.contributionDays.forEach((day) => {
+      if (day.date && day.date.startsWith(String(currentYear))) {
+        yearContributions += day.contributionCount;
+      }
+    });
+  });
+
   const processed = {
     username: USERNAME,
     totalContributions: calendar.totalContributions,
+    yearContributions,
+    currentYear,
     updatedAt: new Date().toISOString(),
     weeks: calendar.weeks.map((week) => ({
       days: week.contributionDays.map((day) => ({
@@ -96,7 +108,7 @@ async function main() {
 
   fs.mkdirSync(path.dirname(OUTPUT_FILE), { recursive: true });
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(processed, null, 2), "utf-8");
-  console.log(`Saved ${processed.totalContributions} contributions across ${processed.weeks.length} weeks to ${OUTPUT_FILE}`);
+  console.log(`Saved ${processed.totalContributions} total (${processed.yearContributions} in ${currentYear}) across ${processed.weeks.length} weeks to ${OUTPUT_FILE}`);
 }
 
 main().catch((err) => {

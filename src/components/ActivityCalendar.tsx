@@ -17,10 +17,12 @@ interface WeekData {
 export function ActivityCalendar() {
   const data = rawContributions as {
     totalContributions: number;
+    yearContributions?: number;
+    currentYear?: number;
     weeks: WeekData[];
   };
 
-  const { months, weeks } = useMemo(() => {
+  const { months, weeks, currentYear, yearTotal } = useMemo(() => {
     const weeksList = data.weeks || [];
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const monthLabels: { name: string; x: number }[] = [];
@@ -40,7 +42,35 @@ export function ActivityCalendar() {
       }
     });
 
-    return { months: monthLabels, weeks: weeksList };
+    let detectedYear = new Date().getFullYear();
+    for (let i = weeksList.length - 1; i >= 0; i--) {
+      const days = weeksList[i]?.days || [];
+      for (let j = days.length - 1; j >= 0; j--) {
+        if (days[j]?.date) {
+          detectedYear = new Date(days[j].date + "T00:00:00").getFullYear();
+          break;
+        }
+      }
+      if (detectedYear) break;
+    }
+
+    const year = data.currentYear || detectedYear;
+    const yearPrefix = `${year}-`;
+    let count = 0;
+    weeksList.forEach((w) => {
+      w.days.forEach((d) => {
+        if (d.date && d.date.startsWith(yearPrefix)) {
+          count += d.count;
+        }
+      });
+    });
+
+    return {
+      months: monthLabels,
+      weeks: weeksList,
+      currentYear: year,
+      yearTotal: data.yearContributions ?? count,
+    };
   }, [data]);
 
   return (
@@ -113,18 +143,18 @@ export function ActivityCalendar() {
             display: "flex",
             flexWrap: "wrap",
             gap: "4px 16px",
+            whiteSpace: "nowrap",
             justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <span className="font-medium text-foreground">
-            {data.totalContributions ? data.totalContributions.toLocaleString() : "1,530"}{" "}
-            activities in the last year
-          </span>
+          <div className="react-activity-calendar__count font-medium text-foreground">
+            {yearTotal.toLocaleString()} activities in {currentYear}
+          </div>
 
           <div
             className="react-activity-calendar__legend-colors"
-            style={{ alignItems: "center", display: "flex", gap: "3px" }}
+            style={{ marginLeft: "auto", alignItems: "center", display: "flex", gap: "3px" }}
           >
             <span style={{ marginRight: "0.4em" }}>Less</span>
             {[0, 1, 2, 3, 4].map((level) => (
