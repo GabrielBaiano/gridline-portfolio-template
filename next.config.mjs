@@ -7,7 +7,12 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   outputFileTracingRoot: __dirname,
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: "https",
@@ -19,6 +24,20 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: ["clsx", "tailwind-merge"],
+  },
+  headers: async () => [
+    {
+      source: "/:all*(svg|jpg|png|webp|avif|ico|ttf|woff2)",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+    },
+  ],
 };
 
 export default nextConfig;

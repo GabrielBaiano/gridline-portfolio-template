@@ -1,23 +1,20 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ProjectItem } from "@/data/portfolio";
-import { useSound } from "./SoundProvider";
 
 interface ProjectCardProps {
   project: ProjectItem;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const { playTick, playClick } = useSound();
   const slug = project.slug || project.name.toLowerCase().replace(/\s+/g, "-");
 
   return (
     <Link
       href={`/projects/${slug}`}
-      onMouseEnter={playTick}
-      onClick={playClick}
+      data-cuelume-hover="tick"
+      data-cuelume-press="true"
       className="flex flex-col gap-2 cursor-pointer group w-full select-none"
     >
       {/* Outer Card with elevated mock window */}
@@ -36,13 +33,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Elevated Screenshot Mock Window */}
           <div className="bg-background rounded-t-[6px] absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[75%] group-hover:h-[70%] transition-all duration-300 p-[2px] pb-0">
-            <div className="w-full h-full rounded-t-[4px] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+            <div className="w-full h-full rounded-t-[4px] overflow-hidden relative">
+              <Image
                 src={project.screenshot}
                 alt={project.name}
-                width={1000}
-                height={1000}
+                width={600}
+                height={450}
+                sizes="(max-width: 640px) 100vw, 340px"
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"

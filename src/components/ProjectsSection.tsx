@@ -1,13 +1,9 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { portfolioData } from "@/data/portfolio";
-import { useSound } from "./SoundProvider";
 import { ProjectCard } from "./ProjectCard";
 
 export function ProjectsSection() {
-  const { playTick, playClick } = useSound();
 
   return (
     <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
@@ -50,8 +46,8 @@ export function ProjectsSection() {
         <div className="flex select-none items-center justify-center">
           <Link
             href="/projects"
-            onMouseEnter={playTick}
-            onClick={playClick}
+            data-cuelume-hover="tick"
+            data-cuelume-press="true"
             className="group w-fit rounded-lg border border-border p-0.5 no-underline"
           >
             <div className="flex h-full w-full items-center justify-center gap-1 rounded-[8px] border border-border bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] px-2.5 py-1 transition duration-300">

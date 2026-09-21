@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { portfolioData } from "@/data/portfolio";
 import { SubPageNav } from "@/components/SubPageNav";
@@ -111,14 +112,13 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           {/* Screenshot Hero Window */}
           <div className="p-4 w-full">
             <div className="w-full h-full md:min-h-[340px] min-h-[200px] rounded-[12px] relative border border-border p-[4px] overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                loading="eager"
-                decoding="async"
+              <Image
+                priority
                 src={project.screenshot}
                 alt={project.name}
                 width={1000}
-                height={1000}
+                height={560}
+                sizes="(max-width: 768px) 100vw, 690px"
                 className="w-full object-cover md:h-[340px] h-[200px] rounded-[8px] border border-border"
               />
             </div>

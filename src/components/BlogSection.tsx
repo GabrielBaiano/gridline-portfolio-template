@@ -1,12 +1,8 @@
-"use client";
-
 import React from "react";
+import Image from "next/image";
 import { portfolioData } from "@/data/portfolio";
-import { useSound } from "./SoundProvider";
 
 export function BlogSection() {
-  const { playTick, playClick } = useSound();
-
   return (
     <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <div className="flex items-center justify-between p-3">
@@ -54,17 +50,20 @@ export function BlogSection() {
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            onMouseEnter={playTick}
-            onClick={playClick}
+            data-cuelume-hover="tick"
+            data-cuelume-press="true"
             className="group relative block p-3 transition-colors duration-300 hover:bg-bgHover select-none"
           >
             <div className="p-[4px] rounded-[10px] border border-border">
               <div className="relative aspect-square w-full overflow-hidden rounded-[6px] border border-border bg-zinc-100 dark:bg-zinc-900">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={post.image}
                   alt={post.title}
+                  width={300}
+                  height={300}
+                  sizes="(max-width: 640px) 50vw, 33vw"
                   loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
@@ -120,8 +119,8 @@ export function BlogSection() {
                 href={blogUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onMouseEnter={playTick}
-                onClick={playClick}
+                data-cuelume-hover="tick"
+                data-cuelume-press="true"
                 className="group w-fit rounded-lg border border-border p-0.5 no-underline"
               >
                 <div className="flex h-full w-full items-center justify-center gap-1 rounded-[8px] border border-border bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] px-2.5 py-1 transition duration-300">

@@ -1,11 +1,7 @@
-"use client";
-
 import React from "react";
 import { portfolioData, SocialLink } from "@/data/portfolio";
-import { useSound } from "./SoundProvider";
 
 export function HeroSection() {
-  const { playTick, playClick } = useSound();
 
   const renderSocialIcon = (icon: SocialLink["icon"]) => {
     switch (icon) {
@@ -69,8 +65,8 @@ export function HeroSection() {
         {portfolioData.personal.email && (
           <a
             href={`mailto:${portfolioData.personal.email}`}
-            onMouseEnter={playTick}
-            onClick={playClick}
+            data-cuelume-hover="tick"
+            data-cuelume-press="true"
             className="w-fit flex items-center gap-1.5 px-2.5 py-[7px] sm:py-1.5 bg-[#f4f4f4] hover:bg-[#e9e9e9] dark:bg-[#1c1c1c] dark:hover:bg-[#2b2b2b] border border-[#d1d1d1] dark:border-[#313131] rounded-[9px] text-sm font-medium text-[#333333] dark:text-[#d9d9d9] transition-colors cursor-pointer no-underline"
           >
             <svg
@@ -97,8 +93,8 @@ export function HeroSection() {
             href={portfolioData.personal.calendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onMouseEnter={playTick}
-            onClick={playClick}
+            data-cuelume-hover="tick"
+            data-cuelume-press="true"
             className="w-fit flex items-center gap-1.5 px-2.5 py-[7px] sm:py-1.5 bg-[#f4f4f4] hover:bg-[#e9e9e9] dark:bg-[#1c1c1c] dark:hover:bg-[#2b2b2b] border border-[#d1d1d1] dark:border-[#313131] rounded-[9px] text-sm font-medium text-[#333333] dark:text-[#d9d9d9] transition-colors cursor-pointer no-underline"
           >
             <svg
@@ -136,8 +132,8 @@ export function HeroSection() {
             href={social.url}
             target="_blank"
             rel="noopener noreferrer"
-            onMouseEnter={playTick}
-            onClick={playClick}
+            data-cuelume-hover="tick"
+            data-cuelume-press="true"
             className="w-fit flex items-center gap-1.5 px-2.5 py-[7px] sm:py-1.5 bg-[#f4f4f4] hover:bg-[#e9e9e9] dark:bg-[#1c1c1c] dark:hover:bg-[#2b2b2b] border border-[#d1d1d1] dark:border-[#313131] rounded-[9px] text-sm font-medium text-[#333333] dark:text-[#d9d9d9] transition-colors cursor-pointer no-underline border-none"
           >
             {renderSocialIcon(social.icon)}

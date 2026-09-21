@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useMemo } from "react";
+import React from "react";
 import rawContributions from "@/data/contributions.json";
 
 interface DayData {
@@ -22,56 +20,50 @@ export function ActivityCalendar() {
     weeks: WeekData[];
   };
 
-  const { months, weeks, currentYear, yearTotal } = useMemo(() => {
-    const weeksList = data.weeks || [];
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const monthLabels: { name: string; x: number }[] = [];
+  const weeksList = data.weeks || [];
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months: { name: string; x: number }[] = [];
 
-    let lastMonth = -1;
-    weeksList.forEach((week, wIdx) => {
-      const firstDay = week.days[0];
-      if (firstDay && firstDay.date) {
-        const m = new Date(firstDay.date + "T00:00:00").getMonth();
-        if (m !== lastMonth) {
-          lastMonth = m;
-          monthLabels.push({
-            name: monthNames[m],
-            x: wIdx * 12.5,
-          });
-        }
+  let lastMonth = -1;
+  weeksList.forEach((week, wIdx) => {
+    const firstDay = week.days[0];
+    if (firstDay && firstDay.date) {
+      const m = new Date(firstDay.date + "T00:00:00").getMonth();
+      if (m !== lastMonth) {
+        lastMonth = m;
+        months.push({
+          name: monthNames[m],
+          x: wIdx * 12.5,
+        });
       }
-    });
-
-    let detectedYear = new Date().getFullYear();
-    for (let i = weeksList.length - 1; i >= 0; i--) {
-      const days = weeksList[i]?.days || [];
-      for (let j = days.length - 1; j >= 0; j--) {
-        if (days[j]?.date) {
-          detectedYear = new Date(days[j].date + "T00:00:00").getFullYear();
-          break;
-        }
-      }
-      if (detectedYear) break;
     }
+  });
 
-    const year = data.currentYear || detectedYear;
-    const yearPrefix = `${year}-`;
-    let count = 0;
-    weeksList.forEach((w) => {
-      w.days.forEach((d) => {
-        if (d.date && d.date.startsWith(yearPrefix)) {
-          count += d.count;
-        }
-      });
+  let detectedYear = new Date().getFullYear();
+  for (let i = weeksList.length - 1; i >= 0; i--) {
+    const days = weeksList[i]?.days || [];
+    for (let j = days.length - 1; j >= 0; j--) {
+      if (days[j]?.date) {
+        detectedYear = new Date(days[j].date + "T00:00:00").getFullYear();
+        break;
+      }
+    }
+    if (detectedYear) break;
+  }
+
+  const currentYear = data.currentYear || detectedYear;
+  const yearPrefix = `${currentYear}-`;
+  let count = 0;
+  weeksList.forEach((w) => {
+    w.days.forEach((d) => {
+      if (d.date && d.date.startsWith(yearPrefix)) {
+        count += d.count;
+      }
     });
+  });
 
-    return {
-      months: monthLabels,
-      weeks: weeksList,
-      currentYear: year,
-      yearTotal: data.yearContributions ?? count,
-    };
-  }, [data]);
+  const yearTotal = data.yearContributions ?? count;
+  const weeks = weeksList;
 
   return (
     <section className="max-w-[690px] mx-2 flex justify-center sm:mx-8 md:mx-auto p-3 border-[#d1d1d1] dark:border-[#313131] container-dashed">

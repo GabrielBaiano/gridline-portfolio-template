@@ -1,12 +1,7 @@
-"use client";
-
 import React from "react";
 import { portfolioData } from "@/data/portfolio";
-import { useSound } from "./SoundProvider";
 
 export function SkillsSection() {
-  const { playTick, playClick } = useSound();
-
   return (
     <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <h2 className="text-[1.55rem] font-semibold text-[#333333] dark:text-[#d9d9d9] p-3">
@@ -22,8 +17,8 @@ export function SkillsSection() {
             href={`https://www.google.com/search?q=${encodeURIComponent(skill.search)}`}
             target="_blank"
             rel="noopener noreferrer"
-            onMouseEnter={playTick}
-            onClick={playClick}
+            data-cuelume-hover="tick"
+            data-cuelume-press="true"
             className="group relative min-w-fit flex cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-[8px] border border-border bg-transparent text-mutedForeground px-2 py-1 transition-all duration-300 hover:text-foreground/65 hover:border-foreground/65 hover:bg-bgHoverForeground select-none flex-1"
           >
             {skill.icon ? (
@@ -33,6 +28,8 @@ export function SkillsSection() {
                 alt={skill.name}
                 width={16}
                 height={16}
+                loading="lazy"
+                decoding="async"
                 style={{ width: "16px", height: "16px" }}
               />
             ) : (

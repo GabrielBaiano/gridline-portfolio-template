@@ -1,12 +1,7 @@
-"use client";
-
 import React from "react";
 import { portfolioData } from "@/data/portfolio";
-import { useSound } from "./SoundProvider";
 
 export function WikiSection() {
-  const { playTick, playClick } = useSound();
-
   return (
     <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <div className="flex items-center justify-between p-3">
@@ -20,8 +15,8 @@ export function WikiSection() {
           <div key={idx}>
             <div className="m-1">
               <div
-                onMouseEnter={playTick}
-                onClick={playClick}
+                data-cuelume-hover="tick"
+                data-cuelume-press="true"
                 className="flex items-center justify-between group hover:bg-bgHover transition-colors duration-300 p-3 cursor-pointer select-none"
               >
                 <div className="flex flex-col gap-2.5">
@@ -94,8 +89,8 @@ export function WikiSection() {
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onMouseEnter={playTick}
-                onClick={playClick}
+                data-cuelume-hover="tick"
+                data-cuelume-press="true"
                 className="group w-fit rounded-lg border border-border p-0.5 no-underline"
               >
                 <div className="flex h-full w-full items-center justify-center gap-1 rounded-[8px] border border-border bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] px-2.5 py-1 transition duration-300">

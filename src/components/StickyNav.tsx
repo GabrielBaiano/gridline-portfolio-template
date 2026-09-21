@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { ThemeToggle } from "./ThemeToggle";
 import { useSound } from "./SoundProvider";
 import { portfolioData } from "@/data/portfolio";
@@ -54,21 +55,24 @@ export function StickyNav() {
     return () => clearInterval(interval);
   }, [subtitles.length]);
 
-  // 2. View count tracking & animation
+  // 2. View count tracking & animation (deferred to avoid hydration contention)
   const [pageviews, setPageviews] = useState<number | null>(null);
   const animatedViews = useAnimatedCount(pageviews);
 
   useEffect(() => {
-    fetch("/api/visitors", { method: "POST" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (typeof data.pageviews === "number") {
-          setPageviews(data.pageviews);
-        }
-      })
-      .catch(() => {
-        setPageviews(1420);
-      });
+    const timer = setTimeout(() => {
+      fetch("/api/visitors", { method: "POST" })
+        .then((res) => res.json())
+        .then((data) => {
+          if (typeof data.pageviews === "number") {
+            setPageviews(data.pageviews);
+          }
+        })
+        .catch(() => {
+          setPageviews(1420);
+        });
+    }, 150);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -82,14 +86,13 @@ export function StickyNav() {
                 className="sm:size-12 size-11 shrink-0 border border-border rounded-[12px] p-[4px]"
                 style={{ background: "var(--background)" }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={portfolioData.personal.avatar || "/images/logo/avatar.jpg"}
                   alt={portfolioData.personal.name}
                   width={48}
                   height={48}
-                  loading="lazy"
-                  decoding="async"
+                  priority
+                  quality={90}
                   className="w-full h-full object-cover border border-border rounded-[8px]"
                 />
               </div>
