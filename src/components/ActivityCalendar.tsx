@@ -78,14 +78,14 @@ export function ActivityCalendar() {
         }}
       >
         <div
-          className="react-activity-calendar__scroll-container"
-          style={{ maxWidth: "100%", overflowX: "auto", overflowY: "hidden", paddingTop: "2px" }}
+          className="react-activity-calendar__scroll-container no-scrollbar"
+          style={{ maxWidth: "100%", overflowX: "auto", overflowY: "hidden", paddingTop: "2px", scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           <svg
             className="react-activity-calendar__calendar text-mutedForeground"
-            height="115"
-            width={Math.max(660, weeks.length * 12.5 + 20)}
-            viewBox={`0 0 ${Math.max(660, weeks.length * 12.5 + 20)} 115`}
+            height="105"
+            width="660"
+            viewBox="0 0 660 105"
             style={{ display: "block", overflow: "visible" }}
           >
             {/* Months Header */}
@@ -111,7 +111,7 @@ export function ActivityCalendar() {
                   <rect
                     key={dIdx}
                     x="0"
-                    y={18 + day.weekday * 12.5}
+                    y={20 + day.weekday * 12.5}
                     width="10"
                     height="10"
                     rx="2"
