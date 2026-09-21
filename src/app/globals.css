@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Instagram Sans";
+  src: url("/fonts/InstagramSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instagram Sans";
+  src: url("/fonts/InstagramSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instagram Sans";
+  src: url("/fonts/InstagramSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --background: #fff;
+  --foreground: #333;
+  --title-color: #333;
+  --strong-color: #000;
+  --muted-color: #9c9c9c;
+  --mutedForeground-color: #737373;
+  --border-color: #d1d1d1;
+  --mutedBackground-color: #f4f4f4;
+  --mutedBackgroundHover-color: #e9e9e9;
+  --bgHover-color: #f5f5f5;
+  --bgHoverForeground-color: #fafafa;
+  --hover-color: #222;
+  --nonHover-color: #555;
+  --dot-color: #9c9c9c;
+  --grid-color: #e4e4e4;
+  --radius: .625rem;
+}
+
+.dark {
+  --background: #0e0d09;
+  --foreground: #d9d9d9;
+  --title-color: #ebebeb;
+  --strong-color: #fff;
+  --muted-color: #5c5c5c;
+  --mutedForeground-color: #9f9f9f;
+  --border-color: #313131;
+  --mutedBackground-color: #1c1c1c;
+  --mutedBackgroundHover-color: #2b2b2b;
+  --bgHover-color: #151515;
+  --bgHoverForeground-color: #1c1c1c;
+  --hover-color: #f5f5f5;
+  --nonHover-color: #aaa;
+  --dot-color: #5e5e5e;
+  --grid-color: #2e2e2e;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Instagram Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(var(--grid-color) 1.25px, transparent 1.25px);
+  background-size: 7.5px 7.5px;
+}
+
+.bg-striped {
+  background-image: repeating-linear-gradient(-45deg, var(--grid-color) 0, var(--grid-color) 1px, transparent 1px, transparent 6px);
+}
+
+.container-dashed {
+  background-image: repeating-linear-gradient(to bottom, var(--border-color) 0px, var(--border-color) 6px, transparent 6px, transparent 14px),
+                    repeating-linear-gradient(to bottom, var(--border-color) 0px, var(--border-color) 6px, transparent 6px, transparent 14px);
+  background-size: 1px 100%, 1px 100%;
+  background-position: left top, right top;
+  background-repeat: no-repeat;
+}
+
+.divider-dashed {
+  height: 1px;
+  width: 100%;
+  background-image: repeating-linear-gradient(to right, var(--border-color) 0px, var(--border-color) 6px, transparent 6px, transparent 14px);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+}
