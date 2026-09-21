@@ -1,0 +1,44 @@
+name: Sync GitHub Contributions
+
+on:
+  schedule:
+    # Run everyday at midnight UTC
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/fetch-contributions.mjs"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch Latest Contributions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch-contributions.mjs
+
+      - name: Commit & Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [[ -n $(git status --porcelain src/data/contributions.json) ]]; then
+            git add src/data/contributions.json
+            git commit -m "chore: sync github contributions calendar [skip ci]"
+            git push
+          else
+            echo "No contribution changes detected."
+          fi

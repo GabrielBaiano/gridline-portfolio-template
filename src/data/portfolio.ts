@@ -56,6 +56,7 @@ export interface PortfolioConfig {
     name: string;
     role: string;
     statusBadge: string;
+    subtitles?: string[];
     avatar: string;
     bio: string[];
     email?: string;
@@ -78,6 +79,11 @@ export const portfolioData: PortfolioConfig = {
     name: "Gabriel Nascimento",
     role: "Frontend Software Engineer",
     statusBadge: "Open Source Contributor",
+    subtitles: [
+      "Frontend Software Engineer",
+      "Open Source Contributor",
+      "UI/UX & Web Developer"
+    ],
     avatar: "/images/logo/avatar.jpg",
     bio: [
       "Hey, I'm Gabriel, a frontend software engineer dedicated to building clean, accessible web applications and developer tooling where design, precision, and performance meet.",

@@ -1,55 +1,53 @@
 "use client";
 
 import React, { useMemo } from "react";
+import rawContributions from "@/data/contributions.json";
+
+interface DayData {
+  date: string;
+  count: number;
+  weekday: number;
+  level: number;
+}
+
+interface WeekData {
+  days: DayData[];
+}
 
 export function ActivityCalendar() {
-  const months = [
-    { name: "Oct", x: 25 },
-    { name: "Nov", x: 75 },
-    { name: "Dec", x: 137.5 },
-    { name: "Jan", x: 187.5 },
-    { name: "Feb", x: 237.5 },
-    { name: "Mar", x: 287.5 },
-    { name: "Apr", x: 350 },
-    { name: "May", x: 400 },
-    { name: "Jun", x: 462.5 },
-    { name: "Jul", x: 512.5 },
-    { name: "Aug", x: 562.5 },
-    { name: "Sep", x: 625 },
-  ];
+  const data = rawContributions as {
+    totalContributions: number;
+    weeks: WeekData[];
+  };
 
-  const weeks = useMemo(() => {
-    const list = [];
-    let seed = 77;
-    const random = () => {
-      seed = (seed * 9301 + 49297) % 233280;
-      return seed / 233280;
-    };
+  const { months, weeks } = useMemo(() => {
+    const weeksList = data.weeks || [];
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthLabels: { name: string; x: number }[] = [];
 
-    const colors = ["#f4f4f5", "#d4d4d8", "#a1a1aa", "#52525b", "#18181b"];
-
-    for (let w = 0; w < 53; w++) {
-      const days = [];
-      for (let d = 0; d < 7; d++) {
-        const val = random();
-        let level = 0;
-        if (val > 0.88) level = 4;
-        else if (val > 0.72) level = 3;
-        else if (val > 0.52) level = 2;
-        else if (val > 0.3) level = 1;
-        days.push(colors[level]);
+    let lastMonth = -1;
+    weeksList.forEach((week, wIdx) => {
+      const firstDay = week.days[0];
+      if (firstDay && firstDay.date) {
+        const m = new Date(firstDay.date + "T00:00:00").getMonth();
+        if (m !== lastMonth) {
+          lastMonth = m;
+          monthLabels.push({
+            name: monthNames[m],
+            x: wIdx * 12.5,
+          });
+        }
       }
-      list.push(days);
-    }
-    return list;
-  }, []);
+    });
+
+    return { months: monthLabels, weeks: weeksList };
+  }, [data]);
 
   return (
     <section className="max-w-[690px] mx-2 flex justify-center sm:mx-8 md:mx-auto p-3 border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <article
-        className="react-activity-calendar"
+        className="react-activity-calendar w-full select-none"
         style={{
-          width: "max-content",
           maxWidth: "100%",
           display: "flex",
           flexDirection: "column",
@@ -63,17 +61,19 @@ export function ActivityCalendar() {
         >
           <svg
             className="react-activity-calendar__calendar text-mutedForeground"
-            height="105"
-            width="660"
-            viewBox="0 0 660 105"
+            height="115"
+            width={Math.max(660, weeks.length * 12.5 + 20)}
+            viewBox={`0 0 ${Math.max(660, weeks.length * 12.5 + 20)} 115`}
             style={{ display: "block", overflow: "visible" }}
           >
+            {/* Months Header */}
             <g className="react-activity-calendar__legend-month">
               {months.map((m, idx) => (
                 <text
                   key={idx}
                   dominantBaseline="hanging"
                   fill="currentColor"
+                  fontSize="10"
                   x={m.x}
                   y="0"
                 >
@@ -82,45 +82,55 @@ export function ActivityCalendar() {
               ))}
             </g>
 
+            {/* Weeks & Days */}
             {weeks.map((week, wIdx) => (
               <g key={wIdx} transform={`translate(${wIdx * 12.5}, 0)`}>
-                {week.map((color, dIdx) => (
+                {week.days.map((day, dIdx) => (
                   <rect
                     key={dIdx}
                     x="0"
-                    y={20 + dIdx * 12.5}
+                    y={18 + day.weekday * 12.5}
                     width="10"
                     height="10"
                     rx="2"
                     ry="2"
-                    fill={color}
-                    style={{ stroke: "rgba(0, 0, 0, 0.08)" }}
-                  />
+                    fill={`var(--cal-l${day.level})`}
+                    style={{ stroke: "rgba(0, 0, 0, 0.06)" }}
+                    className="transition-opacity duration-150 hover:opacity-80"
+                  >
+                    <title>{`${day.count} contributions on ${day.date}`}</title>
+                  </rect>
                 ))}
               </g>
             ))}
           </svg>
         </div>
 
+        {/* Footer with Real Contribution Count and Legend */}
         <footer
-          className="react-activity-calendar__footer text-muted"
+          className="react-activity-calendar__footer text-mutedForeground text-xs pt-1"
           style={{
             display: "flex",
             flexWrap: "wrap",
             gap: "4px 16px",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <span>729 activities in 2025</span>
+          <span className="font-medium text-foreground">
+            {data.totalContributions ? data.totalContributions.toLocaleString() : "1,530"}{" "}
+            activities in the last year
+          </span>
+
           <div
             className="react-activity-calendar__legend-colors"
             style={{ alignItems: "center", display: "flex", gap: "3px" }}
           >
             <span style={{ marginRight: "0.4em" }}>Less</span>
-            {["#f4f4f5", "#d4d4d8", "#a1a1aa", "#52525b", "#18181b"].map((c, i) => (
-              <svg key={i} height="10" width="10">
+            {[0, 1, 2, 3, 4].map((level) => (
+              <svg key={level} height="10" width="10">
                 <rect
-                  fill={c}
+                  fill={`var(--cal-l${level})`}
                   height="10"
                   width="10"
                   rx="2"
