@@ -98,6 +98,12 @@ export const portfolioData = {
 
 ---
 
+## Roadmap & Integrations
+
+- See [TODO.md](TODO.md) for the architecture plan of the automated Google Calendar & Meet scheduling bot.
+
+---
+
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
