@@ -33,7 +33,8 @@ export interface ProjectItem {
 export interface WikiItem {
   title: string;
   date: string;
-  tags: string[];
+  claps?: number;
+  tags?: string[];
   url?: string;
 }
 
@@ -219,20 +220,22 @@ export const portfolioData: PortfolioConfig = {
   wikis: [
     {
       title: "Building Reactive Charts with Pure SVG and React",
-      date: "Sep 2026",
+      date: "Jul 2026",
+      claps: 7,
       tags: ["SVG", "React", "TypeScript", "Performance"],
       url: "https://github.com/GabrielBaiano/pure-svg-charts"
     },
     {
-      title: "Mastering TypeScript Generics and Utility Types",
-      date: "Aug 2026",
-      tags: ["TypeScript", "Next.js", "Clean Code"],
+      title: "Mastering TypeScript Generics and Clean Architecture",
+      date: "Jul 2026",
+      claps: 5,
+      tags: ["TypeScript", "JavaScript", "React", "Node"],
       url: "https://github.com/GabrielBaiano"
     },
     {
-      title: "Modern Design Systems with Tailwind CSS & CSS Variables",
-      date: "Jul 2026",
-      tags: ["Design Systems", "Tailwind", "CSS", "UI/UX"],
+      title: "Claude Code & Agentic Workflow Engineering",
+      date: "Mar 2026",
+      claps: 19,
       url: "https://github.com/GabrielBaiano/gridline-portifolio-template"
     }
   ],
