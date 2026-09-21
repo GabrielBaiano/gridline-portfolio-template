@@ -68,8 +68,9 @@ export function ActivityCalendar() {
   return (
     <section className="max-w-[690px] mx-2 flex justify-center sm:mx-8 md:mx-auto p-3 border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <article
-        className="react-activity-calendar w-full select-none"
+        className="react-activity-calendar select-none"
         style={{
+          width: "max-content",
           maxWidth: "100%",
           display: "flex",
           flexDirection: "column",
