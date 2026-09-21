@@ -2,7 +2,7 @@
   "name": "gridline-portifolio-template",
   "version": "1.0.0",
   "description": "A clean, modern, and modular portfolio template with dashed grid lines, interactive sound effects, and Next.js 15.",
-  "author": "Gabriel Nascimento <gabrielngama@gmail.com> (https://github.com/GabrielBaiano)",
+  "author": "Gabriel Gama <gabrielngama@gmail.com> (https://github.com/GabrielBaiano)",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
