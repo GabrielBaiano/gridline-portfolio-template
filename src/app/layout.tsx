@@ -24,7 +24,7 @@ const instagramSans = localFont({
   ],
   variable: "--font-instagram-sans",
   display: "swap",
-  preload: true,
+  preload: false,
   fallback: [
     "-apple-system",
     "BlinkMacSystemFont",

@@ -5,9 +5,10 @@ import { ProjectItem } from "@/data/portfolio";
 
 interface ProjectCardProps {
   project: ProjectItem;
+  priority?: boolean;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, priority = false }: ProjectCardProps) {
   const slug = project.slug || project.name.toLowerCase().replace(/\s+/g, "-");
 
   return (
@@ -40,8 +41,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 width={600}
                 height={450}
                 sizes="(max-width: 640px) 100vw, 340px"
-                loading="lazy"
-                decoding="async"
+                priority={priority}
                 className="w-full h-full object-cover"
               />
             </div>

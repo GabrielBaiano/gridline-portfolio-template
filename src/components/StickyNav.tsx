@@ -92,7 +92,6 @@ export function StickyNav() {
                   width={48}
                   height={48}
                   priority
-                  quality={90}
                   className="w-full h-full object-cover border border-border rounded-[8px]"
                 />
               </div>
