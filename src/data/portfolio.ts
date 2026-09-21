@@ -76,11 +76,11 @@ export interface PortfolioConfig {
 export const portfolioData: PortfolioConfig = {
   personal: {
     name: "Gabriel Nascimento",
-    role: "Full Stack Developer",
+    role: "Frontend Software Engineer",
     statusBadge: "Open Source Contributor",
     avatar: "/images/logo/avatar.jpg",
     bio: [
-      "Hey, I'm Gabriel, a full stack developer dedicated to building clean, accessible web applications and developer tooling where design, precision, and performance meet.",
+      "Hey, I'm Gabriel, a frontend software engineer dedicated to building clean, accessible web applications and developer tooling where design, precision, and performance meet.",
       "Coding with the persistence of a Soulslike player. Specialized in React, Next.js, TypeScript, reactive SVG architectures, and design systems.",
       "Passionate about open-source contribution, micro-interactions, sound-enhanced interfaces, and clean UI engineering."
     ],
@@ -98,7 +98,7 @@ export const portfolioData: PortfolioConfig = {
   experiences: [
     {
       company: "Open Source Software",
-      role: "Full Stack Engineer & Maintainer",
+      role: "Frontend Software Engineer & Maintainer",
       type: "Remote",
       period: "2024 - Present",
       location: "Brazil",
