@@ -79,8 +79,8 @@ export function ActivityCalendar() {
         }}
       >
         <div
-          className="react-activity-calendar__scroll-container no-scrollbar"
-          style={{ maxWidth: "100%", overflowX: "auto", overflowY: "visible", padding: "2px", scrollbarWidth: "none", msOverflowStyle: "none" }}
+          className="react-activity-calendar__scroll-container no-scrollbar touch-pan-x"
+          style={{ maxWidth: "100%", overflowX: "auto", overflowY: "visible", padding: "2px", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           <svg
             className="react-activity-calendar__calendar text-mutedForeground"

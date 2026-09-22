@@ -40,6 +40,34 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://github.com/GabrielBaiano/gridline-portifolio-template"),
   title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
   description: portfolioData.personal.bio[0],
+  authors: [{ name: portfolioData.personal.name, url: portfolioData.personal.calendarUrl }],
+  creator: portfolioData.personal.name,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://github.com/GabrielBaiano/gridline-portifolio-template",
+    title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
+    description: portfolioData.personal.bio[0],
+    siteName: `${portfolioData.personal.name} Portfolio`,
+    images: [
+      {
+        url: portfolioData.personal.avatar,
+        width: 400,
+        height: 400,
+        alt: portfolioData.personal.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
+    description: portfolioData.personal.bio[0],
+    images: [portfolioData.personal.avatar],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

@@ -28,9 +28,9 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
           />
 
           {/* Badge */}
-          <h4 className="absolute top-2 left-2 text-xs text-mutedForeground group-hover:text-black dark:group-hover:text-white font-medium transition-all duration-300 group-hover:left-1/2 group-hover:-translate-x-1/2">
+          <span className="absolute top-2 left-2 text-xs text-mutedForeground group-hover:text-black dark:group-hover:text-white font-medium transition-all duration-300 group-hover:left-1/2 group-hover:-translate-x-1/2">
             {project.label}
-          </h4>
+          </span>
 
           {/* Elevated Screenshot Mock Window */}
           <div className="bg-background rounded-t-[6px] absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[75%] group-hover:h-[70%] transition-all duration-300 p-[2px] pb-0">

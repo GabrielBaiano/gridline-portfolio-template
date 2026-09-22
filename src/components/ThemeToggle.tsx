@@ -37,7 +37,8 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       type="button"
       className="relative w-fit z-10 cursor-pointer p-1.5 rounded-[6px] hover:bg-[#f4f4f4] dark:hover:bg-[#1c1c1c] border border-transparent"
-      aria-label="Switch to dark mode"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       {mounted && isDark ? (
         <svg

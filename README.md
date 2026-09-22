@@ -7,12 +7,12 @@ A clean, minimalist, and modular developer portfolio template built with **Next.
 ## Features
 
 - **Architectural Grid Aesthetic**: Clean 690px centered container with repeating linear-gradient dashed borders, dot-grid hero banner, and subtle divider accents.
-- **Audio Feedback**: Synthesized clicks and ticks powered by the Web Audio API with zero audio file dependencies and a persistent mute toggle.
-- **Activity Calendar**: Interactive contribution heatmap visualizing coding activity.
+- **Zero-Latency Audio Engine**: Synthesized micro-interactions powered by the Web Audio API with pre-rendered PCM AudioBuffers, zero network dependencies, and instant playback.
+- **Activity Calendar**: Interactive contribution heatmap with touch-pan mobile support visualizing coding activity.
+- **Multiple Theme Presets**: Default (Light/Dark), Cyberpunk, and Paper Minimalist via `data-theme`.
 - **Single-File Configuration**: Customize 100% of your portfolio content, links, bio, projects, and experiences in `portfolio.config.ts` (or `src/data/portfolio.ts`).
-- **Dark & Light Mode**: Smooth theme toggle with system preference fallback and instant flash-free initialization.
-- **Tech Stack Grid**: Interactive skills section with Devicon SVG integration and search shortcuts.
-- **SEO & Performance Ready**: Static generation via Next.js App Router, zero layout shifts, and responsive across mobile, tablet, and desktop.
+- **SEO & OpenGraph Ready**: Complete metadata with dynamic social share cards, Twitter summaries, and search engine optimization out-of-the-box.
+- **Responsive & Mobile-First**: Zero horizontal overflow, touch-optimized swipe gestures, and responsive layouts across all viewports.
 
 ---
 
