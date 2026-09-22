@@ -65,9 +65,9 @@ export const metadata: Metadata = {
     images: [portfolioData.personal.avatar],
   },
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: portfolioData.personal.avatar,
+    shortcut: portfolioData.personal.avatar,
+    apple: portfolioData.personal.avatar,
   },
   robots: {
     index: true,
