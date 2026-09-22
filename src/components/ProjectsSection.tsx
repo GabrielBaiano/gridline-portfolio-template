@@ -34,7 +34,7 @@ export function ProjectsSection() {
 
         {portfolioData.projects.slice(0, 4).map((proj, idx) => (
           <div key={idx} className="relative z-10 p-3">
-            <ProjectCard project={proj} priority={idx === 0} />
+            <ProjectCard project={proj} />
           </div>
         ))}
       </div>

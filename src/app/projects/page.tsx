@@ -46,7 +46,7 @@ export default function ProjectsPage() {
           {portfolioData.projects.map((proj, idx) => (
             <div key={idx}>
               <div className="relative z-10 p-3">
-                <ProjectCard project={proj} priority={idx === 0} />
+                <ProjectCard project={proj} />
               </div>
               {/* Mobile divider between cards */}
               <div className="block sm:hidden">
