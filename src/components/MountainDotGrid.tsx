@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSound } from "./SoundProvider";
 
 interface Point {
@@ -14,13 +14,15 @@ const CELL_SIZE = 7.5;
 const GAME_SPEED_MS = 75;
 
 export function MountainDotGrid({
-  className = "w-full sm:min-h-[220px] min-h-[120px] h-full grow",
+  className = "w-full sm:min-h-[220px] min-h-[140px] h-full grow",
 }: {
   className?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mousePosRef = useRef<{ x: number; y: number } | null>(null);
+  const textMaskRef = useRef<Uint8Array | null>(null);
+  const maskDimsRef = useRef<{ cols: number; rows: number }>({ cols: 0, rows: 0 });
   const { playClick, playChime } = useSound();
 
   // Easter egg Snake Game state
@@ -39,10 +41,8 @@ export function MountainDotGrid({
   const foodRef = useRef<Point>({ x: 28, y: 10 });
   const isGameOverRef = useRef(false);
   const isBlinkingRef = useRef(false);
-  const blinkCountRef = useRef(0);
   const colsRef = useRef(50);
   const rowsRef = useRef(20);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   // Triple-click handler to trigger easter egg
   const handleBannerClick = () => {
@@ -94,7 +94,7 @@ export function MountainDotGrid({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isPlaying]);
 
-  // Main canvas render: Halftone Mountain Relief + Snake overlay
+  // Main canvas render: Halftone "GAMA" Typographic Relief + Snake overlay
   useEffect(() => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
@@ -102,6 +102,39 @@ export function MountainDotGrid({
 
     let animFrame: number;
     let gameTimer: NodeJS.Timeout | null = null;
+
+    // Helper: Rasterize crisp text "GAMA" into a grid bitmap mask
+    const generateTextMask = (cols: number, rows: number) => {
+      if (cols <= 0 || rows <= 0) return;
+      const offscreen = document.createElement("canvas");
+      offscreen.width = cols;
+      offscreen.height = rows;
+      const octx = offscreen.getContext("2d", { willReadFrequently: true });
+      if (!octx) return;
+
+      octx.clearRect(0, 0, cols, rows);
+      octx.fillStyle = "#ffffff";
+
+      // Dynamically size font to fit grid nicely centered
+      const fontSize = Math.min(Math.floor(rows * 0.72), Math.floor(cols / 4.2));
+      octx.font = `900 ${fontSize}px var(--font-instagram-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Arial Black", sans-serif`;
+      octx.textAlign = "center";
+      octx.textBaseline = "middle";
+      octx.letterSpacing = "2px";
+
+      octx.fillText("GAMA", cols / 2, rows / 2 + 1);
+
+      const imgData = octx.getImageData(0, 0, cols, rows).data;
+      const mask = new Uint8Array(cols * rows);
+
+      for (let i = 0; i < cols * rows; i++) {
+        // Red channel gives density (0 to 255)
+        mask[i] = imgData[i * 4 + 3];
+      }
+
+      textMaskRef.current = mask;
+      maskDimsRef.current = { cols, rows };
+    };
 
     const resize = () => {
       const rect = container.getBoundingClientRect();
@@ -111,8 +144,12 @@ export function MountainDotGrid({
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
 
-      colsRef.current = Math.floor(rect.width / CELL_SIZE);
-      rowsRef.current = Math.floor(rect.height / CELL_SIZE);
+      const cols = Math.floor(rect.width / CELL_SIZE);
+      const rows = Math.floor(rect.height / CELL_SIZE);
+      colsRef.current = cols;
+      rowsRef.current = rows;
+
+      generateTextMask(cols, rows);
     };
 
     resize();
@@ -138,7 +175,6 @@ export function MountainDotGrid({
     if (isPlaying) {
       isGameOverRef.current = false;
       isBlinkingRef.current = false;
-      blinkCountRef.current = 0;
       snakeRef.current = [
         { x: 16, y: 10 },
         { x: 15, y: 10 },
@@ -200,7 +236,7 @@ export function MountainDotGrid({
       }, GAME_SPEED_MS);
     }
 
-    // Animation & Halftone Mountain Renderer
+    // Animation & Halftone Typographic Renderer
     const render = () => {
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -219,6 +255,8 @@ export function MountainDotGrid({
       const cols = Math.floor(width / CELL_SIZE);
       const rows = Math.floor(height / CELL_SIZE);
       const mouse = mousePosRef.current;
+      const mask = textMaskRef.current;
+      const maskDims = maskDimsRef.current;
 
       // Draw each dot on the fixed 7.5px grid
       for (let c = 0; c < cols; c++) {
@@ -230,49 +268,34 @@ export function MountainDotGrid({
           const nx = x / width;
           const ny = y / height;
 
-          // Procedural Mountain Ridge Profile matching user image
-          // Left Peak: center ~0.28, steep
-          const peak1 = Math.exp(-Math.pow((nx - 0.28) / 0.16, 2)) * 0.72;
-          // Middle Valley & Ridge: center ~0.55
-          const peak2 = Math.exp(-Math.pow((nx - 0.58) / 0.18, 2)) * 0.65;
-          // Right High Mountain: center ~0.82
-          const peak3 = Math.exp(-Math.pow((nx - 0.82) / 0.15, 2)) * 0.80;
+          // Subtle organic background contour
+          const subtleWave = Math.sin(nx * 8 + ny * 6) * 0.04;
 
-          // Mountain elevation line
-          const mountainElevation = Math.max(peak1, peak2, peak3);
+          // Text Mask Sampling
+          let textAlpha = 0;
+          if (mask && maskDims.cols === cols && maskDims.rows === rows) {
+            textAlpha = mask[r * cols + c] / 255;
+          }
 
-          // Add fine organic topographic noise texture
-          const organicNoise =
-            Math.sin(nx * 32 + ny * 18) * 0.08 +
-            Math.cos(nx * 14 - ny * 24) * 0.06;
+          // Halftone modulation:
+          // Background points: micro-dots (radius ~0.8px, intensity ~0.15)
+          // "GAMA" letter points: bold prominent dots (radius ~2.2px, intensity ~0.95)
+          let intensity = 0.14 + subtleWave;
+          let radius = 0.85;
 
-          // Compute distance from mountain horizon (bottom is 1.0, mountain tops reach up towards 0.2)
-          const mountainY = 1.0 - mountainElevation + organicNoise;
-          const diff = mountainY - ny;
-
-          // Halftone modulation: dots inside the mountain shape are denser/stronger
-          let intensity = 0.15; // default subtle grid background
-          let radius = 1.0;
-
-          if (diff <= 0) {
-            // Inside or on the mountain peak / slope
-            const depth = Math.min(1.0, -diff / 0.45);
-            // Non-linear halftone curve for sharp ridge contrast
-            intensity = 0.35 + Math.pow(depth, 1.4) * 0.55;
-            radius = 1.1 + depth * 1.25;
-          } else if (diff < 0.08) {
-            // Mountain atmospheric edge mist
-            intensity = 0.22;
-            radius = 1.05;
+          if (textAlpha > 0.05) {
+            // Inside typography glyphs
+            intensity = 0.35 + textAlpha * 0.60;
+            radius = 1.2 + textAlpha * 1.25;
           }
 
           // Subtle interactive proximity highlight on mouse hover
           if (mouse) {
             const dist = Math.hypot(x - mouse.x, y - mouse.y);
-            if (dist < 80) {
-              const boost = (1 - dist / 80) * 0.3;
+            if (dist < 75) {
+              const boost = (1 - dist / 75) * 0.28;
               intensity = Math.min(1.0, intensity + boost);
-              radius = Math.min(2.4, radius + boost * 0.8);
+              radius = Math.min(2.5, radius + boost * 0.8);
             }
           }
 
@@ -290,7 +313,7 @@ export function MountainDotGrid({
         const fx = foodRef.current.x * CELL_SIZE + CELL_SIZE / 2;
         const fy = foodRef.current.y * CELL_SIZE + CELL_SIZE / 2;
         const now = performance.now();
-        const foodPulse = 2.2 + Math.sin(now / 150) * 0.6;
+        const foodPulse = 2.4 + Math.sin(now / 150) * 0.6;
 
         ctx.fillStyle = isDark ? "#38bdf8" : "#0284c7";
         ctx.beginPath();
@@ -308,10 +331,10 @@ export function MountainDotGrid({
 
             ctx.beginPath();
             if (i === 0) {
-              ctx.arc(sx, sy, 2.6, 0, Math.PI * 2);
+              ctx.arc(sx, sy, 2.7, 0, Math.PI * 2);
               ctx.fillStyle = isDark ? "#ffffff" : "#000000";
             } else {
-              ctx.arc(sx, sy, 2.0, 0, Math.PI * 2);
+              ctx.arc(sx, sy, 2.1, 0, Math.PI * 2);
               ctx.fillStyle = isDark ? "#38bdf8" : "#0284c7";
             }
             ctx.fill();
