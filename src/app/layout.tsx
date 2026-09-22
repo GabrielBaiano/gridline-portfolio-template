@@ -64,6 +64,11 @@ export const metadata: Metadata = {
     description: portfolioData.personal.bio[0],
     images: [portfolioData.personal.avatar],
   },
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   robots: {
     index: true,
     follow: true,
