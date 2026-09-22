@@ -102,7 +102,7 @@ export function MountainDotGrid({
     let animFrame: number;
     let gameTimer: NodeJS.Timeout | null = null;
 
-    // Helper: Rasterize crisp text "GAMA" into a grid bitmap mask
+    // Helper: Rasterize massive bold "gama" or "GAMA" across full width, cropped at bottom
     const generateTextMask = (cols: number, rows: number) => {
       if (cols <= 0 || rows <= 0) return;
       const offscreen = document.createElement("canvas");
@@ -114,20 +114,21 @@ export function MountainDotGrid({
       octx.clearRect(0, 0, cols, rows);
       octx.fillStyle = "#ffffff";
 
-      // Dynamically size font to fit grid nicely centered
-      const fontSize = Math.min(Math.floor(rows * 0.72), Math.floor(cols / 4.2));
+      // Massive typography sized to span ~94% of the entire grid width
+      const fontSize = Math.floor(cols * 0.32);
       octx.font = `900 ${fontSize}px var(--font-instagram-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Arial Black", sans-serif`;
       octx.textAlign = "center";
-      octx.textBaseline = "middle";
-      octx.letterSpacing = "2px";
+      octx.textBaseline = "alphabetic";
+      octx.letterSpacing = "-0.04em"; // tight modern kerning like the reference
 
-      octx.fillText("GAMA", cols / 2, rows / 2 + 1);
+      // Position baseline near/past the bottom to get the exact "cropped at the bottom" look
+      const baselineY = Math.floor(rows * 1.15);
+      octx.fillText("GAMA", cols / 2, baselineY);
 
       const imgData = octx.getImageData(0, 0, cols, rows).data;
       const mask = new Uint8Array(cols * rows);
 
       for (let i = 0; i < cols * rows; i++) {
-        // Red channel gives density (0 to 255)
         mask[i] = imgData[i * 4 + 3];
       }
 
@@ -260,15 +261,15 @@ export function MountainDotGrid({
           }
 
           // Halftone modulation:
-          // Background points: micro-dots (radius ~0.8px, intensity ~0.15)
-          // "GAMA" letter points: bold prominent dots (radius ~2.2px, intensity ~0.95)
-          let intensity = 0.14 + subtleWave;
-          let radius = 0.85;
+          // Background points: subtle micro-dots matching global grid (radius ~0.9px, intensity ~0.15)
+          // "GAMA" letter points: thick prominent bold dots (radius up to ~2.6px, intensity ~0.95)
+          let intensity = 0.12;
+          let radius = 0.9;
 
           if (textAlpha > 0.05) {
             // Inside typography glyphs
-            intensity = 0.35 + textAlpha * 0.60;
-            radius = 1.2 + textAlpha * 1.25;
+            intensity = 0.40 + textAlpha * 0.58;
+            radius = 1.3 + textAlpha * 1.35;
           }
 
           // Draw the Halftone Grid Dot
