@@ -202,11 +202,15 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener("pointerdown", handleGesture, { passive: true });
     window.addEventListener("keydown", handleGesture, { passive: true });
     window.addEventListener("touchstart", handleGesture, { passive: true });
+    window.addEventListener("wheel", handleGesture, { passive: true, once: true });
+    window.addEventListener("pointermove", handleGesture, { passive: true, once: true });
 
     return () => {
       window.removeEventListener("pointerdown", handleGesture);
       window.removeEventListener("keydown", handleGesture);
       window.removeEventListener("touchstart", handleGesture);
+      window.removeEventListener("wheel", handleGesture);
+      window.removeEventListener("pointermove", handleGesture);
     };
   }, [initEngine]);
 
@@ -251,9 +255,14 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       const target = (e.target as Element)?.closest?.("[data-cuelume-hover]");
       if (!target) return;
 
+      // Prevent re-triggering when moving between child elements of the same target
+      if (e.relatedTarget && target.contains(e.relatedTarget as Node)) {
+        return;
+      }
+
       const now = performance.now();
       const last = lastHoverMap.current.get(target) ?? 0;
-      if (now - last < 80) return;
+      if (now - last < 100) return;
       lastHoverMap.current.set(target, now);
 
       const sound = (target.getAttribute("data-cuelume-hover") || "tick") as SoundType;

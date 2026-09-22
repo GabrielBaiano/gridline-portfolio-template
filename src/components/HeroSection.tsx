@@ -1,7 +1,11 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { portfolioData, SocialLink } from "@/data/portfolio";
+import { ScheduleModal } from "./ScheduleModal";
 
 export function HeroSection() {
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   const renderSocialIcon = (icon: SocialLink["icon"]) => {
     switch (icon) {
@@ -88,36 +92,38 @@ export function HeroSection() {
           </a>
         )}
 
-        {portfolioData.personal.calendarUrl && (
-          <a
-            href={portfolioData.personal.calendarUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cuelume-hover="tick"
-            data-cuelume-press="true"
-            className="w-fit flex items-center gap-1.5 px-2.5 py-[7px] sm:py-1.5 bg-[#f4f4f4] hover:bg-[#e9e9e9] dark:bg-[#1c1c1c] dark:hover:bg-[#2b2b2b] border border-[#d1d1d1] dark:border-[#313131] rounded-[9px] text-sm font-medium text-[#333333] dark:text-[#d9d9d9] transition-colors cursor-pointer no-underline"
+        <button
+          type="button"
+          onClick={() => setIsScheduleOpen(true)}
+          data-cuelume-hover="tick"
+          data-cuelume-press="true"
+          className="w-fit flex items-center gap-1.5 px-2.5 py-[7px] sm:py-1.5 bg-[#f4f4f4] hover:bg-[#e9e9e9] dark:bg-[#1c1c1c] dark:hover:bg-[#2b2b2b] border border-[#d1d1d1] dark:border-[#313131] rounded-[9px] text-sm font-medium text-[#333333] dark:text-[#d9d9d9] transition-colors cursor-pointer no-underline"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-calendar text-[#9c9c9c]"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-calendar text-[#9c9c9c]"
-            >
-              <path d="M8 2v4" />
-              <path d="M16 2v4" />
-              <rect width="18" height="18" x="3" y="4" rx="2" />
-              <path d="M3 10h18" />
-            </svg>
-            Book an intro call
-          </a>
-        )}
+            <path d="M8 2v4" />
+            <path d="M16 2v4" />
+            <rect width="18" height="18" x="3" y="4" rx="2" />
+            <path d="M3 10h18" />
+          </svg>
+          Book an intro call
+        </button>
       </div>
+
+      <ScheduleModal
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
+      />
 
       {/* Socials Heading */}
       <p style={{ fontSize: "16px", marginTop: "16px" }} className="text-[#333333] dark:text-[#d9d9d9]">
