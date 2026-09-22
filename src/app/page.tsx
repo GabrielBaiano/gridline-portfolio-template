@@ -1,6 +1,7 @@
 import React from "react";
 import { HeaderBanner } from "@/components/HeaderBanner";
 import { DotGridSnakeGame } from "@/components/DotGridSnakeGame";
+import { MountainDotGrid } from "@/components/MountainDotGrid";
 import { StickyNav } from "@/components/StickyNav";
 import { HeroSection } from "@/components/HeroSection";
 import { ActivityCalendar } from "@/components/ActivityCalendar";
@@ -62,9 +63,9 @@ export default function Home() {
 
       <div className="divider-dashed"></div>
 
-      {/* Bottom Dot Grid Banner */}
+      {/* Bottom Dot Grid Banner with Halftone Mountain Relief */}
       <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">
-        <DotGridSnakeGame className="w-full sm:min-h-[220px] min-h-[100px] h-full grow" />
+        <MountainDotGrid className="w-full sm:min-h-[220px] min-h-[140px] h-full grow" />
       </div>
 
       {/* Scroll to Top Floating Button */}
