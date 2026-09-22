@@ -28,12 +28,20 @@ const SoundContext = createContext<SoundContextType>({
   play: () => {},
 });
 
+interface AudioGraph {
+  ctx: AudioContext;
+  master: GainNode;
+  compressor: DynamicsCompressorNode;
+}
+
 export function SoundProvider({ children }: { children: React.ReactNode }) {
   const [isMuted, setIsMuted] = useState(false);
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  const graphRef = useRef<AudioGraph | null>(null);
   const isMutedRef = useRef(false);
-  const lastHoverTime = useRef(0);
+  // Per-element throttle map — prevents repeated ticks on same element within 80ms
+  const lastHoverMap = useRef<WeakMap<Element, number>>(new WeakMap());
 
+  // Load persisted mute preference
   useEffect(() => {
     try {
       const saved1 = localStorage.getItem("soundEffectsEnabled");
@@ -52,189 +60,191 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const getAudioContext = useCallback((): AudioContext | null => {
+  /**
+   * Lazily build the AudioContext + master gain + compressor chain.
+   * The compressor handles dynamic normalisation so all sounds come out
+   * at consistent perceived loudness regardless of timing or browser state.
+   */
+  const getGraph = useCallback((): AudioGraph | null => {
     if (typeof window === "undefined") return null;
-    if (!audioCtxRef.current) {
-      const AudioCtxClass =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtxClass) return null;
-      try {
-        audioCtxRef.current = new AudioCtxClass();
-      } catch {
-        return null;
-      }
+    if (graphRef.current) return graphRef.current;
+
+    const AudioCtxClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioCtxClass) return null;
+
+    try {
+      const ctx = new AudioCtxClass();
+
+      // Master gain — all sounds routed here
+      const master = ctx.createGain();
+      master.gain.value = 0.9; // headroom; compressor handles peaks
+
+      // Dynamics compressor — normalises volume spikes and prevents clipping
+      const compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.value = -18; // dB
+      compressor.knee.value = 6;
+      compressor.ratio.value = 4;
+      compressor.attack.value = 0.003;
+      compressor.release.value = 0.12;
+
+      master.connect(compressor);
+      compressor.connect(ctx.destination);
+
+      graphRef.current = { ctx, master, compressor };
+      return graphRef.current;
+    } catch {
+      return null;
     }
-    return audioCtxRef.current;
   }, []);
 
-  // Unlock AudioContext on first user interaction
+  // Unlock the AudioContext on the very first user interaction (browser policy)
   useEffect(() => {
+    let unlocked = false;
     const unlock = () => {
-      const ctx = getAudioContext();
-      if (ctx && ctx.state === "suspended") {
-        ctx.resume().catch(() => {});
+      if (unlocked) return;
+      const graph = getGraph();
+      if (graph && graph.ctx.state === "suspended") {
+        graph.ctx.resume().catch(() => {});
       }
+      unlocked = true;
     };
-    window.addEventListener("pointerdown", unlock, { once: true, passive: true });
-    window.addEventListener("keydown", unlock, { once: true, passive: true });
-    window.addEventListener("touchstart", unlock, { once: true, passive: true });
+    window.addEventListener("pointerdown", unlock, { passive: true });
+    window.addEventListener("keydown", unlock, { passive: true });
+    window.addEventListener("touchstart", unlock, { passive: true });
     return () => {
       window.removeEventListener("pointerdown", unlock);
       window.removeEventListener("keydown", unlock);
       window.removeEventListener("touchstart", unlock);
     };
-  }, [getAudioContext]);
+  }, [getGraph]);
 
-  const executeSound = useCallback((ctx: AudioContext, type: SoundType) => {
-    const now = ctx.currentTime;
+  /**
+   * Schedule a single oscillator burst into the master bus.
+   * All parameters are normalised so sounds feel equally loud.
+   */
+  const scheduleOsc = useCallback(
+    (
+      ctx: AudioContext,
+      dest: AudioNode,
+      opts: {
+        type?: OscillatorType;
+        freqStart: number;
+        freqEnd: number;
+        gainPeak: number;
+        duration: number;
+        startOffset?: number;
+      }
+    ) => {
+      const { type = "sine", freqStart, freqEnd, gainPeak, duration, startOffset = 0 } = opts;
+      const now = ctx.currentTime + startOffset;
 
-    switch (type) {
-      case "tick": {
-        // Crisp, tactile UI hover blip (800Hz down to 400Hz)
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(850, now);
-        osc.frequency.exponentialRampToValueAtTime(420, now + 0.025);
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.026);
-        break;
+      osc.type = type;
+      osc.frequency.setValueAtTime(freqStart, now);
+      if (freqEnd !== freqStart) {
+        osc.frequency.exponentialRampToValueAtTime(Math.max(freqEnd, 0.01), now + duration);
       }
 
-      case "press": {
-        // Satisfying mechanical click (450Hz down to 180Hz)
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(450, now);
-        osc.frequency.exponentialRampToValueAtTime(180, now + 0.045);
+      gain.gain.setValueAtTime(gainPeak, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+      osc.connect(gain);
+      gain.connect(dest);
+      osc.start(now);
+      osc.stop(now + duration + 0.002);
+      osc.onended = () => {
+        osc.disconnect();
+        gain.disconnect();
+      };
+    },
+    []
+  );
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+  const executeSound = useCallback(
+    (graph: AudioGraph, type: SoundType) => {
+      const { ctx, master } = graph;
 
-        osc.start(now);
-        osc.stop(now + 0.046);
-        break;
+      switch (type) {
+        case "tick":
+          // Short crisp blip — hover feedback
+          scheduleOsc(ctx, master, {
+            freqStart: 820,
+            freqEnd: 410,
+            gainPeak: 0.18,
+            duration: 0.022,
+          });
+          break;
+
+        case "press":
+          // Mechanical click — pointer down
+          scheduleOsc(ctx, master, {
+            freqStart: 440,
+            freqEnd: 200,
+            gainPeak: 0.22,
+            duration: 0.04,
+          });
+          break;
+
+        case "release":
+          // Subtle upward chirp — pointer up
+          scheduleOsc(ctx, master, {
+            freqStart: 310,
+            freqEnd: 520,
+            gainPeak: 0.14,
+            duration: 0.028,
+          });
+          break;
+
+        case "toggle":
+          // Two-tone switch blip
+          scheduleOsc(ctx, master, { freqStart: 520, freqEnd: 380, gainPeak: 0.18, duration: 0.018 });
+          scheduleOsc(ctx, master, { freqStart: 740, freqEnd: 560, gainPeak: 0.18, duration: 0.02, startOffset: 0.024 });
+          break;
+
+        case "chime":
+          // Melodic two-note chime — food/milestone
+          scheduleOsc(ctx, master, { freqStart: 1046, freqEnd: 1046, gainPeak: 0.16, duration: 0.18 });
+          scheduleOsc(ctx, master, { freqStart: 1568, freqEnd: 1568, gainPeak: 0.14, duration: 0.24, startOffset: 0.055 });
+          break;
       }
-
-      case "release": {
-        // Subtle upward chirp
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.exponentialRampToValueAtTime(520, now + 0.03);
-
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.031);
-        break;
-      }
-
-      case "toggle": {
-        // Distinct two-tone switch blip
-        const osc1 = ctx.createOscillator();
-        const gain1 = ctx.createGain();
-        osc1.type = "sine";
-        osc1.frequency.setValueAtTime(520, now);
-        osc1.frequency.exponentialRampToValueAtTime(380, now + 0.02);
-        gain1.gain.setValueAtTime(0.09, now);
-        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
-        osc1.connect(gain1);
-        gain1.connect(ctx.destination);
-        osc1.start(now);
-        osc1.stop(now + 0.021);
-
-        const osc2 = ctx.createOscillator();
-        const gain2 = ctx.createGain();
-        osc2.type = "sine";
-        osc2.frequency.setValueAtTime(740, now + 0.025);
-        osc2.frequency.exponentialRampToValueAtTime(560, now + 0.05);
-        gain2.gain.setValueAtTime(0.09, now + 0.025);
-        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
-        osc2.connect(gain2);
-        gain2.connect(ctx.destination);
-        osc2.start(now + 0.025);
-        osc2.stop(now + 0.051);
-        break;
-      }
-
-      case "chime": {
-        // Melodic chime for milestones / claps
-        const osc1 = ctx.createOscillator();
-        const gain1 = ctx.createGain();
-        osc1.type = "sine";
-        osc1.frequency.setValueAtTime(1046.5, now); // C6
-        gain1.gain.setValueAtTime(0.1, now);
-        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-        osc1.connect(gain1);
-        gain1.connect(ctx.destination);
-        osc1.start(now);
-        osc1.stop(now + 0.23);
-
-        const osc2 = ctx.createOscillator();
-        const gain2 = ctx.createGain();
-        osc2.type = "sine";
-        osc2.frequency.setValueAtTime(1568, now + 0.06); // G6
-        gain2.gain.setValueAtTime(0.09, now + 0.06);
-        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
-        osc2.connect(gain2);
-        gain2.connect(ctx.destination);
-        osc2.start(now + 0.06);
-        osc2.stop(now + 0.33);
-        break;
-      }
-    }
-  }, []);
+    },
+    [scheduleOsc]
+  );
 
   const playSound = useCallback(
     (type: SoundType) => {
       if (isMutedRef.current) return;
-      const ctx = getAudioContext();
-      if (!ctx) return;
+      const graph = getGraph();
+      if (!graph) return;
 
-      if (ctx.state === "suspended") {
-        ctx
-          .resume()
-          .then(() => {
-            executeSound(ctx, type);
-          })
-          .catch(() => {});
+      const fire = () => executeSound(graph, type);
+
+      if (graph.ctx.state === "suspended") {
+        graph.ctx.resume().then(fire).catch(() => {});
       } else {
-        executeSound(ctx, type);
+        fire();
       }
     },
-    [getAudioContext, executeSound]
+    [getGraph, executeSound]
   );
 
-  // Global event delegation for data-cuelume attributes
+  // Global event delegation for data-cuelume-* attributes
   useEffect(() => {
     if (typeof document === "undefined") return;
 
     const handlePointerEnter = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse" && e.pointerType !== "") return;
+      if (e.pointerType === "touch") return; // skip synthetic touch events
       const target = (e.target as Element)?.closest?.("[data-cuelume-hover]");
       if (!target) return;
 
       const now = performance.now();
-      if (now - lastHoverTime.current < 120) return;
-      lastHoverTime.current = now;
+      const last = lastHoverMap.current.get(target) ?? 0;
+      if (now - last < 80) return;
+      lastHoverMap.current.set(target, now);
 
       const sound = (target.getAttribute("data-cuelume-hover") || "tick") as SoundType;
       playSound(sound);
@@ -281,17 +291,15 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
-    if (!next) {
-      playSound("toggle");
-    }
+    if (!next) playSound("toggle");
   }, [playSound]);
 
-  const playTick = useCallback(() => playSound("tick"), [playSound]);
-  const playClick = useCallback(() => playSound("press"), [playSound]);
-  const playPress = useCallback(() => playSound("press"), [playSound]);
+  const playTick    = useCallback(() => playSound("tick"),    [playSound]);
+  const playClick   = useCallback(() => playSound("press"),   [playSound]);
+  const playPress   = useCallback(() => playSound("press"),   [playSound]);
   const playRelease = useCallback(() => playSound("release"), [playSound]);
-  const playToggle = useCallback(() => playSound("toggle"), [playSound]);
-  const playChime = useCallback(() => playSound("chime"), [playSound]);
+  const playToggle  = useCallback(() => playSound("toggle"),  [playSound]);
+  const playChime   = useCallback(() => playSound("chime"),   [playSound]);
 
   return (
     <SoundContext.Provider

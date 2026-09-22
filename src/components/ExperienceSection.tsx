@@ -5,7 +5,7 @@ import { portfolioData, Experience } from "@/data/portfolio";
 import { useSound } from "./SoundProvider";
 
 export function ExperienceSection() {
-  const { playClick, playTick } = useSound();
+  const { playClick } = useSound();
   const [openIndices, setOpenIndices] = useState<number[]>([]);
 
   const toggleIndex = (index: number) => {
@@ -74,7 +74,6 @@ export function ExperienceSection() {
                   {/* Header Row */}
                   <div
                     onClick={() => toggleIndex(index)}
-                    onMouseEnter={playTick}
                     data-cuelume-hover="tick"
                     data-cuelume-press="true"
                     className="flex transition-colors duration-300 p-3 flex-row gap-4 justify-between select-none group hover:bg-bgHover cursor-pointer"
