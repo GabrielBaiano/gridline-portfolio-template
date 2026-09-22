@@ -5,18 +5,52 @@ import { useSound } from "@/components/SoundProvider";
 
 interface ClapButtonProps {
   initialClaps: number;
+  slug?: string;
 }
 
-export function ClapButton({ initialClaps }: ClapButtonProps) {
-  const { playClick } = useSound();
+export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
+  const { playClick, playChime } = useSound();
   const [claps, setClaps] = useState(initialClaps);
   const [isAnimating, setIsAnimating] = useState(false);
+  const pendingClapsRef = React.useRef(0);
+  const debounceTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  // Sync latest claps count from server
+  React.useEffect(() => {
+    if (!slug) return;
+    fetch(`/api/claps?slug=${encodeURIComponent(slug)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.claps === "number") {
+          setClaps(data.claps);
+        }
+      })
+      .catch(() => {});
+  }, [slug]);
 
   const handleClap = () => {
     playClick();
     setClaps((prev) => prev + 1);
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 400);
+
+    if (claps % 10 === 0) {
+      playChime();
+    }
+
+    if (slug) {
+      pendingClapsRef.current += 1;
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = setTimeout(() => {
+        const countToSend = pendingClapsRef.current;
+        pendingClapsRef.current = 0;
+        fetch("/api/claps", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slug, count: countToSend }),
+        }).catch(() => {});
+      }, 400);
+    }
   };
 
   return (

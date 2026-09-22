@@ -106,7 +106,7 @@ export default async function BlogPostDetailPage({
               )}
             </div>
 
-            <ClapButton initialClaps={post.claps ?? 0} />
+            <ClapButton slug={post.slug} initialClaps={post.claps ?? 0} />
           </div>
 
           {/* Tags */}
