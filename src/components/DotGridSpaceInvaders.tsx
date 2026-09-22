@@ -88,6 +88,7 @@ export function DotGridSpaceInvaders({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const isPlayingRef = useRef(false);
   const clickTimestamps = useRef<number[]>([]);
 
   // Game state
@@ -169,6 +170,7 @@ export function DotGridSpaceInvaders({
 
   const quitGame = useCallback(() => {
     setIsPlaying(false);
+    isPlayingRef.current = false;
     isGameOverRef.current = false;
     isVictoryRef.current = false;
     keysDownRef.current.clear();
@@ -181,6 +183,7 @@ export function DotGridSpaceInvaders({
     rowsCountRef.current = Math.max(14, Math.floor(rect.height / CELL_SIZE));
     resetGame();
     setIsPlaying(true);
+    isPlayingRef.current = true;
     playChime();
   }, [resetGame, playChime]);
 
@@ -257,28 +260,14 @@ export function DotGridSpaceInvaders({
     };
   }, [isPlaying, quitGame, resetGame, shootPlayerBullet]);
 
-  // Mouse / Touch aiming
-  const handlePointerDown = (e: React.PointerEvent) => {
+  // Mouse / Touch shooting only (no cursor following)
+  const handlePointerDown = () => {
     if (!isPlaying) return;
     if (isGameOverRef.current || isVictoryRef.current) {
       resetGame();
       return;
     }
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (rect) {
-      const col = Math.round((e.clientX - rect.left) / CELL_SIZE);
-      playerColRef.current = Math.max(5, Math.min(colsCountRef.current - 5, col));
-      shootPlayerBullet();
-    }
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isPlaying) return;
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (rect) {
-      const col = Math.round((e.clientX - rect.left) / CELL_SIZE);
-      playerColRef.current = Math.max(5, Math.min(colsCountRef.current - 5, col));
-    }
+    shootPlayerBullet();
   };
 
   // 60FPS Game & Render Loop
@@ -418,6 +407,12 @@ export function DotGridSpaceInvaders({
         if (aliveInvaders.length === 0) {
           isVictoryRef.current = true;
           playChime();
+          setTimeout(() => {
+            if (isPlayingRef.current) {
+              isVictoryRef.current = false;
+              initFleet(totalCols, totalRows);
+            }
+          }, 1200);
         } else {
           fleetStepTimerRef.current += 1;
           const stepSpeed = Math.max(6, Math.floor((aliveInvaders.length / 18) * 32));
@@ -444,6 +439,9 @@ export function DotGridSpaceInvaders({
                 if (inv.row + inv.height >= totalRows - 4) {
                   isGameOverRef.current = true;
                   playError();
+                  setTimeout(() => {
+                    if (isPlayingRef.current) resetGame();
+                  }, 1800);
                   break;
                 }
               }
@@ -517,6 +515,9 @@ export function DotGridSpaceInvaders({
 
               if (livesRef.current <= 0) {
                 isGameOverRef.current = true;
+                setTimeout(() => {
+                  if (isPlayingRef.current) resetGame();
+                }, 1800);
               }
             }
           }
@@ -582,42 +583,6 @@ export function DotGridSpaceInvaders({
       }
       sparksRef.current = nextSparks;
 
-      // 9. HUD Display (Score & Lives)
-      ctx.font = "bold 11px monospace";
-      ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.85)" : "rgba(0, 0, 0, 0.85)";
-      ctx.fillText(`SCORE: ${scoreRef.current}`, 14, 18);
-
-      let livesStr = "LIVES: ";
-      for (let i = 0; i < livesRef.current; i++) {
-        livesStr += "● ";
-      }
-      ctx.fillText(livesStr, totalCols * CELL_SIZE - 95, 18);
-
-      // 10. End Game Overlays
-      if (isGameOverRef.current) {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.72)";
-        ctx.fillRect(0, 0, totalCols * CELL_SIZE, totalRows * CELL_SIZE);
-        ctx.fillStyle = isDark ? "#f87171" : "#ef4444";
-        ctx.font = "bold 16px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("GAME OVER", (totalCols * CELL_SIZE) / 2, (totalRows * CELL_SIZE) / 2 - 8);
-        ctx.font = "11px monospace";
-        ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.8)";
-        ctx.fillText("SPACE TO REPLAY • ESC TO EXIT", (totalCols * CELL_SIZE) / 2, (totalRows * CELL_SIZE) / 2 + 14);
-        ctx.textAlign = "left";
-      } else if (isVictoryRef.current) {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.72)";
-        ctx.fillRect(0, 0, totalCols * CELL_SIZE, totalRows * CELL_SIZE);
-        ctx.fillStyle = isDark ? "#4ade80" : "#16a34a";
-        ctx.font = "bold 16px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("VICTORY! INVASION REPELLED", (totalCols * CELL_SIZE) / 2, (totalRows * CELL_SIZE) / 2 - 8);
-        ctx.font = "11px monospace";
-        ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.8)";
-        ctx.fillText("SPACE TO REPLAY • ESC TO EXIT", (totalCols * CELL_SIZE) / 2, (totalRows * CELL_SIZE) / 2 + 14);
-        ctx.textAlign = "left";
-      }
-
       animId = requestAnimationFrame(loop);
     };
 
@@ -634,27 +599,13 @@ export function DotGridSpaceInvaders({
       ref={containerRef}
       onClick={handleBannerClick}
       onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
       className={`${className} relative select-none overflow-hidden cursor-pointer bg-dot-grid rounded-[4px]`}
     >
       {isPlaying && (
-        <>
-          <canvas
-            ref={canvasRef}
-            className="absolute inset-0 block w-full h-full pointer-events-none"
-          />
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              quitGame();
-            }}
-            className="absolute top-2 right-2 px-1.5 py-0.5 text-[10px] font-mono rounded border border-border bg-background/80 hover:bg-background text-mutedForeground transition-colors cursor-pointer select-none"
-            title="Exit game (Esc)"
-          >
-            ESC ✕
-          </button>
-        </>
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 block w-full h-full pointer-events-none"
+        />
       )}
     </div>
   );
