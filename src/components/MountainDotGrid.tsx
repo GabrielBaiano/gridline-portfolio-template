@@ -20,7 +20,6 @@ export function MountainDotGrid({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mousePosRef = useRef<{ x: number; y: number } | null>(null);
   const textMaskRef = useRef<Uint8Array | null>(null);
   const maskDimsRef = useRef<{ cols: number; rows: number }>({ cols: 0, rows: 0 });
   const { playClick, playChime } = useSound();
@@ -155,22 +154,6 @@ export function MountainDotGrid({
     resize();
     window.addEventListener("resize", resize);
 
-    // Mouse tracking for subtle interactive lighting
-    const onMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      mousePosRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-    };
-
-    const onMouseLeave = () => {
-      mousePosRef.current = null;
-    };
-
-    container.addEventListener("mousemove", onMouseMove);
-    container.addEventListener("mouseleave", onMouseLeave);
-
     // Snake game loop
     if (isPlaying) {
       isGameOverRef.current = false;
@@ -254,7 +237,6 @@ export function MountainDotGrid({
 
       const cols = Math.floor(width / CELL_SIZE);
       const rows = Math.floor(height / CELL_SIZE);
-      const mouse = mousePosRef.current;
       const mask = textMaskRef.current;
       const maskDims = maskDimsRef.current;
 
@@ -287,16 +269,6 @@ export function MountainDotGrid({
             // Inside typography glyphs
             intensity = 0.35 + textAlpha * 0.60;
             radius = 1.2 + textAlpha * 1.25;
-          }
-
-          // Subtle interactive proximity highlight on mouse hover
-          if (mouse) {
-            const dist = Math.hypot(x - mouse.x, y - mouse.y);
-            if (dist < 75) {
-              const boost = (1 - dist / 75) * 0.28;
-              intensity = Math.min(1.0, intensity + boost);
-              radius = Math.min(2.5, radius + boost * 0.8);
-            }
           }
 
           // Draw the Halftone Grid Dot
@@ -352,8 +324,6 @@ export function MountainDotGrid({
       if (gameTimer) clearInterval(gameTimer);
       cancelAnimationFrame(animFrame);
       window.removeEventListener("resize", resize);
-      container.removeEventListener("mousemove", onMouseMove);
-      container.removeEventListener("mouseleave", onMouseLeave);
     };
   }, [isPlaying, playClick]);
 
