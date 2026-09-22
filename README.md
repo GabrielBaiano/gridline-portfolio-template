@@ -13,7 +13,10 @@ Conta com grid dashed de 690px centralizado, sintetizador de som nativo via Web 
 - **Botão de Aplausos com Partículas**: Sistema de claps com animação flutuante de `+1`, limite de 10 claps por leitor com feedback tátil (o botão treme, fica vermelho e toca som de negado ao bater o limite).
 - **Activity Calendar Otimizado**: Heatmap estilo GitHub gerado em build-time como React Server Component (0 KB de JSON enviado ao cliente), com suporte a arrastar/rolar no mobile.
 - **Blog Técnico com SSG**: Páginas dedicadas (`/blog/[slug]`), blocos de código com cópia de 1 clique, estimativa de leitura, feed RSS (`/feed.xml`) e `sitemap.xml`.
-- **Easter Egg (Snake Game)**: Jogo Snake retrô embutido no banner de dot-grid do topo e do rodapé — ativado ao clicar 3 vezes seguidas no banner. Suporta setas/WASD e gestos touch no mobile.
+- **Easter Eggs Retrô**:
+  - **Snake Game** no banner do topo (clique triplo).
+  - **Space Invaders** no banner do rodapé (clique triplo com aliens animados, disparos de laser, partículas e placar).
+  - Suportam teclado (setas/WASD/Espaço) e mouse/touch no mobile.
 - **Agendamento Rápido**: Botão "Book a call" integrado direto com seu link do [Cal.com](https://cal.com).
 - **Full Dark / Light Mode**: Alternador de tema persistido no `localStorage`.
 
@@ -146,16 +149,27 @@ Todo o conteúdo do site fica centralizado em um único arquivo:
 
 ---
 
-## 🎮 Easter Egg do Snake Game
+## 🎮 Easter Eggs Retrô (Minigames)
 
-Para testar ou jogar o Snake:
-1. Abra qualquer página do site.
-2. Dê um **clique triplo rápido** (3 cliques em menos de 750ms) no banner de pontinhos (dot grid) do cabeçalho ou do rodapé.
-3. O jogo iniciará diretamente dentro do banner usando HTML5 Canvas.
-   - **Controles no PC**: Setas ou `W, A, S, D`.
-   - **Controles no Celular**: Deslizar com o dedo (swipe).
-   - **Reiniciar**: Barra de espaço.
-   - **Sair**: Tecla `Esc` ou botão `✕` no canto superior direito.
+Ambos os banners de dot-grid contêm minigames retrô secretos renderizados em HTML5 Canvas sobre o fundo pontilhado:
+
+### 1. Snake Game (Banner do Topo)
+- **Como ativar**: Dê um **clique triplo rápido** (3 cliques em menos de 750ms) no banner do topo.
+- **Controles**: Setas ou `W, A, S, D` no teclado; gestos swipe no celular.
+- **Sair**: Tecla `Esc` ou botão `✕`.
+
+### 2. Space Invaders (Banner do Rodapé)
+- **Como ativar**: Dê um **clique triplo rápido** no banner inferior do rodapé.
+- **Mecânicas**:
+  - Canhão laser do jogador com controle horizontal.
+  - Frotas de aliens animados (Crab e Squid) com descida progressiva e cadência acelerada.
+  - Lasers dos aliens com sistema de vidas (3 vidas) e piscar de invulnerabilidade.
+  - Placar em tempo real (`SCORE`), explosões de fagulhas em pixel art e áudio sintetizado.
+- **Controles no PC**:
+  - Mover: `← / →` ou `A / D` (ou arraste do mouse).
+  - Atirar: Barra de `Espaço`, `W` ou clique/tap do mouse.
+  - Sair: Tecla `Esc` ou botão `ESC ✕`.
+- **Controles no Celular**: Toque e arraste para mover o canhão e disparar.
 
 ---
 
