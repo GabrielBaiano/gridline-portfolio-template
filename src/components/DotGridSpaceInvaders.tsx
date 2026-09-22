@@ -3,70 +3,129 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSound } from "./SoundProvider";
 
-// Micro Space Invaders Bitmaps on a discrete dot-grid
-// 1 = illuminated dot, 0 = unlit grid dot
-
-// Micro Squid (Alien Type A) - 5 cols x 3 rows
+// Exact 1978 Space Invaders Arcade Bitmaps (1 = illuminated dot, 0 = empty)
+// 1. Squid (Top Row Alien) - 8 cols x 8 rows
 const SQUID_1 = [
-  [0, 1, 0, 1, 0],
-  [1, 1, 1, 1, 1],
-  [1, 0, 0, 0, 1],
+  [0, 0, 0, 1, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 1, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 0, 1, 1, 0, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 1, 0, 0, 1, 0, 0],
+  [0, 1, 0, 1, 1, 0, 1, 0],
+  [1, 0, 1, 0, 0, 1, 0, 1],
 ];
 
 const SQUID_2 = [
-  [0, 1, 0, 1, 0],
-  [1, 1, 1, 1, 1],
-  [0, 1, 0, 1, 0],
+  [0, 0, 0, 1, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 1, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 0, 1, 1, 0, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 1, 0, 0, 0, 0, 1, 0],
+  [0, 0, 1, 0, 0, 1, 0, 0],
+  [0, 1, 0, 0, 0, 0, 1, 0],
 ];
 
-// Micro Crab (Alien Type B) - 5 cols x 3 rows
+// 2. Crab (Middle Row Alien) - 11 cols x 8 rows
 const CRAB_1 = [
-  [1, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1],
-  [1, 0, 1, 0, 1],
+  [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+  [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+  [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+  [0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0],
 ];
 
 const CRAB_2 = [
-  [0, 1, 0, 1, 0],
-  [1, 1, 1, 1, 1],
-  [0, 1, 0, 1, 0],
+  [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+  [1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
+  [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+  [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+  [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
 ];
 
-// Micro Cannon (Player Ship) - 5 cols x 3 rows
+// 3. Octopus (Bottom Row Alien) - 12 cols x 8 rows
+const OCTOPUS_1 = [
+  [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0],
+  [0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0],
+  [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+];
+
+const OCTOPUS_2 = [
+  [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0],
+  [0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0],
+  [0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0],
+];
+
+// 4. Cannon (Player Ship) - 13 cols x 8 rows
 const CANNON = [
-  [0, 0, 1, 0, 0],
-  [0, 1, 1, 1, 0],
-  [1, 1, 1, 1, 1],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
-// Grid unit exactly matching .bg-dot-grid in globals.css (7.5px)
-const CELL_SIZE = 7.5;
+// 5. Classic Alien Explosion - 13 cols x 8 rows
+const EXPLOSION = [
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+  [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+  [0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+  [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+  [0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0],
+  [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+];
+
+// Pixel scale for compact micro-dots
+const DOT_STEP = 3.2; // Spacing between dots in pixels
+const DOT_RADIUS = 1.35; // Radius of each illuminated dot
 
 interface Invader {
-  col: number;
-  row: number;
+  x: number;
+  y: number;
   width: number;
   height: number;
-  type: "squid" | "crab";
+  type: "squid" | "crab" | "octopus";
   alive: boolean;
   score: number;
+  explosionTimer?: number;
 }
 
 interface Bullet {
-  col: number;
-  row: number;
+  x: number;
+  y: number;
   vy: number;
   fromPlayer: boolean;
 }
 
-interface DotSpark {
+interface Spark {
   x: number;
   y: number;
   vx: number;
   vy: number;
   life: number;
   maxLife: number;
-  color: string;
 }
 
 export function DotGridSpaceInvaders({
@@ -82,16 +141,17 @@ export function DotGridSpaceInvaders({
   const isPlayingRef = useRef(false);
   const clickTimestamps = useRef<number[]>([]);
 
-  // Game grid state
-  const colsCountRef = useRef(88);
-  const rowsCountRef = useRef(29);
+  // Screen bounds
+  const boundsRef = useRef({ width: 660, height: 220 });
+
+  // Game state
   const isGameOverRef = useRef(false);
   const isVictoryRef = useRef(false);
   const scoreRef = useRef(0);
   const livesRef = useRef(3);
 
   // Player state
-  const playerColRef = useRef(44);
+  const playerXRef = useRef(330);
   const keysDownRef = useRef<Set<string>>(new Set());
   const lastShotTimeRef = useRef(0);
   const invulnerableTimerRef = useRef(0);
@@ -105,33 +165,46 @@ export function DotGridSpaceInvaders({
 
   // Bullets & Sparks
   const bulletsRef = useRef<Bullet[]>([]);
-  const sparksRef = useRef<DotSpark[]>([]);
+  const sparksRef = useRef<Spark[]>([]);
 
-  const initFleet = useCallback((totalCols: number, totalRows: number) => {
-    const isSmall = totalCols < 60;
-    const numCols = isSmall ? 6 : 8;
-    const numRows = totalRows < 20 ? 2 : 3;
+  const initFleet = useCallback((w: number, h: number) => {
+    const isSmall = w < 480;
+    const numCols = isSmall ? 5 : 7;
+    const numRows = h < 170 ? 2 : 3;
 
-    // Spacing between invaders in grid units
-    const colSpacing = isSmall ? 7 : 8;
-    const rowSpacing = 5;
-    const fleetWidth = (numCols - 1) * colSpacing + 5;
-    const startCol = Math.max(3, Math.floor((totalCols - fleetWidth) / 2));
-    const startRow = 2;
+    // Spacing between aliens
+    const colSpacing = isSmall ? 50 : 58;
+    const rowSpacing = 32;
+    const fleetWidth = (numCols - 1) * colSpacing + 12 * DOT_STEP;
+    const startX = Math.max(20, Math.floor((w - fleetWidth) / 2));
+    const startY = 24;
 
     const invaders: Invader[] = [];
     for (let r = 0; r < numRows; r++) {
-      const type: "squid" | "crab" = r === 0 ? "squid" : "crab";
-      const w = 5;
-      const h = 3;
-      const score = type === "squid" ? 30 : 20;
+      let type: "squid" | "crab" | "octopus";
+      let score: number;
+      let spriteCols: number;
+
+      if (r === 0) {
+        type = "squid";
+        score = 30;
+        spriteCols = 8;
+      } else if (r === 1) {
+        type = "crab";
+        score = 20;
+        spriteCols = 11;
+      } else {
+        type = "octopus";
+        score = 10;
+        spriteCols = 12;
+      }
 
       for (let c = 0; c < numCols; c++) {
         invaders.push({
-          col: startCol + c * colSpacing,
-          row: startRow + r * rowSpacing,
-          width: w,
-          height: h,
+          x: startX + c * colSpacing + ((12 - spriteCols) * DOT_STEP) / 2,
+          y: startY + r * rowSpacing,
+          width: spriteCols * DOT_STEP,
+          height: 8 * DOT_STEP,
           type,
           alive: true,
           score,
@@ -146,17 +219,16 @@ export function DotGridSpaceInvaders({
   }, []);
 
   const resetGame = useCallback(() => {
-    const totalCols = colsCountRef.current;
-    const totalRows = rowsCountRef.current;
+    const { width, height } = boundsRef.current;
     scoreRef.current = 0;
     livesRef.current = 3;
-    playerColRef.current = Math.floor(totalCols / 2);
+    playerXRef.current = width / 2;
     bulletsRef.current = [];
     sparksRef.current = [];
     isGameOverRef.current = false;
     isVictoryRef.current = false;
     invulnerableTimerRef.current = 0;
-    initFleet(totalCols, totalRows);
+    initFleet(width, height);
   }, [initFleet]);
 
   const quitGame = useCallback(() => {
@@ -170,17 +242,22 @@ export function DotGridSpaceInvaders({
   const startGame = useCallback(() => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    colsCountRef.current = Math.max(24, Math.floor(rect.width / CELL_SIZE));
-    rowsCountRef.current = Math.max(14, Math.floor(rect.height / CELL_SIZE));
+    boundsRef.current = { width: rect.width, height: rect.height };
     resetGame();
     setIsPlaying(true);
     isPlayingRef.current = true;
     playChime();
   }, [resetGame, playChime]);
 
-  // Triple-click on banner triggers game
+  // Triple-click on the banner triggers the game
   const handleBannerClick = () => {
-    if (isPlaying) return;
+    if (isPlaying) {
+      if (isGameOverRef.current || isVictoryRef.current) {
+        resetGame();
+        return;
+      }
+      return;
+    }
     const now = Date.now();
     clickTimestamps.current.push(now);
     clickTimestamps.current = clickTimestamps.current.filter((t) => now - t < 750);
@@ -194,25 +271,22 @@ export function DotGridSpaceInvaders({
   const shootPlayerBullet = useCallback(() => {
     if (isGameOverRef.current || isVictoryRef.current) return;
     const now = performance.now();
-    if (now - lastShotTimeRef.current < 190) return;
+    if (now - lastShotTimeRef.current < 200) return;
 
     const activeBullets = bulletsRef.current.filter((b) => b.fromPlayer).length;
-    if (activeBullets >= 3) return;
+    if (activeBullets >= 2) return;
 
     lastShotTimeRef.current = now;
-    const pCol = playerColRef.current;
-    const pRow = rowsCountRef.current - 3;
-
     bulletsRef.current.push({
-      col: pCol,
-      row: pRow - 1,
-      vy: -0.7,
+      x: playerXRef.current,
+      y: boundsRef.current.height - 24,
+      vy: -6,
       fromPlayer: true,
     });
     playPress();
   }, [playPress]);
 
-  // Keyboard controls only
+  // Keyboard controls
   useEffect(() => {
     if (!isPlaying) return;
 
@@ -251,7 +325,6 @@ export function DotGridSpaceInvaders({
     };
   }, [isPlaying, quitGame, resetGame, shootPlayerBullet]);
 
-  // Mouse / Touch click shoots only (no mouse following)
   const handlePointerDown = () => {
     if (!isPlaying) return;
     if (isGameOverRef.current || isVictoryRef.current) {
@@ -282,111 +355,71 @@ export function DotGridSpaceInvaders({
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      colsCountRef.current = Math.max(24, Math.floor(rect.width / CELL_SIZE));
-      rowsCountRef.current = Math.max(14, Math.floor(rect.height / CELL_SIZE));
+      boundsRef.current = { width: rect.width, height: rect.height };
     };
 
     updateCanvasDimensions();
     window.addEventListener("resize", updateCanvasDimensions);
 
-    // Monochromatic dot renderer with crisp subtle glow
-    const drawMonochromeDot = (
-      col: number,
-      row: number,
-      color: string,
-      glowColor: string,
-      radius = 1.6,
-      glowBlur = 3
-    ) => {
-      const isDark = document.documentElement.classList.contains("dark");
-      const x = col * CELL_SIZE + CELL_SIZE / 2;
-      const y = row * CELL_SIZE + CELL_SIZE / 2;
-
+    // Monochromatic dot renderer
+    const drawMonochromeDot = (x: number, y: number, color: string, glowColor: string, radius = DOT_RADIUS) => {
       ctx.save();
       ctx.fillStyle = color;
       ctx.shadowColor = glowColor;
-      ctx.shadowBlur = glowBlur;
+      ctx.shadowBlur = 3;
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);
       ctx.fill();
-
-      // Subtle bright core in dark mode
-      if (isDark) {
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(x, y, radius * 0.45, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
       ctx.restore();
     };
 
-    const drawDotSprite = (
+    // Draw authentic bitmap sprite using glowing circular dots
+    const drawDotBitmap = (
       bitmap: number[][],
-      startCol: number,
-      startRow: number,
+      startX: number,
+      startY: number,
       color: string,
-      glowColor: string,
-      radius = 1.6
+      glowColor: string
     ) => {
       const rows = bitmap.length;
       const cols = bitmap[0].length;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           if (bitmap[r][c] === 1) {
-            drawMonochromeDot(startCol + c, startRow + r, color, glowColor, radius, 3);
+            drawMonochromeDot(startX + c * DOT_STEP, startY + r * DOT_STEP, color, glowColor);
           }
         }
       }
     };
 
-    const spawnExplosionDots = (centerCol: number, centerRow: number, color: string) => {
-      for (let i = 0; i < 8; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 0.4 + Math.random() * 2.0;
-        sparksRef.current.push({
-          x: centerCol * CELL_SIZE + CELL_SIZE / 2,
-          y: centerRow * CELL_SIZE + CELL_SIZE / 2,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          life: 0,
-          maxLife: 12 + Math.floor(Math.random() * 8),
-          color,
-        });
-      }
-    };
-
     const loop = () => {
-      const totalCols = colsCountRef.current;
-      const totalRows = rowsCountRef.current;
+      const { width: w, height: h } = boundsRef.current;
       const isDark = document.documentElement.classList.contains("dark");
 
-      ctx.clearRect(0, 0, totalCols * CELL_SIZE + 10, totalRows * CELL_SIZE + 10);
+      ctx.clearRect(0, 0, w, h);
 
-      // Strictly Monochromatic Palette
-      const playerColor = isDark ? "#ffffff" : "#111111";
-      const alienColor = isDark ? "#d4d4d8" : "#27272a";
-      const bulletColor = isDark ? "#ffffff" : "#18181b";
-      const alienBulletColor = isDark ? "#a1a1aa" : "#52525b";
-      const glowHalo = isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.15)";
+      // Strictly Monochromatic Arcade Colors
+      const mainWhite = isDark ? "#ffffff" : "#111111";
+      const secondaryWhite = isDark ? "#e4e4e7" : "#27272a";
+      const dimmedWhite = isDark ? "#a1a1aa" : "#71717a";
+      const glowHalo = isDark ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.2)";
 
       if (!isGameOverRef.current && !isVictoryRef.current) {
-        // 1. Move Player Cannon
+        // 1. Move Player Cannon (ArrowLeft / ArrowRight / A / D)
         const keys = keysDownRef.current;
+        const cannonWidth = 13 * DOT_STEP;
         if (keys.has("arrowleft") || keys.has("a")) {
-          playerColRef.current = Math.max(3, playerColRef.current - 0.75);
+          playerXRef.current = Math.max(cannonWidth / 2 + 10, playerXRef.current - 4.5);
         }
         if (keys.has("arrowright") || keys.has("d")) {
-          playerColRef.current = Math.min(totalCols - 3, playerColRef.current + 0.75);
+          playerXRef.current = Math.min(w - cannonWidth / 2 - 10, playerXRef.current + 4.5);
         }
 
         if (invulnerableTimerRef.current > 0) {
           invulnerableTimerRef.current -= 1;
         }
 
-        // 2. Fleet Step Timing
+        // 2. Invaders Fleet Movement
         const aliveInvaders = invadersRef.current.filter((inv) => inv.alive);
         if (aliveInvaders.length === 0) {
           isVictoryRef.current = true;
@@ -394,12 +427,12 @@ export function DotGridSpaceInvaders({
           setTimeout(() => {
             if (isPlayingRef.current) {
               isVictoryRef.current = false;
-              initFleet(totalCols, totalRows);
+              initFleet(w, h);
             }
-          }, 1200);
+          }, 1400);
         } else {
           fleetStepTimerRef.current += 1;
-          const stepSpeed = Math.max(5, Math.floor((aliveInvaders.length / 24) * 30));
+          const stepSpeed = Math.max(5, Math.floor((aliveInvaders.length / 21) * 28));
 
           if (fleetStepTimerRef.current >= stepSpeed) {
             fleetStepTimerRef.current = 0;
@@ -410,7 +443,7 @@ export function DotGridSpaceInvaders({
             const dir = fleetDirRef.current;
 
             for (const inv of aliveInvaders) {
-              if ((dir === 1 && inv.col + inv.width >= totalCols - 2) || (dir === -1 && inv.col <= 2)) {
+              if ((dir === 1 && inv.x + inv.width >= w - 16) || (dir === -1 && inv.x <= 16)) {
                 hitEdge = true;
                 break;
               }
@@ -419,37 +452,35 @@ export function DotGridSpaceInvaders({
             if (hitEdge) {
               fleetDirRef.current = (dir * -1) as 1 | -1;
               for (const inv of aliveInvaders) {
-                inv.row += 1;
-                if (inv.row + inv.height >= totalRows - 3) {
+                inv.y += 10;
+                if (inv.y + inv.height >= h - 28) {
                   isGameOverRef.current = true;
                   playError();
-                  setTimeout(() => {
-                    if (isPlayingRef.current) resetGame();
-                  }, 1800);
                   break;
                 }
               }
             } else {
+              const stepX = dir * 7;
               for (const inv of aliveInvaders) {
-                inv.col += dir;
+                inv.x += stepX;
               }
             }
           }
 
-          // 3. Alien Bomb Drop
+          // 3. Alien Bombs Drop
           invaderShotTimerRef.current += 1;
-          if (invaderShotTimerRef.current > 60) {
+          if (invaderShotTimerRef.current > 55) {
             invaderShotTimerRef.current = 0;
             const bottomAliens = aliveInvaders.filter((inv) => {
-              return !aliveInvaders.some((other) => other !== inv && Math.abs(other.col - inv.col) < 5 && other.row > inv.row);
+              return !aliveInvaders.some((other) => other !== inv && Math.abs(other.x - inv.x) < 30 && other.y > inv.y);
             });
 
             if (bottomAliens.length > 0) {
               const shooter = bottomAliens[Math.floor(Math.random() * bottomAliens.length)];
               bulletsRef.current.push({
-                col: shooter.col + Math.floor(shooter.width / 2),
-                row: shooter.row + shooter.height,
-                vy: 0.4,
+                x: shooter.x + shooter.width / 2,
+                y: shooter.y + shooter.height + 2,
+                vy: 3.2,
                 fromPlayer: false,
               });
             }
@@ -459,9 +490,9 @@ export function DotGridSpaceInvaders({
         // 4. Update Bullets
         const nextBullets: Bullet[] = [];
         for (const b of bulletsRef.current) {
-          b.row += b.vy;
+          b.y += b.vy;
 
-          if (b.row < 0 || b.row > totalRows + 1) continue;
+          if (b.y < -10 || b.y > h + 10) continue;
 
           let consumed = false;
 
@@ -469,39 +500,35 @@ export function DotGridSpaceInvaders({
             for (const inv of invadersRef.current) {
               if (!inv.alive) continue;
               if (
-                Math.round(b.col) >= inv.col &&
-                Math.round(b.col) <= inv.col + inv.width - 1 &&
-                Math.round(b.row) >= inv.row &&
-                Math.round(b.row) <= inv.row + inv.height - 1
+                b.x >= inv.x &&
+                b.x <= inv.x + inv.width &&
+                b.y >= inv.y &&
+                b.y <= inv.y + inv.height
               ) {
                 inv.alive = false;
+                inv.explosionTimer = 9; // Display authentic explosion for 9 frames
                 consumed = true;
                 scoreRef.current += inv.score;
-                spawnExplosionDots(inv.col + Math.floor(inv.width / 2), inv.row + Math.floor(inv.height / 2), alienColor);
                 playClick();
                 break;
               }
             }
           } else {
-            // Alien bullet hit player
-            const pCol = Math.round(playerColRef.current);
-            const pRow = totalRows - 3;
+            // Alien bullet hit player cannon
+            const px = playerXRef.current;
+            const py = h - 20;
             if (
               invulnerableTimerRef.current <= 0 &&
-              Math.abs(b.col - pCol) <= 2 &&
-              Math.abs(b.row - pRow) <= 2
+              Math.abs(b.x - px) < 18 &&
+              Math.abs(b.y - py) < 10
             ) {
               consumed = true;
               livesRef.current -= 1;
               invulnerableTimerRef.current = 50;
-              spawnExplosionDots(pCol, pRow, playerColor);
               playError();
 
               if (livesRef.current <= 0) {
                 isGameOverRef.current = true;
-                setTimeout(() => {
-                  if (isPlayingRef.current) resetGame();
-                }, 1800);
               }
             }
           }
@@ -511,58 +538,77 @@ export function DotGridSpaceInvaders({
         bulletsRef.current = nextBullets;
       }
 
-      // 5. Draw Invaders (monochromatic dots)
-      const isAltFrame = animFrameToggleRef.current;
+      // 5. Draw Invaders (100% authentic Space Invaders bitmaps)
+      const isAlt = animFrameToggleRef.current;
       for (const inv of invadersRef.current) {
-        if (!inv.alive) continue;
-        const bitmap =
-          inv.type === "squid"
-            ? isAltFrame ? SQUID_2 : SQUID_1
-            : isAltFrame ? CRAB_2 : CRAB_1;
-        drawDotSprite(bitmap, inv.col, inv.row, alienColor, glowHalo, 1.6);
+        if (!inv.alive) {
+          if (inv.explosionTimer && inv.explosionTimer > 0) {
+            inv.explosionTimer -= 1;
+            drawDotBitmap(EXPLOSION, inv.x, inv.y, dimmedWhite, glowHalo);
+          }
+          continue;
+        }
+
+        let bitmap: number[][];
+        if (inv.type === "squid") {
+          bitmap = isAlt ? SQUID_2 : SQUID_1;
+        } else if (inv.type === "crab") {
+          bitmap = isAlt ? CRAB_2 : CRAB_1;
+        } else {
+          bitmap = isAlt ? OCTOPUS_2 : OCTOPUS_1;
+        }
+
+        drawDotBitmap(bitmap, inv.x, inv.y, secondaryWhite, glowHalo);
       }
 
-      // 6. Draw Bullets (monochromatic dots)
+      // 6. Draw Bullets (pure monochrome beams)
       for (const b of bulletsRef.current) {
-        const c = Math.round(b.col);
-        const r = Math.round(b.row);
         if (b.fromPlayer) {
-          drawMonochromeDot(c, r, bulletColor, glowHalo, 1.8, 4);
-          drawMonochromeDot(c, r + 1, bulletColor, glowHalo, 1.5, 2);
+          // Sharp player vertical laser beam
+          drawMonochromeDot(b.x, b.y - 3, mainWhite, glowHalo, 1.4);
+          drawMonochromeDot(b.x, b.y, mainWhite, glowHalo, 1.5);
+          drawMonochromeDot(b.x, b.y + 3, mainWhite, glowHalo, 1.4);
         } else {
-          drawMonochromeDot(c, r, alienBulletColor, glowHalo, 1.5, 3);
+          // Alien bomb
+          drawMonochromeDot(b.x, b.y - 2, dimmedWhite, glowHalo, 1.3);
+          drawMonochromeDot(b.x, b.y + 2, dimmedWhite, glowHalo, 1.3);
         }
       }
 
-      // 7. Draw Player Cannon (monochromatic dots)
+      // 7. Draw Player Cannon (100% authentic Space Invaders cannon)
       const isBlinking = invulnerableTimerRef.current > 0 && Math.floor(invulnerableTimerRef.current / 5) % 2 === 0;
       if (!isBlinking) {
-        const pCol = Math.round(playerColRef.current) - 2;
-        const pRow = totalRows - 3;
-        drawDotSprite(CANNON, pCol, pRow, playerColor, glowHalo, 1.75);
+        const cannonStartX = playerXRef.current - (13 * DOT_STEP) / 2;
+        const cannonStartY = h - 22;
+        drawDotBitmap(CANNON, cannonStartX, cannonStartY, mainWhite, glowHalo);
       }
 
-      // 8. Draw Sparks (monochromatic dots)
-      const nextSparks: DotSpark[] = [];
-      for (const s of sparksRef.current) {
-        s.x += s.vx;
-        s.y += s.vy;
-        s.life += 1;
-        if (s.life < s.maxLife) {
-          nextSparks.push(s);
-          const alpha = 1 - s.life / s.maxLife;
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.fillStyle = s.color;
-          ctx.shadowColor = s.color;
-          ctx.shadowBlur = 3;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, 1.6 * alpha, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
+      // 8. Monochromatic GAME OVER Screen
+      if (isGameOverRef.current) {
+        ctx.fillStyle = isDark ? "rgba(0, 0, 0, 0.78)" : "rgba(255, 255, 255, 0.82)";
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.textAlign = "center";
+
+        // "GAME OVER" title
+        ctx.font = "bold 16px monospace";
+        ctx.fillStyle = mainWhite;
+        ctx.shadowColor = glowHalo;
+        ctx.shadowBlur = 6;
+        ctx.fillText("G A M E   O V E R", w / 2, h / 2 - 12);
+        ctx.shadowBlur = 0;
+
+        // Score display
+        ctx.font = "11px monospace";
+        ctx.fillStyle = secondaryWhite;
+        ctx.fillText(`SCORE  < ${String(scoreRef.current).padStart(4, "0")} >`, w / 2, h / 2 + 10);
+
+        // Restart prompt
+        ctx.font = "10px monospace";
+        ctx.fillStyle = dimmedWhite;
+        ctx.fillText("PRESS SPACE TO PLAY AGAIN • ESC TO EXIT", w / 2, h / 2 + 30);
+        ctx.textAlign = "left";
       }
-      sparksRef.current = nextSparks;
 
       animId = requestAnimationFrame(loop);
     };
