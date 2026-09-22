@@ -96,7 +96,7 @@ export interface PortfolioConfig {
 
 export const portfolioData: PortfolioConfig = {
   personal: {
-    name: "Gabriel Gama",
+    name: "GabrielBaiano",
     role: "Frontend Software Engineer",
     statusBadge: "Open Source Contributor",
     subtitles: [
