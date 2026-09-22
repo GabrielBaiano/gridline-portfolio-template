@@ -1,109 +1,175 @@
 # Gridline Portfolio Template
 
-A clean, minimalist, and modular developer portfolio template built with **Next.js 15**, **React 19**, **Tailwind CSS**, and **TypeScript**. Features dashed grid borders, synthesized audio micro-interactions, an interactive contribution heatmap, and dark mode.
+Um template de portfólio para desenvolvedores com estética minimalista arquitetural, construído com **Next.js 15 (App Router)**, **React 19**, **Tailwind CSS** e **TypeScript**.
+
+Conta com grid dashed de 690px centralizado, sintetizador de som nativo via Web Audio API (zero dependências de áudio ou arquivos MP3 pesados), heatmap de contribuições em Server Component, micro-interações táteis de aplausos, leitor de artigos de blog com code blocks, easter egg do jogo Snake e integração pronta para Vercel.
 
 ---
 
-## Features
+## ⚡ Funcionalidades
 
-- **Architectural Grid Aesthetic**: Clean 690px centered container with repeating linear-gradient dashed borders, dot-grid hero banner, and subtle divider accents.
-- **Zero-Latency Audio Engine**: Synthesized micro-interactions powered by the Web Audio API with pre-rendered PCM AudioBuffers, zero network dependencies, and instant playback.
-- **Activity Calendar**: Interactive contribution heatmap with touch-pan mobile support visualizing coding activity.
-- **Multiple Theme Presets**: Default (Light/Dark), Cyberpunk, and Paper Minimalist via `data-theme`.
-- **Single-File Configuration**: Customize 100% of your portfolio content, links, bio, projects, and experiences in `portfolio.config.ts` (or `src/data/portfolio.ts`).
-- **SEO & OpenGraph Ready**: Complete metadata with dynamic social share cards, Twitter summaries, and search engine optimization out-of-the-box.
-- **Responsive & Mobile-First**: Zero horizontal overflow, touch-optimized swipe gestures, and responsive layouts across all viewports.
+- **Design Grid Arquitetural**: Container de 690px centralizado com bordas pontilhadas lineares (`repeating-linear-gradient`), banners em dot-grid no topo e rodapé.
+- **Engine de Som Tátil (Web Audio API)**: Sons sintetizados em memória (PCM AudioBuffers) com latência zero. Micro-sons para hover (`tick`), clique mecânico (`press`), switches (`toggle`), recompensas (`chime`) e som de limite excedido (`error`).
+- **Botão de Aplausos com Partículas**: Sistema de claps com animação flutuante de `+1`, limite de 10 claps por leitor com feedback tátil (o botão treme, fica vermelho e toca som de negado ao bater o limite).
+- **Activity Calendar Otimizado**: Heatmap estilo GitHub gerado em build-time como React Server Component (0 KB de JSON enviado ao cliente), com suporte a arrastar/rolar no mobile.
+- **Blog Técnico com SSG**: Páginas dedicadas (`/blog/[slug]`), blocos de código com cópia de 1 clique, estimativa de leitura, feed RSS (`/feed.xml`) e `sitemap.xml`.
+- **Easter Egg (Snake Game)**: Jogo Snake retrô embutido no banner de dot-grid do topo e do rodapé — ativado ao clicar 3 vezes seguidas no banner. Suporta setas/WASD e gestos touch no mobile.
+- **Agendamento Rápido**: Botão "Book a call" integrado direto com seu link do [Cal.com](https://cal.com).
+- **Full Dark / Light Mode**: Alternador de tema persistido no `localStorage`.
 
 ---
 
-## Quick Start
+## 🚀 Como Rodar Localmente
 
-### 1. Clone the repository
+### 1. Pré-requisitos
+- Node.js 18.18+ (recomendado Node 20+)
+- pnpm (recomendado), npm ou yarn
+
+### 2. Clonar e Instalar
 
 ```bash
 git clone https://github.com/GabrielBaiano/gridline-portifolio-template.git
 cd gridline-portifolio-template
+
+# Instale as dependências
+pnpm install
 ```
 
-### 2. Install dependencies
+### 3. Configurar Variáveis de Ambiente (Opcional)
+
+Copie o arquivo de exemplo:
 
 ```bash
-pnpm install
-# or
-npm install
-# or
-yarn install
+cp .env.example .env.local
 ```
 
-### 3. Run development server
+### 4. Executar em Desenvolvimento
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the template in your browser.
+Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
 ---
 
-## Customization
+## 🌐 Como Colocar no Ar (Deploy na Vercel)
 
-All portfolio data is decoupled from the UI components. Customize your site by editing:
+O template foi projetado para deploy com 1 clique na [Vercel](https://vercel.com) com custo zero.
 
-👉 `portfolio.config.ts` (or `src/data/portfolio.ts`)
-
-```typescript
-export const portfolioData = {
-  personal: {
-    name: "Your Name",
-    role: "Your Role",
-    statusBadge: "Available for Projects",
-    avatar: "/images/logo/avatar.jpg",
-    bio: [
-      "Your bio line 1...",
-      "Your bio line 2...",
-    ],
-    email: "your.email@example.com",
-    calendarUrl: "https://cal.com/yourhandle",
-  },
-  socials: [
-    { name: "GitHub", url: "https://github.com/yourhandle", icon: "github" },
-    { name: "Twitter", url: "https://x.com/yourhandle", icon: "twitter" },
-    { name: "LinkedIn", url: "https://linkedin.com/in/yourhandle", icon: "linkedin" },
-  ],
-  // ...projects, experiences, wikis, blogs, and skills
-};
+### Passo 1: Subir o Código no GitHub
+Se ainda não fez fork ou push para seu próprio repositório:
+```bash
+git add .
+git commit -m "feat: meu portfolio personalizado"
+git push origin main
 ```
 
+### Passo 2: Importar na Vercel
+1. Acesse o dashboard da [Vercel](https://vercel.com) e clique em **Add New... > Project**.
+2. Conecte sua conta do GitHub e selecione o repositório do seu portfólio.
+3. As configurações padrão já são detectadas automaticamente:
+   - **Framework Preset**: `Next.js`
+   - **Build Command**: `next build` (ou `pnpm build`)
+   - **Output Directory**: `.next`
+   - **Install Command**: `pnpm install`
+
+### Passo 3: Configurar as Environment Variables (Keys)
+
+Na tela de importação (ou em **Settings > Environment Variables** do seu projeto na Vercel):
+
+```ini
+# URL do seu domínio ou subdomínio da Vercel (usado para canonical URLs, Sitemap e RSS)
+NEXT_PUBLIC_SITE_URL=https://seu-portfolio.vercel.app
+
+# (OPCIONAL) Upstash Redis para persistência global de Views e Claps
+UPSTASH_REDIS_REST_URL=https://...upstash.io
+UPSTASH_REDIS_REST_TOKEN=AX...
+```
+
+Clique em **Deploy**. Em cerca de 1 a 2 minutos o site estará online!
+
 ---
 
-## Scripts
+## 🔑 Variáveis de Ambiente e Coisas Opcionais
 
-| Command | Action |
+O site **funciona 100% mesmo se você NÃO configurar nenhuma variável**. Porém, aqui está o que cada uma faz:
+
+### 1. `NEXT_PUBLIC_SITE_URL` *(Recomendado)*
+- **Para que serve**: Define a URL canônica usada para gerar o `sitemap.xml` e o feed RSS (`/feed.xml`).
+- **Padrão**: Se omitido, utiliza `https://gabrielbaiano.dev`.
+- **Exemplo**: `https://meunome.dev` ou `https://meu-portfolio.vercel.app`.
+
+### 2. `UPSTASH_REDIS_REST_URL` & `UPSTASH_REDIS_REST_TOKEN` *(Opcional - Contador Persistente)*
+- **Para que serve**: Como a Vercel roda em arquitetura Serverless, a memória das rotas de API (`/api/visitors` e `/api/claps`) é efêmera e reseta quando a função entra em cold boot. Se você quiser que o contador de visualizações do site e os claps dos artigos fiquem **persistidos globalmente e acumulados para sempre**, você usa o Redis gratuito da Upstash.
+- **É de graça?**: Sim! A Upstash oferece plano gratuito com até 10.000 requisições por dia (mais que suficiente para portfólios pessoais).
+- **Como obter as chaves**:
+  1. Entre em [upstash.com](https://upstash.com) e crie uma conta gratuita com seu GitHub.
+  2. Clique em **Create Database**, escolha um nome (ex: `portfolio-redis`) e a região mais próxima (ex: `sa-east-1` ou `us-east-1`).
+  3. No painel do banco criado, role até a seção **REST API**.
+  4. Copie o `UPSTASH_REDIS_REST_URL` e o `UPSTASH_REDIS_REST_TOKEN` e cole nas variáveis da Vercel.
+  *(Dica: você também pode instalar a integração oficial da Upstash diretamente no Marketplace da Vercel com 1 clique).*
+
+### 3. Integração de Reunião com Cal.com *(Opcional)*
+- **Para que serve**: O botão no topo da página permite que recrutadores ou clientes agendem uma call com você diretamente.
+- **É de graça?**: Sim, o [Cal.com](https://cal.com) é gratuito e open source.
+- **Como configurar**: Crie seu usuário no Cal.com e defina a URL em `src/data/portfolio.ts`:
+  ```ts
+  personal: {
+    calendarUrl: "https://cal.com/seu-usuario",
+  }
+  ```
+  Se você não quiser o botão de booking, basta deixar `calendarUrl: ""` ou remover a propriedade que o botão não será exibido.
+
+---
+
+## 🛠️ Personalização do Conteúdo
+
+Todo o conteúdo do site fica centralizado em um único arquivo:
+
+👉 **`src/data/portfolio.ts`** (também exportado na raiz como `portfolio.config.ts`).
+
+### O que você pode alterar:
+- **`personal`**:
+  - `name`: Seu nome ou pseudônimo (ex: `GabrielBaiano`).
+  - `role`: Seu cargo / especialidade (ex: `Frontend Engineer`).
+  - `avatar`: Caminho da sua foto (coloque seu arquivo em `/public/images/logo/avatar.jpg`).
+  - `statusBadge`: Status de trabalho (ex: `Open for opportunities`).
+  - `bio`: Parágrafos da sua biografia.
+  - `email`: Seu e-mail de contato.
+  - `calendarUrl`: Seu link de agendamento (ex: `https://cal.com/...`).
+- **`socials`**: Suas redes (GitHub, LinkedIn, X/Twitter, etc.).
+- **`experiences`**: Histórico profissional com período, cargo, empresa, resumo e tags de tecnologias.
+- **`projects`**: Seus projetos com título, descrição, tecnologias, links de preview e repositório, e página interna de detalhes.
+- **`blogs`**: Artigos técnicos completos com seções, snippets de código (`CodeBlock`) e tags.
+- **`skills`**: Suas habilidades técnicas categorizadas.
+
+---
+
+## 🎮 Easter Egg do Snake Game
+
+Para testar ou jogar o Snake:
+1. Abra qualquer página do site.
+2. Dê um **clique triplo rápido** (3 cliques em menos de 750ms) no banner de pontinhos (dot grid) do cabeçalho ou do rodapé.
+3. O jogo iniciará diretamente dentro do banner usando HTML5 Canvas.
+   - **Controles no PC**: Setas ou `W, A, S, D`.
+   - **Controles no Celular**: Deslizar com o dedo (swipe).
+   - **Reiniciar**: Barra de espaço.
+   - **Sair**: Tecla `Esc` ou botão `✕` no canto superior direito.
+
+---
+
+## 📦 Scripts Disponíveis
+
+| Comando | Descrição |
 | --- | --- |
-| `pnpm dev` | Starts local Next.js dev server on port 3000 |
-| `pnpm build` | Builds optimized production bundle |
-| `pnpm start` | Runs the production build locally |
+| `pnpm dev` | Inicia o servidor local de desenvolvimento na porta 3000 |
+| `pnpm build` | Compila o build de produção otimizado com SSG |
+| `pnpm start` | Inicia o servidor com o build de produção localmente |
+| `pnpm tsc --noEmit` | Validação estática de tipos TypeScript |
 
 ---
 
-## Deployment
+## 📄 Licença
 
-### Vercel (Recommended)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGabrielBaiano%2Fgridline-portifolio-template)
-
-1. Push your repository to GitHub.
-2. Import the repository in [Vercel](https://vercel.com).
-3. The default Next.js build settings will automatically configure and deploy.
-
----
-
-## Roadmap & Integrations
-
-- See [TODO.md](TODO.md) for the architecture plan of the automated Google Calendar & Meet scheduling bot.
-
----
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
+Distribuído sob a licença [MIT](LICENSE). Sinta-se livre para usar, clonar e modificar para seu próprio portfólio.
