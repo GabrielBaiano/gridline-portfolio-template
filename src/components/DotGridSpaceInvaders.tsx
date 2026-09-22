@@ -7,45 +7,41 @@ import { useSound } from "./SoundProvider";
 // 1 = illuminated glowing dot, 0 = unlit grid dot
 
 // Squid (Alien Type A) - 7 cols x 5 rows
+// Compact Squid (Alien Type A) - 5 cols x 4 rows
 const SQUID_1 = [
-  [0, 0, 1, 1, 1, 0, 0],
-  [0, 1, 1, 1, 1, 1, 0],
-  [1, 1, 0, 1, 0, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1],
-  [0, 1, 0, 0, 0, 1, 0],
+  [0, 1, 1, 1, 0],
+  [1, 0, 1, 0, 1],
+  [1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 1],
 ];
 
 const SQUID_2 = [
-  [0, 0, 1, 1, 1, 0, 0],
-  [0, 1, 1, 1, 1, 1, 0],
-  [1, 1, 0, 1, 0, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 1, 0, 1, 0, 1],
+  [0, 1, 1, 1, 0],
+  [1, 0, 1, 0, 1],
+  [1, 1, 1, 1, 1],
+  [0, 1, 0, 1, 0],
 ];
 
-// Crab (Alien Type B) - 9 cols x 5 rows
+// Compact Crab (Alien Type B) - 6 cols x 4 rows
 const CRAB_1 = [
-  [0, 1, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 1, 1, 1, 1, 1, 0, 0],
-  [0, 1, 1, 0, 1, 0, 1, 1, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 0, 1, 0, 0, 0, 1, 0, 1],
+  [1, 0, 0, 0, 0, 1],
+  [0, 1, 1, 1, 1, 0],
+  [1, 1, 0, 0, 1, 1],
+  [1, 0, 1, 1, 0, 1],
 ];
 
 const CRAB_2 = [
-  [1, 0, 0, 0, 0, 0, 0, 0, 1],
-  [0, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 1, 1, 0, 1, 0, 1, 1, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [0, 1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 0, 1, 1, 0, 0],
+  [1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0, 1],
+  [0, 1, 0, 0, 1, 0],
 ];
 
-// Cannon (Player Ship) - 9 cols x 4 rows
+// Compact Cannon (Player Ship) - 7 cols x 3 rows
 const CANNON = [
-  [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 1, 0, 0, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1],
 ];
 
 // Grid unit exactly matching .bg-dot-grid in globals.css (7.5px)
@@ -118,26 +114,26 @@ export function DotGridSpaceInvaders({
 
   const initFleet = useCallback((totalCols: number, totalRows: number) => {
     const isSmall = totalCols < 60;
-    const numCols = isSmall ? 4 : 6;
+    const numCols = isSmall ? 5 : 7;
     const numRows = totalRows < 22 ? 2 : 3;
 
     // Spacing between invaders in grid units
-    const colSpacing = isSmall ? 11 : 12;
-    const rowSpacing = 7;
-    const fleetWidth = (numCols - 1) * colSpacing + 9;
+    const colSpacing = isSmall ? 8 : 9;
+    const rowSpacing = 6;
+    const fleetWidth = (numCols - 1) * colSpacing + 6;
     const startCol = Math.max(3, Math.floor((totalCols - fleetWidth) / 2));
     const startRow = 2;
 
     const invaders: Invader[] = [];
     for (let r = 0; r < numRows; r++) {
       const type: "squid" | "crab" = r === 0 ? "squid" : "crab";
-      const w = type === "squid" ? 7 : 9;
-      const h = 5;
+      const w = type === "squid" ? 5 : 6;
+      const h = 4;
       const score = type === "squid" ? 30 : 20;
 
       for (let c = 0; c < numCols; c++) {
         invaders.push({
-          col: startCol + c * colSpacing + (type === "squid" ? 1 : 0),
+          col: startCol + c * colSpacing,
           row: startRow + r * rowSpacing,
           width: w,
           height: h,
@@ -501,10 +497,10 @@ export function DotGridSpaceInvaders({
           } else {
             // Alien bullet hit player
             const pCol = Math.round(playerColRef.current);
-            const pRow = totalRows - 4;
+            const pRow = totalRows - 3;
             if (
               invulnerableTimerRef.current <= 0 &&
-              Math.abs(b.col - pCol) <= 4 &&
+              Math.abs(b.col - pCol) <= 3 &&
               Math.abs(b.row - pRow) <= 2
             ) {
               consumed = true;
@@ -537,7 +533,7 @@ export function DotGridSpaceInvaders({
             : isAltFrame ? CRAB_2 : CRAB_1;
         const color = inv.type === "squid" ? squidColor : crabColor;
         const glow = inv.type === "squid" ? squidGlow : crabGlow;
-        drawDotSprite(bitmap, inv.col, inv.row, color, glow, 2.3);
+        drawDotSprite(bitmap, inv.col, inv.row, color, glow, 1.95);
       }
 
       // 6. Draw Bullets (using glowing vertical dot pairs)
@@ -545,20 +541,20 @@ export function DotGridSpaceInvaders({
         const c = Math.round(b.col);
         const r = Math.round(b.row);
         if (b.fromPlayer) {
-          drawGlowDot(c, r, laserColor, laserGlow, 2.6, 8);
-          drawGlowDot(c, r + 1, laserColor, laserGlow, 2.3, 6);
+          drawGlowDot(c, r, laserColor, laserGlow, 2.2, 7);
+          drawGlowDot(c, r + 1, laserColor, laserGlow, 1.9, 5);
         } else {
-          drawGlowDot(c, r, alienBombColor, alienBombGlow, 2.5, 7);
-          drawGlowDot(c, r - 1, alienBombColor, alienBombGlow, 2.1, 5);
+          drawGlowDot(c, r, alienBombColor, alienBombGlow, 2.1, 6);
+          drawGlowDot(c, r - 1, alienBombColor, alienBombGlow, 1.8, 4);
         }
       }
 
       // 7. Draw Player Cannon (using glowing dots)
       const isBlinking = invulnerableTimerRef.current > 0 && Math.floor(invulnerableTimerRef.current / 5) % 2 === 0;
       if (!isBlinking) {
-        const pCol = Math.round(playerColRef.current) - 4;
-        const pRow = totalRows - 4;
-        drawDotSprite(CANNON, pCol, pRow, cannonColor, cannonGlow, 2.5);
+        const pCol = Math.round(playerColRef.current) - 3;
+        const pRow = totalRows - 3;
+        drawDotSprite(CANNON, pCol, pRow, cannonColor, cannonGlow, 2.1);
       }
 
       // 8. Draw Sparks
