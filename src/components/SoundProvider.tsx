@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
 
-type SoundType = "tick" | "press" | "release" | "toggle" | "chime";
+type SoundType = "tick" | "press" | "release" | "toggle" | "chime" | "error";
 
 interface SoundContextType {
   isMuted: boolean;
@@ -13,6 +13,7 @@ interface SoundContextType {
   playRelease: () => void;
   playToggle: () => void;
   playChime: () => void;
+  playError: () => void;
   play: (type: SoundType) => void;
 }
 
@@ -25,6 +26,7 @@ const SoundContext = createContext<SoundContextType>({
   playRelease: () => {},
   playToggle: () => {},
   playChime: () => {},
+  playError: () => {},
   play: () => {},
 });
 
@@ -182,6 +184,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         )
       );
 
+      // 6. Error / Denial buzz: sharp double low-pitch thud (140Hz -> 90Hz)
+      buffers.set(
+        "error",
+        createDualToneBuffer(
+          ctx,
+          { f1: 140, f2: 90, dur: 0.06, peak: 0.24, offset: 0 },
+          { f1: 120, f2: 80, dur: 0.08, peak: 0.22, offset: 0.07 }
+        )
+      );
+
       engineRef.current = { ctx, buffers, masterGain };
       return engineRef.current;
     } catch {
@@ -319,6 +331,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const playRelease = useCallback(() => playSound("release"), [playSound]);
   const playToggle = useCallback(() => playSound("toggle"), [playSound]);
   const playChime = useCallback(() => playSound("chime"), [playSound]);
+  const playError = useCallback(() => playSound("error"), [playSound]);
 
   return (
     <SoundContext.Provider
@@ -331,6 +344,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         playRelease,
         playToggle,
         playChime,
+        playError,
         play: playSound,
       }}
     >
