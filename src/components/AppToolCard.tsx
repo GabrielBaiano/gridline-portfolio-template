@@ -188,12 +188,12 @@ export function AppToolCard({ item }: AppToolCardProps) {
         <AppMockupIcon type={item.iconType} />
       </div>
 
-      {/* Typography: Title & Description without clipping */}
+      {/* Typography: Title & Description with locked 2-line baseline */}
       <div className="flex flex-col min-w-0 flex-1 justify-center py-0.5">
         <h4 className="text-[0.95rem] sm:text-[0.98rem] font-medium text-title leading-tight tracking-tight truncate">
           {item.name}
         </h4>
-        <p className="text-[11.5px] sm:text-xs text-mutedForeground line-clamp-2 leading-[1.38] mt-1">
+        <p className="text-[11.5px] sm:text-xs text-mutedForeground line-clamp-2 leading-[1.38] mt-1 min-h-[34px] flex items-start">
           {item.description}
         </p>
       </div>
