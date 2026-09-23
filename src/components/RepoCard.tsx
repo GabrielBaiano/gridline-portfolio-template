@@ -14,10 +14,10 @@ export function RepoCard({ repo }: RepoCardProps) {
       data-cuelume-hover="tick"
       data-cuelume-press="true"
       title={repo.description}
-      className="group relative flex flex-col justify-center p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none min-h-[66px] sm:min-h-[70px] h-full w-full"
+      className="group relative flex flex-col justify-center p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none min-h-[66px] sm:min-h-[70px] h-full w-full min-w-0 overflow-hidden"
     >
-      <div className="flex items-center justify-between gap-2">
-        <h4 className="text-[0.95rem] sm:text-[0.98rem] font-medium text-title group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors truncate leading-tight">
+      <div className="flex items-center justify-between gap-2 min-w-0 w-full">
+        <h4 className="text-[0.95rem] sm:text-[0.98rem] font-medium text-title group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors truncate leading-tight min-w-0 flex-1">
           {repo.name}
         </h4>
         <svg
@@ -36,7 +36,7 @@ export function RepoCard({ repo }: RepoCardProps) {
           <path d="M7 17 17 7" />
         </svg>
       </div>
-      <p className="text-[11.5px] sm:text-xs text-mutedForeground line-clamp-1 leading-snug mt-1 truncate">
+      <p className="text-[11.5px] sm:text-xs text-mutedForeground truncate mt-1 w-full block">
         {repo.description}
       </p>
     </a>

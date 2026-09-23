@@ -87,7 +87,7 @@ export default function ProjectsPage() {
               </div>
 
               {portfolioData.appsAndTools.map((app, idx) => (
-                <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex">
+                <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex min-w-0">
                   <AppToolCard item={app} />
                 </div>
               ))}
@@ -124,7 +124,7 @@ export default function ProjectsPage() {
               </div>
 
               {portfolioData.repositories.map((repo, idx) => (
-                <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex">
+                <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex min-w-0">
                   <RepoCard repo={repo} />
                 </div>
               ))}

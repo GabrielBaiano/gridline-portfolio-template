@@ -179,7 +179,7 @@ export function AppToolCard({ item }: AppToolCardProps) {
       data-cuelume-hover="tick"
       data-cuelume-press="true"
       title={item.description}
-      className="group relative flex items-center gap-3 sm:gap-3.5 p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none min-h-[88px] sm:min-h-[90px] h-full w-full"
+      className="group relative flex items-center gap-3 sm:gap-3.5 p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none min-h-[88px] sm:min-h-[90px] h-full w-full min-w-0 overflow-hidden"
     >
       {/* Colorful Mockup Block Icon */}
       <div
@@ -193,9 +193,11 @@ export function AppToolCard({ item }: AppToolCardProps) {
         <h4 className="text-[0.95rem] sm:text-[0.98rem] font-medium text-title leading-tight tracking-tight truncate">
           {item.name}
         </h4>
-        <p className="text-[11.5px] sm:text-xs text-mutedForeground line-clamp-2 leading-[1.38] mt-1 min-h-[34px] flex items-start">
-          {item.description}
-        </p>
+        <div className="min-h-[34px] flex items-start mt-1">
+          <p className="text-[11.5px] sm:text-xs text-mutedForeground line-clamp-2 leading-[1.38] overflow-hidden">
+            {item.description}
+          </p>
+        </div>
       </div>
     </a>
   );
