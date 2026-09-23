@@ -219,8 +219,8 @@ export const portfolioData: PortfolioConfig = {
       stack: ["React", "TypeScript", "Next.js", "SVG", "TailwindCSS"]
     },
     {
-      name: "gridline-portifolio-template",
-      slug: "gridline-portifolio-template",
+      name: "gridline-portfolio-template",
+      slug: "gridline-portfolio-template",
       status: "Live",
       label: "Portfolio Template",
       description: "A clean, modern developer portfolio template featuring dashed borders, sound effects, contribution graph, and dark mode.",
@@ -231,8 +231,8 @@ export const portfolioData: PortfolioConfig = {
       ],
       screenshot: "/images/project/screenshots/gridline-template.svg",
       bgImage: "/images/project/background/bg-gradient-2.svg",
-      websiteUrl: "https://github.com/GabrielBaiano/gridline-portifolio-template",
-      githubUrl: "https://github.com/GabrielBaiano/gridline-portifolio-template",
+      websiteUrl: "https://github.com/GabrielBaiano/gridline-portfolio-template",
+      githubUrl: "https://github.com/GabrielBaiano/gridline-portfolio-template",
       stack: ["Next.js", "React", "TypeScript", "TailwindCSS", "Web Audio API"]
     },
     {

@@ -31,8 +31,8 @@ Conta com grid dashed de 690px centralizado, sintetizador de som nativo via Web 
 ### 2. Clonar e Instalar
 
 ```bash
-git clone https://github.com/GabrielBaiano/gridline-portifolio-template.git
-cd gridline-portifolio-template
+git clone https://github.com/GabrielBaiano/gridline-portfolio-template.git
+cd gridline-portfolio-template
 
 # Instale as dependências
 pnpm install
