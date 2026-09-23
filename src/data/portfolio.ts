@@ -142,7 +142,7 @@ export const portfolioData: PortfolioConfig = {
       "Passionate about open-source contribution, music and literature."
     ],
     email: "gabrielngama@gmail.com",
-    calendarUrl: "https://cal.com/gabrielbaiano",
+    calendarUrl: "https://cal.com/gabriel-nascimento-gama-hw1x48/15min",
   },
 
   socials: [

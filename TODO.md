@@ -7,7 +7,7 @@ Plan and implementation roadmap for an automated agent/bot that inspects calenda
 ## 1. Approaches
 
 ### Option A: Cal.com Native Integration (Zero Maintenance)
-- [ ] Connect Google Calendar to [Cal.com](https://cal.com/gabrielbaiano).
+- [ ] Connect Google Calendar to [Cal.com](https://cal.com/gabriel-nascimento-gama-hw1x48/15min).
 - [ ] Enable automatic Google Meet conference generation on booking confirmation.
 - [ ] Embed the Cal.com inline modal/popover directly into the portfolio (`@calcom/embed-react`) instead of redirecting externally.
 
