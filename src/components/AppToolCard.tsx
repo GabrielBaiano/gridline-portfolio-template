@@ -178,7 +178,8 @@ export function AppToolCard({ item }: AppToolCardProps) {
       rel="noopener noreferrer"
       data-cuelume-hover="tick"
       data-cuelume-press="true"
-      className="group relative flex items-center gap-3.5 p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none h-[78px] sm:h-[82px] w-full"
+      title={item.description}
+      className="group relative flex items-center gap-3 sm:gap-3.5 p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none min-h-[88px] sm:min-h-[90px] h-full w-full"
     >
       {/* Colorful Mockup Block Icon */}
       <div
@@ -187,12 +188,12 @@ export function AppToolCard({ item }: AppToolCardProps) {
         <AppMockupIcon type={item.iconType} />
       </div>
 
-      {/* Typography: Title & Description with constant baseline */}
-      <div className="flex flex-col min-w-0 flex-1 justify-center h-full py-0.5">
-        <h4 className="text-[0.98rem] sm:text-[1.02rem] font-medium text-title leading-tight tracking-tight truncate">
+      {/* Typography: Title & Description without clipping */}
+      <div className="flex flex-col min-w-0 flex-1 justify-center py-0.5">
+        <h4 className="text-[0.95rem] sm:text-[0.98rem] font-medium text-title leading-tight tracking-tight truncate">
           {item.name}
         </h4>
-        <p className="text-xs text-mutedForeground line-clamp-2 leading-[1.35] mt-1">
+        <p className="text-[11.5px] sm:text-xs text-mutedForeground line-clamp-2 leading-[1.38] mt-1">
           {item.description}
         </p>
       </div>

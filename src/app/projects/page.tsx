@@ -71,10 +71,25 @@ export default function ProjectsPage() {
           </div>
           <div className="divider-dashed" />
 
-          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3">
+          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto container-dashed">
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-0">
+              {/* Vertical middle divider on desktop */}
+              <div className="absolute left-1/2 top-0 h-full -translate-x-1/2 z-0 hidden sm:block">
+                <div
+                  className="h-full w-px"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(to bottom, var(--border-color) 0px, var(--border-color) 6px, transparent 6px, transparent 14px)",
+                    backgroundSize: "1px 100%",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                />
+              </div>
+
               {portfolioData.appsAndTools.map((app, idx) => (
-                <AppToolCard key={idx} item={app} />
+                <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex">
+                  <AppToolCard item={app} />
+                </div>
               ))}
             </div>
           </section>
@@ -93,10 +108,25 @@ export default function ProjectsPage() {
           </div>
           <div className="divider-dashed" />
 
-          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3">
+          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto container-dashed">
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-0">
+              {/* Vertical middle divider on desktop */}
+              <div className="absolute left-1/2 top-0 h-full -translate-x-1/2 z-0 hidden sm:block">
+                <div
+                  className="h-full w-px"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(to bottom, var(--border-color) 0px, var(--border-color) 6px, transparent 6px, transparent 14px)",
+                    backgroundSize: "1px 100%",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                />
+              </div>
+
               {portfolioData.repositories.map((repo, idx) => (
-                <RepoCard key={idx} repo={repo} />
+                <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex">
+                  <RepoCard repo={repo} />
+                </div>
               ))}
             </div>
           </section>
