@@ -26,15 +26,25 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: `Project Not Found · ${portfolioData.personal.name}`,
+      title: "Project Not Found",
     };
   }
 
   return {
-    title: `${project.name} · ${portfolioData.personal.name}`,
+    title: project.name,
     description: project.description,
+    alternates: {
+      canonical: `/projects/${slug}`,
+    },
     openGraph: {
-      title: `${project.name} · ${portfolioData.personal.name}`,
+      title: project.name,
+      description: project.description,
+      images: [project.screenshot],
+      url: `/projects/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.name,
       description: project.description,
       images: [project.screenshot],
     },
@@ -50,6 +60,23 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   if (!project) {
     notFound();
   }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: project.name,
+    description: project.description,
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Any",
+    author: {
+      "@type": "Person",
+      name: portfolioData.personal.name,
+      url: siteUrl,
+    },
+    url: project.websiteUrl || project.githubUrl,
+    image: `${siteUrl}${project.screenshot}`,
+  };
 
   const githubIcon = (
     <svg
@@ -95,6 +122,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+      />
       {/* Top Dot-Grid Banner */}
       <div className="relative z-50 bg-background">
         <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">

@@ -24,17 +24,29 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: `Article Not Found · ${portfolioData.personal.name}`,
+      title: "Article Not Found",
     };
   }
 
   return {
-    title: `${post.title} · ${portfolioData.personal.name}`,
+    title: post.title,
     description: post.summary,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
     openGraph: {
-      title: `${post.title} · ${portfolioData.personal.name}`,
+      title: post.title,
       description: post.summary,
       type: "article",
+      publishedTime: post.date,
+      authors: [portfolioData.personal.name],
+      tags: post.tags,
+      url: `/blog/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
     },
   };
 }
@@ -49,8 +61,37 @@ export default async function BlogPostDetailPage({
     notFound();
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.summary,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: portfolioData.personal.name,
+      url: siteUrl,
+    },
+    publisher: {
+      "@type": "Person",
+      name: portfolioData.personal.name,
+      url: siteUrl,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/blog/${slug}`,
+    },
+    keywords: post.tags?.join(", "),
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       {/* Top Dot-Grid Banner */}
       <div className="relative z-50 bg-background">
         <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">

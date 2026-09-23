@@ -5,8 +5,16 @@ import { BlogItem } from "@/components/BlogItem";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 export const metadata: Metadata = {
-  title: `Blog · ${portfolioData.personal.name}`,
+  title: "Blog",
   description: `Technical articles, engineering guides, and open source insights by ${portfolioData.personal.name}.`,
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: `Blog · ${portfolioData.personal.name}`,
+    description: `Technical articles, engineering guides, and open source insights by ${portfolioData.personal.name}.`,
+    url: "/blog",
+  },
 };
 
 export default function BlogPage() {

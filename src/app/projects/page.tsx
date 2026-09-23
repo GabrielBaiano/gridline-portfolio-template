@@ -7,8 +7,16 @@ import { RepoCard } from "@/components/RepoCard";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 export const metadata: Metadata = {
-  title: `Projects · ${portfolioData.personal.name}`,
+  title: "Projects",
   description: `Explore open-source projects, web apps, and developer tools built by ${portfolioData.personal.name}.`,
+  alternates: {
+    canonical: "/projects",
+  },
+  openGraph: {
+    title: `Projects · ${portfolioData.personal.name}`,
+    description: `Explore open-source projects, web apps, and developer tools built by ${portfolioData.personal.name}.`,
+    url: "/projects",
+  },
 };
 
 export default function ProjectsPage() {

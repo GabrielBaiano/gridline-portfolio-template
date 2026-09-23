@@ -40,10 +40,32 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
+  title: {
+    default: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
+    template: `%s · ${portfolioData.personal.name}`,
+  },
   description: portfolioData.personal.bio[0],
+  keywords: [
+    portfolioData.personal.name,
+    portfolioData.personal.role,
+    "Frontend Software Engineer",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "TailwindCSS",
+    "Web Performance",
+    "SVG Graphics",
+    "Software Developer Portfolio",
+    "Brazil",
+  ],
   authors: [{ name: portfolioData.personal.name, url: portfolioData.personal.calendarUrl }],
   creator: portfolioData.personal.name,
+  alternates: {
+    canonical: "/",
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -53,18 +75,18 @@ export const metadata: Metadata = {
     siteName: `${portfolioData.personal.name} Portfolio`,
     images: [
       {
-        url: portfolioData.personal.avatar,
-        width: 400,
-        height: 400,
-        alt: portfolioData.personal.name,
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
       },
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
     description: portfolioData.personal.bio[0],
-    images: [portfolioData.personal.avatar],
+    images: ["/opengraph-image"],
   },
   icons: {
     icon: portfolioData.personal.avatar,
@@ -74,7 +96,52 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      name: portfolioData.personal.name,
+      jobTitle: portfolioData.personal.role,
+      url: siteUrl,
+      image: `${siteUrl}${portfolioData.personal.avatar}`,
+      sameAs: [
+        ...portfolioData.socials.map((s) => s.url),
+        portfolioData.personal.calendarUrl,
+      ].filter(Boolean),
+      knowsAbout: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Frontend Engineering",
+        "Web Performance",
+        "SVG Architectures",
+        "Design Systems",
+      ],
+      description: portfolioData.personal.bio[0],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: `${portfolioData.personal.name} Portfolio`,
+      description: portfolioData.personal.bio[0],
+      publisher: {
+        "@id": `${siteUrl}/#person`,
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -89,6 +156,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://avatars.githubusercontent.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var s=localStorage.getItem('darkMode');var dark=s===null?window.matchMedia('(prefers-color-scheme: dark)').matches:s==='true';if(dark){document.documentElement.classList.add('dark')}}catch(e){}})()`,
