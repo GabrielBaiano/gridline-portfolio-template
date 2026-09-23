@@ -1,6 +1,17 @@
-// Upstash Redis HTTP REST client with graceful fallback
-const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
-const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+// Upstash Redis HTTP REST client with graceful fallback (supports Vercel Storage & Upstash prefixes)
+const REDIS_URL =
+  process.env.UPSTASH_REDIS_REST_URL ||
+  process.env.UPSTASH_REDIS_REST_API_URL ||
+  process.env.STORAGE_REST_API_URL ||
+  process.env.STORAGE_URL ||
+  process.env.KV_REST_API_URL;
+
+const REDIS_TOKEN =
+  process.env.UPSTASH_REDIS_REST_TOKEN ||
+  process.env.UPSTASH_REDIS_REST_API_TOKEN ||
+  process.env.STORAGE_REST_API_TOKEN ||
+  process.env.STORAGE_TOKEN ||
+  process.env.KV_REST_API_TOKEN;
 
 export async function redisIncr(key: string, by = 1): Promise<number | null> {
   if (!REDIS_URL || !REDIS_TOKEN) return null;
