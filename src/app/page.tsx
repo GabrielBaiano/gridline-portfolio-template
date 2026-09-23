@@ -11,6 +11,7 @@ import { SkillsSection } from "@/components/SkillsSection";
 import { NewsletterSection } from "@/components/NewsletterSection";
 import { FooterSection } from "@/components/FooterSection";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { portfolioData } from "@/data/portfolio";
 
 export default function Home() {
   return (
@@ -49,10 +50,13 @@ export default function Home() {
         {/* Skills Section */}
         <SkillsSection />
 
-        <div className="divider-dashed"></div>
-
         {/* Newsletter Section */}
-        <NewsletterSection />
+        {portfolioData.features?.newsletter !== false && (
+          <>
+            <div className="divider-dashed"></div>
+            <NewsletterSection />
+          </>
+        )}
 
         <div className="divider-dashed"></div>
 

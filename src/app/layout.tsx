@@ -36,8 +36,10 @@ const instagramSans = localFont({
   ],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://github.com/GabrielBaiano/gridline-portifolio-template"),
+  metadataBase: new URL(siteUrl),
   title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
   description: portfolioData.personal.bio[0],
   authors: [{ name: portfolioData.personal.name, url: portfolioData.personal.calendarUrl }],
@@ -45,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://github.com/GabrielBaiano/gridline-portifolio-template",
+    url: siteUrl,
     title: `${portfolioData.personal.name} · ${portfolioData.personal.role}`,
     description: portfolioData.personal.bio[0],
     siteName: `${portfolioData.personal.name} Portfolio`,

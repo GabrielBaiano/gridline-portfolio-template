@@ -1,7 +1,7 @@
 export interface SocialLink {
   name: string;
   url: string;
-  icon: "github" | "twitter" | "weibo" | "blog" | "douyin" | "bilibili" | "mail" | "calendar" | "linkedin" | "globe";
+  icon: "github" | "twitter" | "x" | "linkedin" | "instagram" | "youtube" | "discord" | "telegram" | "blog" | "mail" | "globe";
 }
 
 export interface Experience {
@@ -80,7 +80,7 @@ export interface AppToolItem {
   iconBg?: string;
   iconFit?: "cover" | "contain";
   iconGradient?: string;
-  iconType?: "docklift" | "zipora" | "screentest" | "deskmark" | "vidwall" | "vidcrop" | "mousiohint" | "mousio" | "custom";
+  iconType?: string;
   url?: string;
   githubUrl?: string;
 }
@@ -119,6 +119,9 @@ export interface PortfolioConfig {
   quote: {
     text: string;
     author: string;
+  };
+  features?: {
+    newsletter?: boolean;
   };
 }
 
@@ -453,5 +456,9 @@ export const portfolioData: PortfolioConfig = {
   quote: {
     text: "To succeed, planning alone is insufficient. One must improvise as well.",
     author: "Salvor Hardin, Foundation"
+  },
+
+  features: {
+    newsletter: true,
   }
 };

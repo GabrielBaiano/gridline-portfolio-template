@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
 
-const USERNAME = "GabrielBaiano";
+const USERNAME = process.env.GITHUB_USERNAME || "GabrielBaiano";
 const OUTPUT_FILE = path.join(process.cwd(), "src/data/contributions.json");
 
 const QUERY = `
