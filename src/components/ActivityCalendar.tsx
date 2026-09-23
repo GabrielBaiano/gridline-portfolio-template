@@ -30,11 +30,14 @@ export function ActivityCalendar() {
     if (firstDay && firstDay.date) {
       const m = new Date(firstDay.date + "T00:00:00").getMonth();
       if (m !== lastMonth) {
+        // Skip first month if it has fewer than 2 weeks to avoid cramped label collision (e.g. Sep/Oct)
+        if (wIdx >= 2 || weeksList.length <= 10) {
+          months.push({
+            name: monthNames[m],
+            x: wIdx * 13,
+          });
+        }
         lastMonth = m;
-        months.push({
-          name: monthNames[m],
-          x: wIdx * 12.5,
-        });
       }
     }
   });
@@ -64,29 +67,38 @@ export function ActivityCalendar() {
 
   const yearTotal = data.yearContributions ?? count;
   const weeks = weeksList;
+  const totalGridWidth = Math.max(weeks.length * 13 - 3, 686);
 
   return (
-    <section className="max-w-[690px] mx-2 flex justify-center sm:mx-8 md:mx-auto p-3 border-[#d1d1d1] dark:border-[#313131] container-dashed">
+    <section className="max-w-[690px] mx-2 flex justify-center sm:mx-8 md:mx-auto p-3 sm:p-3.5 border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <article
-        className="react-activity-calendar select-none"
+        className="react-activity-calendar select-none w-full"
         style={{
           width: "max-content",
           maxWidth: "100%",
           display: "flex",
           flexDirection: "column",
-          gap: "8px",
+          gap: "10px",
           fontSize: "12px",
         }}
       >
         <div
           className="react-activity-calendar__scroll-container no-scrollbar touch-pan-x"
-          style={{ maxWidth: "100%", overflowX: "auto", overflowY: "visible", padding: "2px", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", msOverflowStyle: "none" }}
+          style={{
+            maxWidth: "100%",
+            overflowX: "auto",
+            overflowY: "hidden",
+            padding: "1px 0",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
         >
           <svg
             className="react-activity-calendar__calendar text-mutedForeground"
-            height="110"
-            width="666"
-            viewBox="0 0 666 110"
+            height="116"
+            width={totalGridWidth}
+            viewBox={`0 0 ${totalGridWidth} 116`}
             style={{ display: "block", overflow: "visible" }}
           >
             {/* Months Header */}
@@ -97,28 +109,28 @@ export function ActivityCalendar() {
                   dominantBaseline="hanging"
                   fill="currentColor"
                   fontSize="10"
-                  x={m.x + 2}
+                  x={m.x}
                   y="2"
+                  className="font-normal select-none"
                 >
                   {m.name}
                 </text>
               ))}
             </g>
 
-            {/* Weeks & Days */}
+            {/* Weeks & Days: integer 13px stride (10px cell + 3px gap) for razor-sharp rendering */}
             {weeks.map((week, wIdx) => (
-              <g key={wIdx} transform={`translate(${wIdx * 12.5 + 2}, 2)`}>
+              <g key={wIdx} transform={`translate(${wIdx * 13}, 0)`}>
                 {week.days.map((day, dIdx) => (
                   <rect
                     key={dIdx}
                     x="0"
-                    y={20 + day.weekday * 12.5}
+                    y={22 + day.weekday * 13}
                     width="10"
                     height="10"
                     rx="2"
                     ry="2"
                     fill={`var(--cal-l${day.level})`}
-                    style={{ stroke: "rgba(0, 0, 0, 0.08)" }}
                     className="transition-opacity duration-150 hover:opacity-80"
                   >
                     <title>{`${day.count} contributions on ${day.date}`}</title>
@@ -129,9 +141,9 @@ export function ActivityCalendar() {
           </svg>
         </div>
 
-        {/* Footer with Real Contribution Count and Legend */}
+        {/* Footer with Contribution Count and Legend */}
         <footer
-          className="react-activity-calendar__footer text-mutedForeground text-xs pt-1"
+          className="react-activity-calendar__footer text-mutedForeground text-xs"
           style={{
             display: "flex",
             flexWrap: "wrap",
@@ -141,7 +153,7 @@ export function ActivityCalendar() {
             alignItems: "center",
           }}
         >
-          <div className="react-activity-calendar__count font-medium text-foreground">
+          <div className="react-activity-calendar__count font-normal text-mutedForeground text-[11.5px] sm:text-xs">
             {yearTotal.toLocaleString()} activities in {currentYear}
           </div>
 
@@ -149,7 +161,9 @@ export function ActivityCalendar() {
             className="react-activity-calendar__legend-colors"
             style={{ marginLeft: "auto", alignItems: "center", display: "flex", gap: "3px" }}
           >
-            <span style={{ marginRight: "0.4em" }}>Less</span>
+            <span style={{ marginRight: "0.3em" }} className="text-[11px] sm:text-xs text-mutedForeground">
+              Less
+            </span>
             {[0, 1, 2, 3, 4].map((level) => (
               <svg key={level} height="10" width="10">
                 <rect
@@ -158,11 +172,12 @@ export function ActivityCalendar() {
                   width="10"
                   rx="2"
                   ry="2"
-                  style={{ stroke: "rgba(0, 0, 0, 0.08)" }}
                 />
               </svg>
             ))}
-            <span style={{ marginLeft: "0.4em" }}>More</span>
+            <span style={{ marginLeft: "0.3em" }} className="text-[11px] sm:text-xs text-mutedForeground">
+              More
+            </span>
           </div>
         </footer>
       </article>
