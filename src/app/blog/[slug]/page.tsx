@@ -109,7 +109,19 @@ export default async function BlogPostDetailPage({
             <ClapButton slug={post.slug} initialClaps={post.claps ?? 0} />
           </div>
 
-
+          {/* Tags */}
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex gap-1.5 flex-wrap">
+              {post.tags.map((tag, tIdx) => (
+                <span
+                  key={tIdx}
+                  className="text-xs text-foreground bg-mutedBackground px-2 py-0.5 rounded-[4px] border border-border"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Lead Summary Callout */}
           <div className="p-3.5 rounded-[8px] border border-border bg-zinc-50/70 dark:bg-zinc-900/50 text-sm leading-relaxed text-foreground font-medium">
