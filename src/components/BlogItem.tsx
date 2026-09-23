@@ -18,7 +18,7 @@ export function BlogItem({ post }: { post: BlogPostItem }) {
         <div className="flex items-center justify-between group hover:bg-bgHover transition-colors duration-300 p-3 select-none">
           <div className="flex flex-col gap-2.5">
             {/* 1. Title */}
-            <h3 className="text-[1rem] sm:leading-[0.80] leading-[1.60] font-bold text-title">
+            <h3 className="text-[1rem] leading-snug font-medium text-title group-hover:text-foreground transition-colors">
               {post.title}
             </h3>
 
