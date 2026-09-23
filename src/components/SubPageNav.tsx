@@ -90,7 +90,7 @@ export function SubPageNav({ backHref = "/", title }: SubPageNavProps) {
                       } as React.CSSProperties)
                     : undefined
                 }
-                className={`text-[1.15rem] font-bold leading-tight text-title inline-block whitespace-nowrap ${
+                className={`text-[1.05rem] sm:text-[1.1rem] font-medium leading-tight text-title inline-block whitespace-nowrap ${
                   overflowDistance > 0 ? "animate-nav-marquee" : ""
                 }`}
               >
