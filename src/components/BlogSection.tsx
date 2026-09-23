@@ -28,14 +28,13 @@ export function BlogSection() {
       <div className="divider-dashed"></div>
 
       {/* View All Button */}
-      <div className="relative mx-2 max-w-[690px] p-2 sm:mx-8 md:mx-auto">
-        <div className="flex select-none items-center justify-center">
-          <Link
-            href="/blog"
-            data-cuelume-hover="tick"
-            data-cuelume-press="true"
-            className="group w-fit rounded-lg border border-border p-0.5 no-underline"
-          >
+      <div className="relative p-2 flex select-none items-center justify-center">
+        <Link
+          href="/blog"
+          data-cuelume-hover="tick"
+          data-cuelume-press="true"
+          className="group w-fit rounded-lg border border-border p-0.5 no-underline"
+        >
             <div className="flex h-full w-full items-center justify-center gap-1 rounded-[8px] border border-border bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] px-2.5 py-1 transition duration-300">
               <span className="text-[0.95rem] font-medium text-white dark:text-black">
                 View All
@@ -60,7 +59,6 @@ export function BlogSection() {
               </span>
             </div>
           </Link>
-        </div>
       </div>
     </section>
   );

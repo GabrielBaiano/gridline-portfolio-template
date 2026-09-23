@@ -16,7 +16,7 @@ export function NewsletterSection() {
   };
 
   return (
-    <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] bg-striped container-dashed">
+    <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <div className="flex items-center justify-between p-3">
         <h2 className="text-[1.55rem] font-semibold text-title">Newsletter</h2>
       </div>

@@ -14,7 +14,7 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background">
       {/* Top Dot Grid Banner */}
       <HeaderBanner />
 
@@ -22,7 +22,7 @@ export default function Home() {
       <StickyNav />
 
       {/* Main Content Flow */}
-      <div className="flex flex-col">
+      <div>
         {/* Hero Section */}
         <HeroSection />
 
@@ -63,8 +63,8 @@ export default function Home() {
       <div className="divider-dashed"></div>
 
       {/* Bottom Dot Grid Banner */}
-      <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col flex-1 grow md:w-full container-dashed">
-        <DotGridSpaceInvaders className="w-full sm:min-h-[220px] min-h-[140px] h-full grow" />
+      <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">
+        <DotGridSpaceInvaders className="w-full sm:min-h-[220px] min-h-[120px] h-full grow" />
       </div>
 
       {/* Scroll to Top Floating Button */}

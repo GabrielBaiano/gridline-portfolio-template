@@ -15,7 +15,7 @@ export default function BlogPage() {
     "https://github.com";
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background">
       {/* Top Dot-Grid Banner */}
       <div className="relative z-50 bg-background">
         <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">
@@ -64,7 +64,7 @@ export default function BlogPage() {
       )}
 
       {/* Bottom Dot-Grid Banner */}
-      <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col flex-1 md:w-full container-dashed">
+      <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">
         <div className="w-full sm:min-h-[220px] min-h-[100px] h-full grow bg-dot-grid rounded-[4px]" />
       </div>
 
