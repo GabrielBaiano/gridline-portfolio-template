@@ -31,6 +31,15 @@ export function ExperienceSection() {
         />
       );
     }
+    if (exp.color) {
+      return (
+        <div
+          className="w-full h-full rounded-[6px] transition-transform duration-300 group-hover:scale-105"
+          style={{ backgroundColor: exp.color }}
+          title={exp.company}
+        />
+      );
+    }
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"

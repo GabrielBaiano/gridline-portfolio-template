@@ -11,6 +11,7 @@ export interface Experience {
   period: string;
   location: string;
   logo?: string;
+  color?: string;
   bullets: string[];
   skills: string[];
 }
@@ -126,6 +127,7 @@ export const portfolioData: PortfolioConfig = {
       type: "Full-time",
       period: "Jun 2025 - Aug 2026 · 1 yr 3 mos",
       location: "São Paulo, Brazil · Hybrid",
+      color: "#FF007A", // Rosa choque Flash
       bullets: [
         "Designed and implemented scalable frontend architecture using React.js, Next.js, and TypeScript with Micro Frontends",
         "Improved Core Web Vitals and reduced page load time by 40% using lazy loading, code splitting, and bundle optimization",
@@ -142,6 +144,7 @@ export const portfolioData: PortfolioConfig = {
       type: "Internship",
       period: "Oct 2024 - Apr 2025 · 7 mos",
       location: "São Paulo, Brazil · Remote",
+      color: "#FF6A00", // Laranja Compass
       bullets: [
         "Developed cross-platform mobile applications using React Native and TypeScript",
         "Implemented navigation, async data handling, and API integration",
@@ -156,6 +159,7 @@ export const portfolioData: PortfolioConfig = {
       type: "Full-time",
       period: "May 2023 - Nov 2024 · 1 yr 7 mos",
       location: "Curitiba, Paraná, Brazil · Remote",
+      color: "#0066FF", // Azul Techsolution
       bullets: [
         "Built responsive, accessible web applications using React.js, Next.js, and TypeScript",
         "Developed Backend-for-Frontend (BFF) layers with Node.js and Prisma ORM to optimize client data pipelines",
