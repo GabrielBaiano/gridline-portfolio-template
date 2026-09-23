@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import rawContributions from "@/data/contributions.json";
 
 interface DayData {
@@ -13,6 +15,19 @@ interface WeekData {
 }
 
 export function ActivityCalendar() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    el.scrollLeft = el.scrollWidth;
+    const rafId = requestAnimationFrame(() => {
+      el.scrollLeft = el.scrollWidth;
+    });
+
+    return () => cancelAnimationFrame(rafId);
+  }, []);
   const data = rawContributions as {
     totalContributions: number;
     yearContributions?: number;
@@ -83,6 +98,7 @@ export function ActivityCalendar() {
         }}
       >
         <div
+          ref={scrollRef}
           className="react-activity-calendar__scroll-container no-scrollbar touch-pan-x"
           style={{
             maxWidth: "100%",
