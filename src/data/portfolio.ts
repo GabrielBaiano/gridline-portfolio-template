@@ -273,7 +273,6 @@ export const portfolioData: PortfolioConfig = {
       name: "Deskstamp",
       description: "Native desktop watermark overlay with seamless click-through for Linux & COSMIC.",
       icon: "/images/apps/deskstamp.png",
-      iconBg: "bg-blue-50/50 dark:bg-zinc-900/60",
       iconFit: "contain",
       url: "https://github.com/GabrielBaiano/Deskstamp",
     },

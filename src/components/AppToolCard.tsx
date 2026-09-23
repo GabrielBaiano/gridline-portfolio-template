@@ -185,14 +185,14 @@ export function AppToolCard({ item }: AppToolCardProps) {
       {item.icon ? (
         <div
           className={`w-12 h-12 rounded-[11px] ${
-            item.iconBg || "bg-mutedBackground"
-          } flex items-center justify-center shrink-0 shadow-sm border border-border/50 overflow-hidden relative group-hover:scale-105 transition-transform duration-200`}
+            item.iconBg || "bg-transparent"
+          } flex items-center justify-center shrink-0 overflow-hidden relative group-hover:scale-105 transition-transform duration-200`}
         >
           <img
             src={item.icon}
             alt={item.name}
             className={`w-full h-full ${
-              item.iconFit === "contain" ? "object-contain p-1" : "object-cover"
+              item.iconFit === "contain" ? "object-contain" : "object-cover"
             }`}
           />
         </div>
