@@ -11,6 +11,8 @@ export type {
   SocialLink,
   Experience,
   ProjectItem,
+  AppToolItem,
+  RepositoryItem,
   WikiItem,
   BlogPostItem,
   SkillItem,

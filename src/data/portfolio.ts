@@ -72,6 +72,24 @@ export interface SkillItem {
   search: string;
 }
 
+export interface AppToolItem {
+  name: string;
+  description: string;
+  tag?: string;
+  iconGradient?: string;
+  iconType: "docklift" | "zipora" | "screentest" | "deskmark" | "vidwall" | "vidcrop" | "mousiohint" | "mousio" | "custom";
+  url?: string;
+  githubUrl?: string;
+}
+
+export interface RepositoryItem {
+  name: string;
+  description: string;
+  url: string;
+  language?: string;
+  stars?: number;
+}
+
 export interface PortfolioConfig {
   personal: {
     name: string;
@@ -86,6 +104,8 @@ export interface PortfolioConfig {
   socials: SocialLink[];
   experiences: Experience[];
   projects: ProjectItem[];
+  appsAndTools?: AppToolItem[];
+  repositories?: RepositoryItem[];
   wikis: WikiItem[];
   blogs: BlogPostItem[];
   skills: SkillItem[];
@@ -238,6 +258,126 @@ export const portfolioData: PortfolioConfig = {
       websiteUrl: "https://github.com/GabrielBaiano/tabnews-release-publisher",
       githubUrl: "https://github.com/GabrielBaiano/tabnews-release-publisher",
       stack: ["TypeScript", "Node.js", "GitHub Actions", "OpenAI API"]
+    },
+  ],
+
+  appsAndTools: [
+    {
+      name: "DockLift",
+      description: "Click a Dock app window to bring it back to the current screen",
+      tag: "macOS",
+      iconType: "docklift",
+      iconGradient: "from-blue-600 to-indigo-700",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "Zipora",
+      description: "Zip/RAR/7Z Extraction Tool",
+      tag: "macOS",
+      iconType: "zipora",
+      iconGradient: "from-emerald-400 to-teal-600",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "Screen Test",
+      description: "Monitor Image Quality Test Tool",
+      tag: "macOS",
+      iconType: "screentest",
+      iconGradient: "from-sky-400 to-blue-500",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "Deskmark",
+      description: "Add watermarks to the desktop, ideal for recording videos.",
+      tag: "macOS",
+      iconType: "deskmark",
+      iconGradient: "from-emerald-600 to-teal-800",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "Vidwall Hub",
+      description: "Your Videos, Your Dynamic Lock Screen",
+      tag: "macOS",
+      iconType: "vidwall",
+      iconGradient: "from-zinc-700 to-zinc-900",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "VidCrop",
+      description: "Easily Crop Your Videos",
+      tag: "macOS",
+      iconType: "vidcrop",
+      iconGradient: "from-purple-500 to-pink-500",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "Mousio Hint",
+      description: "Shortcut hints for precise keyboard-driven cursor control",
+      tag: "macOS",
+      iconType: "mousiohint",
+      iconGradient: "from-amber-400 to-orange-500",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "Mousio",
+      description: "Quickly move, click, and drag the mouse cursor using only the keyboard",
+      tag: "macOS",
+      iconType: "mousio",
+      iconGradient: "from-blue-500 to-sky-600",
+      url: "https://github.com/GabrielBaiano",
+    },
+  ],
+
+  repositories: [
+    {
+      name: "Quick Reference",
+      description: "Cheat sheets, toolkits, and quick reference cards for developers.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "linux-command",
+      description: "Linux CLI search tool and cheat sheets covering 500+ commands.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "WXMP",
+      description: "WeChat & Markdown publishing tool with syntax highlighting.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "CodeImage",
+      description: "Create beautiful images of your source code snippets.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "npm-unpkg",
+      description: "A web application to view npm packages and unpacked files.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "run-web",
+      description: "Online Code Editor for Rapid Web Development.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "nginx-editor",
+      description: "Nginx language for Monaco Editor with syntax verification.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "github-rank",
+      description: "Github China/Global User Ranking and developer statistics.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "Logo",
+      description: "Minimalist SVG tech logos and iconography repository.",
+      url: "https://github.com/GabrielBaiano",
+    },
+    {
+      name: "regexp-example",
+      description: "Curated regular expression practical recipes and examples.",
+      url: "https://github.com/GabrielBaiano",
     },
   ],
 

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { portfolioData } from "@/data/portfolio";
 import { SubPageNav } from "@/components/SubPageNav";
 import { ProjectCard } from "@/components/ProjectCard";
+import { AppToolCard } from "@/components/AppToolCard";
+import { RepoCard } from "@/components/RepoCard";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ export default function ProjectsPage() {
       {/* Subpage Navigation */}
       <SubPageNav title="Projects" backHref="/" />
 
-      {/* Projects Grid */}
+      {/* Featured Projects Grid */}
       <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto container-dashed">
         <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-0">
           {/* Vertical middle divider on desktop */}
@@ -58,6 +60,50 @@ export default function ProjectsPage() {
       </section>
 
       <div className="divider-dashed" />
+
+      {/* Apps & Tools Section */}
+      {portfolioData.appsAndTools && portfolioData.appsAndTools.length > 0 && (
+        <>
+          <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto p-3.5 sm:px-4 container-dashed">
+            <h2 className="text-xs sm:text-sm font-semibold tracking-wider text-mutedForeground uppercase">
+              Apps & Tools
+            </h2>
+          </div>
+          <div className="divider-dashed" />
+
+          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto container-dashed">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3 sm:p-3.5">
+              {portfolioData.appsAndTools.map((app, idx) => (
+                <AppToolCard key={idx} item={app} />
+              ))}
+            </div>
+          </section>
+
+          <div className="divider-dashed" />
+        </>
+      )}
+
+      {/* Repositories Section */}
+      {portfolioData.repositories && portfolioData.repositories.length > 0 && (
+        <>
+          <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto p-3.5 sm:px-4 container-dashed">
+            <h2 className="text-xs sm:text-sm font-semibold tracking-wider text-mutedForeground uppercase">
+              Open Source / Repositories
+            </h2>
+          </div>
+          <div className="divider-dashed" />
+
+          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto container-dashed">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3 sm:p-3.5">
+              {portfolioData.repositories.map((repo, idx) => (
+                <RepoCard key={idx} repo={repo} />
+              ))}
+            </div>
+          </section>
+
+          <div className="divider-dashed" />
+        </>
+      )}
 
       {/* Bottom Github Callout */}
       {githubUrl && (
