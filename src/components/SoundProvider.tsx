@@ -201,28 +201,40 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const hasUserActivated = useCallback((): boolean => {
+    if (isUnlockedRef.current) return true;
+    if (typeof navigator !== "undefined" && "userActivation" in navigator) {
+      const active = (navigator as unknown as { userActivation?: { hasBeenActive: boolean } })
+        .userActivation?.hasBeenActive;
+      if (active) {
+        isUnlockedRef.current = true;
+        return true;
+      }
+    }
+    return false;
+  }, []);
+
   // Listen to the very first user interaction to create/resume the AudioContext cleanly
   useEffect(() => {
     const handleGesture = () => {
+      isUnlockedRef.current = true;
       const engine = initEngine();
       if (engine && engine.ctx.state === "suspended") {
         engine.ctx.resume().catch(() => {});
       }
-      isUnlockedRef.current = true;
     };
 
+    // Only actual W3C user activation gestures (no mouse movement or scroll wheel)
     window.addEventListener("pointerdown", handleGesture, { passive: true });
     window.addEventListener("keydown", handleGesture, { passive: true });
     window.addEventListener("touchstart", handleGesture, { passive: true });
-    window.addEventListener("wheel", handleGesture, { passive: true, once: true });
-    window.addEventListener("pointermove", handleGesture, { passive: true, once: true });
+    window.addEventListener("click", handleGesture, { passive: true });
 
     return () => {
       window.removeEventListener("pointerdown", handleGesture);
       window.removeEventListener("keydown", handleGesture);
       window.removeEventListener("touchstart", handleGesture);
-      window.removeEventListener("wheel", handleGesture);
-      window.removeEventListener("pointermove", handleGesture);
+      window.removeEventListener("click", handleGesture);
     };
   }, [initEngine]);
 
@@ -230,6 +242,10 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const playSound = useCallback(
     (type: SoundType) => {
       if (isMutedRef.current) return;
+
+      // Never attempt to create or resume AudioContext before any user interaction
+      // (prevents browser Autoplay Policy console warnings)
+      if (!hasUserActivated()) return;
 
       const engine = engineRef.current || initEngine();
       if (!engine) return;
@@ -253,7 +269,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         // Audio playback failed safely
       }
     },
-    [initEngine]
+    [hasUserActivated, initEngine]
   );
 
   // Global event delegation for data-cuelume-* attributes
@@ -282,6 +298,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     };
 
     const handlePointerDown = (e: PointerEvent) => {
+      isUnlockedRef.current = true;
       const target = (e.target as Element)?.closest?.("[data-cuelume-press]");
       if (!target) return;
       playSound("press");
@@ -294,6 +311,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     };
 
     const handleClick = (e: MouseEvent) => {
+      isUnlockedRef.current = true;
       const target = (e.target as Element)?.closest?.("[data-cuelume-toggle]");
       if (!target) return;
       playSound("toggle");
@@ -313,6 +331,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   }, [playSound]);
 
   const toggleMute = useCallback(() => {
+    isUnlockedRef.current = true;
     const next = !isMutedRef.current;
     isMutedRef.current = next;
     setIsMuted(next);
