@@ -13,10 +13,10 @@ export function RepoCard({ repo }: RepoCardProps) {
       rel="noopener noreferrer"
       data-cuelume-hover="tick"
       data-cuelume-press="true"
-      className="group relative flex flex-col justify-center p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none"
+      className="group relative flex flex-col justify-center p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none h-[64px] sm:h-[68px] w-full"
     >
       <div className="flex items-center justify-between gap-2">
-        <h4 className="text-[1.02rem] sm:text-[1.08rem] font-bold text-title group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors truncate">
+        <h4 className="text-[0.98rem] sm:text-[1.02rem] font-medium text-title group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors truncate leading-tight">
           {repo.name}
         </h4>
         <svg
@@ -35,7 +35,7 @@ export function RepoCard({ repo }: RepoCardProps) {
           <path d="M7 17 17 7" />
         </svg>
       </div>
-      <p className="text-xs sm:text-[0.82rem] text-mutedForeground line-clamp-1 leading-relaxed mt-0.5">
+      <p className="text-xs text-mutedForeground line-clamp-1 leading-snug mt-1 truncate">
         {repo.description}
       </p>
     </a>

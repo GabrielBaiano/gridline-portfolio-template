@@ -64,15 +64,15 @@ export default function ProjectsPage() {
       {/* Apps & Tools Section */}
       {portfolioData.appsAndTools && portfolioData.appsAndTools.length > 0 && (
         <>
-          <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto p-3.5 sm:px-4 container-dashed">
-            <h2 className="text-xs sm:text-sm font-semibold tracking-wider text-mutedForeground uppercase">
+          <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
+            <h2 className="text-[1.55rem] font-semibold text-title p-3">
               Apps & Tools
             </h2>
           </div>
           <div className="divider-dashed" />
 
-          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto container-dashed">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3 sm:p-3.5">
+          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3">
               {portfolioData.appsAndTools.map((app, idx) => (
                 <AppToolCard key={idx} item={app} />
               ))}
@@ -86,15 +86,15 @@ export default function ProjectsPage() {
       {/* Repositories Section */}
       {portfolioData.repositories && portfolioData.repositories.length > 0 && (
         <>
-          <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto p-3.5 sm:px-4 container-dashed">
-            <h2 className="text-xs sm:text-sm font-semibold tracking-wider text-mutedForeground uppercase">
-              Open Source / Repositories
+          <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
+            <h2 className="text-[1.55rem] font-semibold text-title p-3">
+              Repositories
             </h2>
           </div>
           <div className="divider-dashed" />
 
-          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto container-dashed">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3 sm:p-3.5">
+          <section className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 p-3">
               {portfolioData.repositories.map((repo, idx) => (
                 <RepoCard key={idx} repo={repo} />
               ))}

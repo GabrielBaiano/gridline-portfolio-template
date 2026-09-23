@@ -20,7 +20,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
   switch (type) {
     case "docklift":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Mini Window Frame */}
           <rect x="6" y="6" width="32" height="21" rx="3.5" fill="#FFFFFF" fillOpacity="0.95" />
           <path d="M6 12H38" stroke="#E2E8F0" strokeWidth="1.2" />
@@ -45,7 +45,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
       );
     case "zipora":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Zipper interlocking teeth */}
           <rect x="20" y="5" width="4" height="2.2" rx="0.6" fill="#FFFFFF" fillOpacity="0.8" />
           <rect x="15" y="8.5" width="4" height="2.2" rx="0.6" fill="#FFFFFF" fillOpacity="0.8" />
@@ -66,7 +66,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
       );
     case "screentest":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Monitor Frame */}
           <rect x="6" y="8" width="32" height="21" rx="3" stroke="#FFFFFF" strokeWidth="2.4" fill="#FFFFFF" fillOpacity="0.18" />
           {/* Screen Inner Display */}
@@ -78,7 +78,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
       );
     case "deskmark":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Diagonal Watermark Stripes Pattern */}
           <path
             d="M6 16L16 6M6 28L28 6M6 40L40 6M18 40L40 18M30 40L40 30"
@@ -92,7 +92,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
       );
     case "vidwall":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Dynamic 8-blade Aperture Shutter */}
           <g transform="translate(22,22) scale(0.95)">
             {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
@@ -110,7 +110,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
       );
     case "vidcrop":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Video Camera */}
           <rect x="7" y="13" width="20" height="18" rx="3.5" fill="#FFFFFF" fillOpacity="0.92" />
           <path d="M27 19L36 14V30L27 25V19Z" fill="#FFFFFF" fillOpacity="0.92" />
@@ -122,7 +122,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
       );
     case "mousiohint":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Cursor Pointer */}
           <path
             d="M9 8L17 32L21 24L30 24L9 8Z"
@@ -143,7 +143,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
       );
     case "mousio":
       return (
-        <svg viewBox="0 0 44 44" className="w-9 h-9 text-white drop-shadow" fill="none">
+        <svg viewBox="0 0 44 44" className="w-8 h-8 text-white drop-shadow" fill="none">
           {/* Cursor Pointer */}
           <path
             d="M10 8L18 32L22 24L31 24L10 8Z"
@@ -178,21 +178,21 @@ export function AppToolCard({ item }: AppToolCardProps) {
       rel="noopener noreferrer"
       data-cuelume-hover="tick"
       data-cuelume-press="true"
-      className="group relative flex items-center gap-3.5 sm:gap-4 p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none"
+      className="group relative flex items-center gap-3.5 p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none h-[78px] sm:h-[82px] w-full"
     >
       {/* Colorful Mockup Block Icon */}
       <div
-        className={`w-12 h-12 sm:w-14 sm:h-14 rounded-[12px] bg-gradient-to-br ${gradientClass} flex items-center justify-center shrink-0 shadow-sm border border-white/15 overflow-hidden relative group-hover:scale-105 transition-transform duration-200`}
+        className={`w-12 h-12 rounded-[11px] bg-gradient-to-br ${gradientClass} flex items-center justify-center shrink-0 shadow-sm border border-white/15 overflow-hidden relative group-hover:scale-105 transition-transform duration-200`}
       >
         <AppMockupIcon type={item.iconType} />
       </div>
 
-      {/* Typography: Title & Description */}
-      <div className="flex flex-col min-w-0 flex-1 justify-center">
-        <h4 className="text-[1.02rem] sm:text-[1.08rem] font-bold text-title leading-snug tracking-tight truncate">
+      {/* Typography: Title & Description with constant baseline */}
+      <div className="flex flex-col min-w-0 flex-1 justify-center h-full py-0.5">
+        <h4 className="text-[0.98rem] sm:text-[1.02rem] font-medium text-title leading-tight tracking-tight truncate">
           {item.name}
         </h4>
-        <p className="text-xs sm:text-[0.82rem] text-mutedForeground line-clamp-2 leading-relaxed mt-0.5">
+        <p className="text-xs text-mutedForeground line-clamp-2 leading-[1.35] mt-1">
           {item.description}
         </p>
       </div>
