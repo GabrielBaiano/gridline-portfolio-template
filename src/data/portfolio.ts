@@ -251,24 +251,7 @@ export const portfolioData: PortfolioConfig = {
       websiteUrl: "https://ebbcopendata.vercel.app/",
       githubUrl: "https://github.com/GabrielBaiano/EBBC-OpenData",
       stack: ["JavaScript", "React", "Node.js", "Open Data", "REST API"]
-    },
-    {
-      name: "tabnews-release-publisher",
-      slug: "tabnews-release-publisher",
-      status: "Live",
-      label: "Automation Tool",
-      description: "Automated GitHub release publisher with AI translation and markdown parsing for developer communities.",
-      longDescription: [
-        "tabnews-release-publisher automates publishing GitHub repository release notes directly to the Brazilian developer platform TabNews.",
-        "Integrates intelligent LLM translation into Portuguese while preserving 100% of markdown formatting, code snippets, badge links, and release semantics.",
-        "Can be executed as a GitHub Action or local CLI tool to streamline developer community announcements."
-      ],
-      screenshot: "/images/project/screenshots/tabnews-publisher.svg",
-      bgImage: "/images/project/background/bg-gradient-4.svg",
-      websiteUrl: "https://github.com/GabrielBaiano/tabnews-release-publisher",
-      githubUrl: "https://github.com/GabrielBaiano/tabnews-release-publisher",
-      stack: ["TypeScript", "Node.js", "GitHub Actions", "OpenAI API"]
-    },
+    }
   ],
 
   apps: [
