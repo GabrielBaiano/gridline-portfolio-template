@@ -16,6 +16,9 @@ export default function ProjectsPage() {
     portfolioData.socials.find((s) => s.name.toLowerCase() === "github")?.url ||
     "https://github.com";
 
+  const appsList = portfolioData.apps || portfolioData.appsAndTools || [];
+  const toolsList = portfolioData.tools || portfolioData.repositories || [];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top Dot-Grid Banner */}
@@ -61,12 +64,12 @@ export default function ProjectsPage() {
 
       <div className="divider-dashed" />
 
-      {/* Apps & Tools Section */}
-      {portfolioData.appsAndTools && portfolioData.appsAndTools.length > 0 && (
+      {/* Apps Section */}
+      {appsList.length > 0 && (
         <>
           <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
             <h2 className="text-[1.55rem] font-semibold text-title p-3">
-              Apps & Tools
+              Apps
             </h2>
           </div>
           <div className="divider-dashed" />
@@ -86,7 +89,7 @@ export default function ProjectsPage() {
                 />
               </div>
 
-              {portfolioData.appsAndTools.map((app, idx) => (
+              {appsList.map((app, idx) => (
                 <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex min-w-0">
                   <AppToolCard item={app} />
                 </div>
@@ -98,12 +101,12 @@ export default function ProjectsPage() {
         </>
       )}
 
-      {/* Repositories Section */}
-      {portfolioData.repositories && portfolioData.repositories.length > 0 && (
+      {/* Tools Section */}
+      {toolsList.length > 0 && (
         <>
           <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed">
             <h2 className="text-[1.55rem] font-semibold text-title p-3">
-              Repositories
+              Tools
             </h2>
           </div>
           <div className="divider-dashed" />
@@ -123,9 +126,9 @@ export default function ProjectsPage() {
                 />
               </div>
 
-              {portfolioData.repositories.map((repo, idx) => (
+              {toolsList.map((tool, idx) => (
                 <div key={idx} className="relative z-10 p-2.5 sm:p-3 flex min-w-0">
-                  <RepoCard repo={repo} />
+                  <RepoCard repo={tool} />
                 </div>
               ))}
             </div>

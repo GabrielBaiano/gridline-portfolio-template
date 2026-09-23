@@ -76,8 +76,11 @@ export interface AppToolItem {
   name: string;
   description: string;
   tag?: string;
+  icon?: string;
+  iconBg?: string;
+  iconFit?: "cover" | "contain";
   iconGradient?: string;
-  iconType: "docklift" | "zipora" | "screentest" | "deskmark" | "vidwall" | "vidcrop" | "mousiohint" | "mousio" | "custom";
+  iconType?: "docklift" | "zipora" | "screentest" | "deskmark" | "vidwall" | "vidcrop" | "mousiohint" | "mousio" | "custom";
   url?: string;
   githubUrl?: string;
 }
@@ -89,6 +92,8 @@ export interface RepositoryItem {
   language?: string;
   stars?: number;
 }
+
+export type ToolItem = RepositoryItem;
 
 export interface PortfolioConfig {
   personal: {
@@ -104,7 +109,9 @@ export interface PortfolioConfig {
   socials: SocialLink[];
   experiences: Experience[];
   projects: ProjectItem[];
+  apps?: AppToolItem[];
   appsAndTools?: AppToolItem[];
+  tools?: RepositoryItem[];
   repositories?: RepositoryItem[];
   wikis: WikiItem[];
   blogs: BlogPostItem[];
@@ -261,123 +268,33 @@ export const portfolioData: PortfolioConfig = {
     },
   ],
 
-  appsAndTools: [
+  apps: [
     {
-      name: "DockLift",
-      description: "Click a Dock app window to bring it back to the current screen",
-      tag: "macOS",
-      iconType: "docklift",
-      iconGradient: "from-blue-600 to-indigo-700",
-      url: "https://github.com/GabrielBaiano",
+      name: "Deskstamp",
+      description: "Native desktop watermark overlay with seamless click-through for Linux & COSMIC.",
+      icon: "/images/apps/deskstamp.png",
+      iconBg: "bg-blue-50/50 dark:bg-zinc-900/60",
+      iconFit: "contain",
+      url: "https://github.com/GabrielBaiano/Deskstamp",
     },
     {
-      name: "Zipora",
-      description: "Zip/RAR/7Z Extraction Tool",
-      tag: "macOS",
-      iconType: "zipora",
-      iconGradient: "from-emerald-400 to-teal-600",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "Screen Test",
-      description: "Monitor Image Quality Test Tool",
-      tag: "macOS",
-      iconType: "screentest",
-      iconGradient: "from-sky-400 to-blue-500",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "Deskmark",
-      description: "Add watermarks to the desktop, ideal for recording videos.",
-      tag: "macOS",
-      iconType: "deskmark",
-      iconGradient: "from-emerald-600 to-teal-800",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "Vidwall Hub",
-      description: "Your Videos, Your Dynamic Lock Screen",
-      tag: "macOS",
-      iconType: "vidwall",
-      iconGradient: "from-zinc-700 to-zinc-900",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "VidCrop",
-      description: "Easily Crop Your Videos",
-      tag: "macOS",
-      iconType: "vidcrop",
-      iconGradient: "from-purple-500 to-pink-500",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "Mousio Hint",
-      description: "Shortcut hints for precise keyboard-driven cursor control",
-      tag: "macOS",
-      iconType: "mousiohint",
-      iconGradient: "from-amber-400 to-orange-500",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "Mousio",
-      description: "Quickly move, click, and drag the mouse cursor using only the keyboard",
-      tag: "macOS",
-      iconType: "mousio",
-      iconGradient: "from-blue-500 to-sky-600",
-      url: "https://github.com/GabrielBaiano",
+      name: "Paperback",
+      description: "Clean, fast, and lightweight collaborative e-book reader in the browser.",
+      icon: "/images/apps/paperback.png",
+      url: "https://github.com/GabrielBaiano/paperback",
     },
   ],
 
-  repositories: [
+  tools: [
     {
-      name: "Quick Reference",
-      description: "Cheat sheets, toolkits, and quick reference cards for developers.",
-      url: "https://github.com/GabrielBaiano",
+      name: "Awesome README",
+      description: "Generate professional, high-quality READMEs and GitHub templates in seconds.",
+      url: "https://awesome-readme-nu.vercel.app/",
     },
     {
-      name: "linux-command",
-      description: "Linux CLI search tool and cheat sheets covering 500+ commands.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "WXMP",
-      description: "WeChat & Markdown publishing tool with syntax highlighting.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "CodeImage",
-      description: "Create beautiful images of your source code snippets.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "npm-unpkg",
-      description: "A web application to view npm packages and unpacked files.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "run-web",
-      description: "Online Code Editor for Rapid Web Development.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "nginx-editor",
-      description: "Nginx language for Monaco Editor with syntax verification.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "github-rank",
-      description: "Github China/Global User Ranking and developer statistics.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "Logo",
-      description: "Minimalist SVG tech logos and iconography repository.",
-      url: "https://github.com/GabrielBaiano",
-    },
-    {
-      name: "regexp-example",
-      description: "Curated regular expression practical recipes and examples.",
-      url: "https://github.com/GabrielBaiano",
+      name: "pure-svg-charts",
+      description: "Lightweight, accessible, and reactive SVG chart primitives for React and Next.js.",
+      url: "https://github.com/GabrielBaiano/pure-svg-charts",
     },
   ],
 

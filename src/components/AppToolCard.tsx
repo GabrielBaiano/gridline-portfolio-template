@@ -16,7 +16,7 @@ const GRADIENT_MAP: Record<string, string> = {
   mousio: "from-blue-500 to-cyan-500 shadow-blue-500/20",
 };
 
-function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
+function AppMockupIcon({ type }: { type?: AppToolItem["iconType"] }) {
   switch (type) {
     case "docklift":
       return (
@@ -169,7 +169,7 @@ function AppMockupIcon({ type }: { type: AppToolItem["iconType"] }) {
 }
 
 export function AppToolCard({ item }: AppToolCardProps) {
-  const gradientClass = GRADIENT_MAP[item.iconType] || "from-blue-600 to-indigo-600 shadow-blue-500/20";
+  const gradientClass = (item.iconType && GRADIENT_MAP[item.iconType]) || "from-blue-600 to-indigo-600 shadow-blue-500/20";
 
   return (
     <a
@@ -181,12 +181,28 @@ export function AppToolCard({ item }: AppToolCardProps) {
       title={item.description}
       className="group relative flex items-center gap-3 sm:gap-3.5 p-3 sm:p-3.5 rounded-[12px] border border-border bg-background hover:bg-mutedBackground/40 transition-colors duration-200 cursor-pointer select-none min-h-[88px] sm:min-h-[90px] h-full w-full min-w-0 overflow-hidden"
     >
-      {/* Colorful Mockup Block Icon */}
-      <div
-        className={`w-12 h-12 rounded-[11px] bg-gradient-to-br ${gradientClass} flex items-center justify-center shrink-0 shadow-sm border border-white/15 overflow-hidden relative group-hover:scale-105 transition-transform duration-200`}
-      >
-        <AppMockupIcon type={item.iconType} />
-      </div>
+      {/* App Icon */}
+      {item.icon ? (
+        <div
+          className={`w-12 h-12 rounded-[11px] ${
+            item.iconBg || "bg-mutedBackground"
+          } flex items-center justify-center shrink-0 shadow-sm border border-border/50 overflow-hidden relative group-hover:scale-105 transition-transform duration-200`}
+        >
+          <img
+            src={item.icon}
+            alt={item.name}
+            className={`w-full h-full ${
+              item.iconFit === "contain" ? "object-contain p-1" : "object-cover"
+            }`}
+          />
+        </div>
+      ) : (
+        <div
+          className={`w-12 h-12 rounded-[11px] bg-gradient-to-br ${gradientClass} flex items-center justify-center shrink-0 shadow-sm border border-white/15 overflow-hidden relative group-hover:scale-105 transition-transform duration-200`}
+        >
+          <AppMockupIcon type={item.iconType} />
+        </div>
+      )}
 
       {/* Typography: Title & Description with locked 2-line baseline */}
       <div className="flex flex-col min-w-0 flex-1 justify-center py-0.5">
