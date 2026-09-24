@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import initialData from "@/data/visitors.json";
 import { getRedisCredentials, redisGet, redisIncr } from "@/lib/redis";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const BASE_PAGEVIEWS = typeof initialData?.pageviews === "number" ? initialData.pageviews : 1420;
 let inMemoryCount = BASE_PAGEVIEWS;
 

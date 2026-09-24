@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { portfolioData } from "@/data/portfolio";
 import { redisGet, redisIncr } from "@/lib/redis";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const inMemoryClaps = new Map<string, number>();
 
 export async function GET(req: NextRequest) {
@@ -19,11 +22,19 @@ export async function GET(req: NextRequest) {
   const remote = await redisGet(`portfolio:claps:${slug}`);
   const current = remote !== null ? baseClaps + remote : (inMemoryClaps.get(slug) ?? baseClaps);
 
-  return NextResponse.json({
-    slug,
-    claps: current,
-    ...(isDebug ? { connectedToRedis: remote !== null, baseClaps, remoteOffset: remote } : {}),
-  });
+  return NextResponse.json(
+    {
+      slug,
+      claps: current,
+      ...(isDebug ? { connectedToRedis: remote !== null, baseClaps, remoteOffset: remote } : {}),
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "Pragma": "no-cache",
+      },
+    }
+  );
 }
 
 export async function POST(req: NextRequest) {
@@ -41,16 +52,21 @@ export async function POST(req: NextRequest) {
     // Rate cap: max 10 claps per single request to prevent script flooding
     const safeIncrement = Math.min(Math.max(Number(count) || 1, 1), 10);
 
+    const noCacheHeaders = {
+      "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+      "Pragma": "no-cache",
+    };
+
     const remote = await redisIncr(`portfolio:claps:${slug}`, safeIncrement);
     if (remote !== null) {
-      return NextResponse.json({ slug, claps: baseClaps + remote });
+      return NextResponse.json({ slug, claps: baseClaps + remote }, { headers: noCacheHeaders });
     }
 
     const current = inMemoryClaps.get(slug) ?? baseClaps;
     const updated = current + safeIncrement;
     inMemoryClaps.set(slug, updated);
 
-    return NextResponse.json({ slug, claps: updated });
+    return NextResponse.json({ slug, claps: updated }, { headers: noCacheHeaders });
   } catch {
     return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
   }
