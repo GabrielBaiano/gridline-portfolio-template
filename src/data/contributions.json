@@ -1,9 +1,9 @@
 {
   "username": "GabrielBaiano",
-  "totalContributions": 1615,
-  "yearContributions": 1214,
+  "totalContributions": 886,
+  "yearContributions": 689,
   "currentYear": 2026,
-  "updatedAt": "2026-09-23T11:18:34.743Z",
+  "updatedAt": "2026-09-24T02:55:27.287Z",
   "weeks": [
     {
       "days": [
@@ -39,13 +39,13 @@
         },
         {
           "date": "2025-09-26",
-          "count": 15,
+          "count": 12,
           "weekday": 5,
-          "level": 4
+          "level": 3
         },
         {
           "date": "2025-09-27",
-          "count": 26,
+          "count": 19,
           "weekday": 6,
           "level": 4
         }
@@ -125,15 +125,15 @@
         },
         {
           "date": "2025-10-09",
-          "count": 5,
+          "count": 0,
           "weekday": 4,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-10-10",
-          "count": 15,
+          "count": 0,
           "weekday": 5,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2025-10-11",
@@ -177,7 +177,7 @@
         },
         {
           "date": "2025-10-17",
-          "count": 2,
+          "count": 1,
           "weekday": 5,
           "level": 1
         },
@@ -389,21 +389,21 @@
         },
         {
           "date": "2025-11-18",
-          "count": 4,
+          "count": 0,
           "weekday": 2,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-11-19",
-          "count": 3,
+          "count": 0,
           "weekday": 3,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-11-20",
-          "count": 3,
+          "count": 1,
           "weekday": 4,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2025-11-21",
@@ -413,9 +413,9 @@
         },
         {
           "date": "2025-11-22",
-          "count": 15,
+          "count": 0,
           "weekday": 6,
-          "level": 4
+          "level": 0
         }
       ]
     },
@@ -423,15 +423,15 @@
       "days": [
         {
           "date": "2025-11-23",
-          "count": 4,
+          "count": 0,
           "weekday": 0,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-11-24",
-          "count": 7,
+          "count": 0,
           "weekday": 1,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2025-11-25",
@@ -441,21 +441,21 @@
         },
         {
           "date": "2025-11-26",
-          "count": 3,
+          "count": 0,
           "weekday": 3,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-11-27",
-          "count": 17,
+          "count": 0,
           "weekday": 4,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2025-11-28",
-          "count": 1,
+          "count": 0,
           "weekday": 5,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2025-11-29",
@@ -487,9 +487,9 @@
         },
         {
           "date": "2025-12-03",
-          "count": 2,
+          "count": 0,
           "weekday": 3,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2025-12-04",
@@ -521,19 +521,19 @@
         },
         {
           "date": "2025-12-08",
-          "count": 5,
+          "count": 0,
           "weekday": 1,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-12-09",
-          "count": 5,
+          "count": 0,
           "weekday": 2,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-12-10",
-          "count": 6,
+          "count": 4,
           "weekday": 3,
           "level": 2
         },
@@ -545,15 +545,15 @@
         },
         {
           "date": "2025-12-12",
-          "count": 13,
+          "count": 7,
           "weekday": 5,
-          "level": 4
+          "level": 3
         },
         {
           "date": "2025-12-13",
-          "count": 1,
+          "count": 0,
           "weekday": 6,
-          "level": 1
+          "level": 0
         }
       ]
     },
@@ -561,15 +561,15 @@
       "days": [
         {
           "date": "2025-12-14",
-          "count": 1,
+          "count": 0,
           "weekday": 0,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2025-12-15",
-          "count": 5,
+          "count": 0,
           "weekday": 1,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-12-16",
@@ -585,9 +585,9 @@
         },
         {
           "date": "2025-12-18",
-          "count": 3,
+          "count": 0,
           "weekday": 4,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-12-19",
@@ -613,21 +613,21 @@
         },
         {
           "date": "2025-12-22",
-          "count": 4,
+          "count": 0,
           "weekday": 1,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-12-23",
-          "count": 5,
+          "count": 0,
           "weekday": 2,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2025-12-24",
-          "count": 2,
+          "count": 0,
           "weekday": 3,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2025-12-25",
@@ -643,9 +643,9 @@
         },
         {
           "date": "2025-12-27",
-          "count": 21,
+          "count": 1,
           "weekday": 6,
-          "level": 4
+          "level": 1
         }
       ]
     },
@@ -659,39 +659,39 @@
         },
         {
           "date": "2025-12-29",
-          "count": 17,
+          "count": 6,
           "weekday": 1,
-          "level": 4
+          "level": 2
         },
         {
           "date": "2025-12-30",
-          "count": 14,
+          "count": 8,
           "weekday": 2,
-          "level": 4
+          "level": 3
         },
         {
           "date": "2025-12-31",
-          "count": 39,
+          "count": 0,
           "weekday": 3,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2026-01-01",
-          "count": 2,
+          "count": 0,
           "weekday": 4,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-01-02",
-          "count": 42,
+          "count": 0,
           "weekday": 5,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2026-01-03",
-          "count": 15,
+          "count": 0,
           "weekday": 6,
-          "level": 4
+          "level": 0
         }
       ]
     },
@@ -699,33 +699,33 @@
       "days": [
         {
           "date": "2026-01-04",
-          "count": 19,
+          "count": 0,
           "weekday": 0,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2026-01-05",
-          "count": 11,
+          "count": 0,
           "weekday": 1,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-01-06",
-          "count": 5,
+          "count": 4,
           "weekday": 2,
           "level": 2
         },
         {
           "date": "2026-01-07",
-          "count": 1,
+          "count": 0,
           "weekday": 3,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-01-08",
-          "count": 9,
+          "count": 0,
           "weekday": 4,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-01-09",
@@ -735,9 +735,9 @@
         },
         {
           "date": "2026-01-10",
-          "count": 19,
+          "count": 0,
           "weekday": 6,
-          "level": 4
+          "level": 0
         }
       ]
     },
@@ -751,9 +751,9 @@
         },
         {
           "date": "2026-01-12",
-          "count": 5,
+          "count": 0,
           "weekday": 1,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-01-13",
@@ -791,21 +791,21 @@
       "days": [
         {
           "date": "2026-01-18",
-          "count": 24,
+          "count": 21,
           "weekday": 0,
           "level": 4
         },
         {
           "date": "2026-01-19",
-          "count": 52,
+          "count": 0,
           "weekday": 1,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2026-01-20",
-          "count": 26,
+          "count": 0,
           "weekday": 2,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2026-01-21",
@@ -821,15 +821,15 @@
         },
         {
           "date": "2026-01-23",
-          "count": 16,
+          "count": 6,
           "weekday": 5,
-          "level": 4
+          "level": 2
         },
         {
           "date": "2026-01-24",
-          "count": 2,
+          "count": 0,
           "weekday": 6,
-          "level": 1
+          "level": 0
         }
       ]
     },
@@ -861,9 +861,9 @@
         },
         {
           "date": "2026-01-29",
-          "count": 2,
+          "count": 0,
           "weekday": 4,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-01-30",
@@ -889,9 +889,9 @@
         },
         {
           "date": "2026-02-02",
-          "count": 10,
+          "count": 3,
           "weekday": 1,
-          "level": 3
+          "level": 2
         },
         {
           "date": "2026-02-03",
@@ -919,9 +919,9 @@
         },
         {
           "date": "2026-02-07",
-          "count": 2,
+          "count": 0,
           "weekday": 6,
-          "level": 1
+          "level": 0
         }
       ]
     },
@@ -959,9 +959,9 @@
         },
         {
           "date": "2026-02-13",
-          "count": 7,
+          "count": 0,
           "weekday": 5,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-02-14",
@@ -981,13 +981,13 @@
         },
         {
           "date": "2026-02-16",
-          "count": 30,
+          "count": 3,
           "weekday": 1,
-          "level": 4
+          "level": 2
         },
         {
           "date": "2026-02-17",
-          "count": 11,
+          "count": 7,
           "weekday": 2,
           "level": 3
         },
@@ -1005,9 +1005,9 @@
         },
         {
           "date": "2026-02-20",
-          "count": 21,
+          "count": 3,
           "weekday": 5,
-          "level": 4
+          "level": 2
         },
         {
           "date": "2026-02-21",
@@ -1045,15 +1045,15 @@
         },
         {
           "date": "2026-02-26",
-          "count": 3,
+          "count": 0,
           "weekday": 4,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-02-27",
-          "count": 2,
+          "count": 0,
           "weekday": 5,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-02-28",
@@ -1113,15 +1113,15 @@
       "days": [
         {
           "date": "2026-03-08",
-          "count": 1,
+          "count": 0,
           "weekday": 0,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-03-09",
-          "count": 4,
+          "count": 0,
           "weekday": 1,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-03-10",
@@ -1217,9 +1217,9 @@
         },
         {
           "date": "2026-03-24",
-          "count": 5,
+          "count": 0,
           "weekday": 2,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-03-25",
@@ -1229,15 +1229,15 @@
         },
         {
           "date": "2026-03-26",
-          "count": 12,
+          "count": 2,
           "weekday": 4,
-          "level": 3
+          "level": 1
         },
         {
           "date": "2026-03-27",
-          "count": 21,
+          "count": 5,
           "weekday": 5,
-          "level": 4
+          "level": 2
         },
         {
           "date": "2026-03-28",
@@ -1257,9 +1257,9 @@
         },
         {
           "date": "2026-03-30",
-          "count": 3,
+          "count": 0,
           "weekday": 1,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-03-31",
@@ -1297,13 +1297,13 @@
       "days": [
         {
           "date": "2026-04-05",
-          "count": 1,
+          "count": 0,
           "weekday": 0,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-04-06",
-          "count": 2,
+          "count": 1,
           "weekday": 1,
           "level": 1
         },
@@ -1315,9 +1315,9 @@
         },
         {
           "date": "2026-04-08",
-          "count": 3,
+          "count": 1,
           "weekday": 3,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2026-04-09",
@@ -1349,9 +1349,9 @@
         },
         {
           "date": "2026-04-13",
-          "count": 3,
+          "count": 1,
           "weekday": 1,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2026-04-14",
@@ -1419,15 +1419,15 @@
         },
         {
           "date": "2026-04-24",
-          "count": 26,
+          "count": 0,
           "weekday": 5,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2026-04-25",
-          "count": 2,
+          "count": 0,
           "weekday": 6,
-          "level": 1
+          "level": 0
         }
       ]
     },
@@ -1435,33 +1435,33 @@
       "days": [
         {
           "date": "2026-04-26",
-          "count": 7,
+          "count": 0,
           "weekday": 0,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-04-27",
-          "count": 8,
+          "count": 0,
           "weekday": 1,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-04-28",
-          "count": 5,
+          "count": 0,
           "weekday": 2,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-04-29",
-          "count": 3,
+          "count": 0,
           "weekday": 3,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-04-30",
-          "count": 1,
+          "count": 0,
           "weekday": 4,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-05-01",
@@ -1471,9 +1471,9 @@
         },
         {
           "date": "2026-05-02",
-          "count": 1,
+          "count": 0,
           "weekday": 6,
-          "level": 1
+          "level": 0
         }
       ]
     },
@@ -1481,9 +1481,9 @@
       "days": [
         {
           "date": "2026-05-03",
-          "count": 1,
+          "count": 0,
           "weekday": 0,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-05-04",
@@ -1493,19 +1493,19 @@
         },
         {
           "date": "2026-05-05",
-          "count": 4,
+          "count": 0,
           "weekday": 2,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-05-06",
-          "count": 8,
+          "count": 1,
           "weekday": 3,
-          "level": 3
+          "level": 1
         },
         {
           "date": "2026-05-07",
-          "count": 9,
+          "count": 8,
           "weekday": 4,
           "level": 3
         },
@@ -1527,13 +1527,13 @@
       "days": [
         {
           "date": "2026-05-10",
-          "count": 7,
+          "count": 6,
           "weekday": 0,
-          "level": 3
+          "level": 2
         },
         {
           "date": "2026-05-11",
-          "count": 2,
+          "count": 1,
           "weekday": 1,
           "level": 1
         },
@@ -1545,19 +1545,19 @@
         },
         {
           "date": "2026-05-13",
-          "count": 3,
+          "count": 0,
           "weekday": 3,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-05-14",
-          "count": 12,
+          "count": 2,
           "weekday": 4,
-          "level": 3
+          "level": 1
         },
         {
           "date": "2026-05-15",
-          "count": 5,
+          "count": 4,
           "weekday": 5,
           "level": 2
         },
@@ -1631,15 +1631,15 @@
         },
         {
           "date": "2026-05-26",
-          "count": 4,
+          "count": 2,
           "weekday": 2,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2026-05-27",
-          "count": 3,
+          "count": 0,
           "weekday": 3,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-05-28",
@@ -1649,15 +1649,15 @@
         },
         {
           "date": "2026-05-29",
-          "count": 2,
+          "count": 0,
           "weekday": 5,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-05-30",
-          "count": 1,
+          "count": 0,
           "weekday": 6,
-          "level": 1
+          "level": 0
         }
       ]
     },
@@ -1671,33 +1671,33 @@
         },
         {
           "date": "2026-06-01",
-          "count": 2,
+          "count": 0,
           "weekday": 1,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-06-02",
-          "count": 4,
+          "count": 2,
           "weekday": 2,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2026-06-03",
-          "count": 5,
+          "count": 1,
           "weekday": 3,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2026-06-04",
-          "count": 1,
+          "count": 0,
           "weekday": 4,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-06-05",
-          "count": 2,
+          "count": 0,
           "weekday": 5,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-06-06",
@@ -1711,9 +1711,9 @@
       "days": [
         {
           "date": "2026-06-07",
-          "count": 5,
+          "count": 1,
           "weekday": 0,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2026-06-08",
@@ -1729,21 +1729,21 @@
         },
         {
           "date": "2026-06-10",
-          "count": 2,
+          "count": 1,
           "weekday": 3,
           "level": 1
         },
         {
           "date": "2026-06-11",
-          "count": 16,
+          "count": 9,
           "weekday": 4,
-          "level": 4
+          "level": 3
         },
         {
           "date": "2026-06-12",
-          "count": 5,
+          "count": 0,
           "weekday": 5,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-06-13",
@@ -1763,13 +1763,13 @@
         },
         {
           "date": "2026-06-15",
-          "count": 1,
+          "count": 0,
           "weekday": 1,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-06-16",
-          "count": 18,
+          "count": 16,
           "weekday": 2,
           "level": 4
         },
@@ -1781,15 +1781,15 @@
         },
         {
           "date": "2026-06-18",
-          "count": 1,
+          "count": 2,
           "weekday": 4,
           "level": 1
         },
         {
           "date": "2026-06-19",
-          "count": 6,
+          "count": 0,
           "weekday": 5,
-          "level": 2
+          "level": 0
         },
         {
           "date": "2026-06-20",
@@ -1815,9 +1815,9 @@
         },
         {
           "date": "2026-06-23",
-          "count": 9,
+          "count": 3,
           "weekday": 2,
-          "level": 3
+          "level": 2
         },
         {
           "date": "2026-06-24",
@@ -1861,15 +1861,15 @@
         },
         {
           "date": "2026-06-30",
-          "count": 1,
+          "count": 0,
           "weekday": 2,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-07-01",
-          "count": 12,
+          "count": 0,
           "weekday": 3,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-07-02",
@@ -1919,7 +1919,7 @@
         },
         {
           "date": "2026-07-09",
-          "count": 21,
+          "count": 19,
           "weekday": 4,
           "level": 4
         },
@@ -1947,21 +1947,21 @@
         },
         {
           "date": "2026-07-13",
-          "count": 11,
+          "count": 9,
           "weekday": 1,
           "level": 3
         },
         {
           "date": "2026-07-14",
-          "count": 3,
+          "count": 2,
           "weekday": 2,
-          "level": 2
+          "level": 1
         },
         {
           "date": "2026-07-15",
-          "count": 14,
+          "count": 3,
           "weekday": 3,
-          "level": 4
+          "level": 2
         },
         {
           "date": "2026-07-16",
@@ -1999,9 +1999,9 @@
         },
         {
           "date": "2026-07-21",
-          "count": 8,
+          "count": 0,
           "weekday": 2,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-07-22",
@@ -2137,9 +2137,9 @@
         },
         {
           "date": "2026-08-11",
-          "count": 2,
+          "count": 0,
           "weekday": 2,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-08-12",
@@ -2229,9 +2229,9 @@
         },
         {
           "date": "2026-08-25",
-          "count": 1,
+          "count": 0,
           "weekday": 2,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-08-26",
@@ -2269,15 +2269,15 @@
         },
         {
           "date": "2026-08-31",
-          "count": 29,
+          "count": 0,
           "weekday": 1,
-          "level": 4
+          "level": 0
         },
         {
           "date": "2026-09-01",
-          "count": 11,
+          "count": 0,
           "weekday": 2,
-          "level": 3
+          "level": 0
         },
         {
           "date": "2026-09-02",
@@ -2287,9 +2287,9 @@
         },
         {
           "date": "2026-09-03",
-          "count": 2,
+          "count": 0,
           "weekday": 4,
-          "level": 1
+          "level": 0
         },
         {
           "date": "2026-09-04",
@@ -2355,7 +2355,7 @@
       "days": [
         {
           "date": "2026-09-13",
-          "count": 47,
+          "count": 46,
           "weekday": 0,
           "level": 4
         },
@@ -2391,7 +2391,7 @@
         },
         {
           "date": "2026-09-19",
-          "count": 19,
+          "count": 18,
           "weekday": 6,
           "level": 4
         }
@@ -2419,9 +2419,15 @@
         },
         {
           "date": "2026-09-23",
-          "count": 31,
+          "count": 56,
           "weekday": 3,
           "level": 4
+        },
+        {
+          "date": "2026-09-24",
+          "count": 0,
+          "weekday": 4,
+          "level": 0
         }
       ]
     }
