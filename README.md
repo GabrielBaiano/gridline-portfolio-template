@@ -41,6 +41,9 @@
   </a>
 </p>
 
+> [!TIP]
+> **Starter Branch**: You are on the `template` branch, pre-configured with clean mock data (`Alex River`) in `src/data/portfolio.ts` so you can clone and customize it immediately without author personal data.
+
 **Gridline Portfolio Template** is an engineering-first personal website template structured around a 690px architectural drafting grid with dashed borders, zero-latency Web Audio sound synthesis, static contribution heatmaps, and hidden canvas minigames.
 
 > 📚 **Project Evolution**: Designed as a high-density, low-clutter alternative to generic SaaS-style portfolios, prioritizing zero-dependency browser APIs (Web Audio synthesis, SVG charts, Server Components) over heavy client-side bundles.

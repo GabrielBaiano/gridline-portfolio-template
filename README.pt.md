@@ -41,6 +41,9 @@
   </a>
 </p>
 
+> [!TIP]
+> **Branch de Template Limpa**: Você está na branch `template`, pré-configurada com dados mockados (`Alex River`) em `src/data/portfolio.ts` para você clonar e preencher diretamente, sem dados pessoais do autor.
+
 O **Gridline Portfolio Template** é um modelo de portfólio pessoal com foco em engenharia e arquitetura visual limpa. Ele utiliza um container de 690px com bordas pontilhadas estilo blueprint, sintetizador de som nativo sem arquivos de áudio pesados, heatmap de contribuições em Server Components e minigames ocultos em canvas.
 
 > 📚 **Evolução do Projeto**: Criado como uma alternativa minimalista e de alta densidade técnica aos modelos genéricos de portfólio estilo SaaS, priorizando APIs nativas do navegador (Web Audio API, gráficos SVG, Server Components) em vez de pacotes pesados no cliente.
