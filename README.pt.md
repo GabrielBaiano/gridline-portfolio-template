@@ -41,6 +41,12 @@
   </a>
 </p>
 
+> [!TIP]
+> **Procurando um starter limpo sem dados do autor?** Clone diretamente a branch [`template`](https://github.com/GabrielBaiano/gridline-portfolio-template/tree/template) pré-configurada com dados mockados:
+> ```bash
+> git clone -b template https://github.com/GabrielBaiano/gridline-portfolio-template.git
+> ```
+
 O **Gridline Portfolio Template** é um modelo de portfólio pessoal com foco em engenharia e arquitetura visual limpa. Ele utiliza um container de 690px com bordas pontilhadas estilo blueprint, sintetizador de som nativo sem arquivos de áudio pesados, heatmap de contribuições em Server Components e minigames ocultos em canvas.
 
 > 📚 **Evolução do Projeto**: Criado como uma alternativa minimalista e de alta densidade técnica aos modelos genéricos de portfólio estilo SaaS, priorizando APIs nativas do navegador (Web Audio API, gráficos SVG, Server Components) em vez de pacotes pesados no cliente.

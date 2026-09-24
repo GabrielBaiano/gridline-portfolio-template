@@ -41,6 +41,12 @@
   </a>
 </p>
 
+> [!TIP]
+> **Looking for a clean starter without author data?** Clone directly from the [`template`](https://github.com/GabrielBaiano/gridline-portfolio-template/tree/template) branch pre-loaded with clean mock data:
+> ```bash
+> git clone -b template https://github.com/GabrielBaiano/gridline-portfolio-template.git
+> ```
+
 **Gridline Portfolio Template** is an engineering-first personal website template structured around a 690px architectural drafting grid with dashed borders, zero-latency Web Audio sound synthesis, static contribution heatmaps, and hidden canvas minigames.
 
 > 📚 **Project Evolution**: Designed as a high-density, low-clutter alternative to generic SaaS-style portfolios, prioritizing zero-dependency browser APIs (Web Audio synthesis, SVG charts, Server Components) over heavy client-side bundles.
