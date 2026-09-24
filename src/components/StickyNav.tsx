@@ -179,12 +179,15 @@ export function StickyNav() {
                   <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
                   <circle cx="12" cy="12" r="3" />
                 </svg>
-                <span className="text-sm text-[#9c9c9c] tabular-nums font-medium">
+                <span
+                  title={animatedViews !== null ? `${animatedViews.toLocaleString()} views` : undefined}
+                  className="text-sm text-[#9c9c9c] tabular-nums font-medium"
+                >
                   {animatedViews === null
                     ? "—"
-                    : animatedViews >= 10000
+                    : animatedViews >= 1000
                     ? `${(animatedViews / 1000).toFixed(1)}k`
-                    : animatedViews.toLocaleString()}
+                    : animatedViews}
                 </span>
               </div>
             </div>
