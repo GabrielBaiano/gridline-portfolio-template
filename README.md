@@ -10,6 +10,16 @@
 </p>
 
 <p align="center">
+  <a href="README.md">🇺🇸 English</a>
+  &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="README.pt.md">🇧🇷 Português</a>
+  &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/GabrielBaiano/gridline-portfolio-template/generate">⚡ Use Template</a>
+  &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="https://github.com/GabrielBaiano/gridline-portfolio-template/archive/refs/heads/main.zip">📦 Download ZIP</a>
+</p>
+
+<p align="center">
   <a href="https://github.com/GabrielBaiano/gridline-portfolio-template/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/GabrielBaiano/gridline-portfolio-template?style=flat-square" alt="License">
   </a>
@@ -48,40 +58,46 @@
 * **Icons**: Lucide React
 * **Persistence (Optional)**: Upstash Redis (`@upstash/redis`) for global stats
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Download
 
-### Prerequisites
-- Node.js 18.18+ (Node 20+ recommended)
-- pnpm (recommended), npm, or yarn
+### 📥 3 Ways to Get Started
 
-### 1. Clone & Install
+1. **GitHub Template (Recommended)**: Click **[Use this template](https://github.com/GabrielBaiano/gridline-portfolio-template/generate)** to scaffold a clean copy directly into your GitHub account.
+2. **Scaffold via Degit**:
+   ```bash
+   npx degit GabrielBaiano/gridline-portfolio-template my-portfolio
+   cd my-portfolio
+   pnpm install
+   ```
+3. **Download ZIP Package**:
+   - Download the latest template archive: **[gridline-portfolio-template.zip](https://github.com/GabrielBaiano/gridline-portfolio-template/archive/refs/heads/main.zip)**
+   - Unpack and install dependencies: `pnpm install`
+
+### 💻 Local Development
 
 ```bash
 # Clone the repository
 git clone https://github.com/GabrielBaiano/gridline-portfolio-template.git
 
-# Enter the project directory
+# Enter project directory
 cd gridline-portfolio-template
 
 # Install dependencies
 pnpm install
-```
 
-### 2. Environment Variables (Optional)
-
-The template runs completely out of the box with zero environment variables required. To customize canonical URLs or enable persistent stats:
-
-```bash
-cp .env.example .env.local
-```
-
-### 3. Run Locally
-
-```bash
+# Run locally
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### 📦 Create Offline Distribution Package
+
+To bundle a clean ZIP package of the template locally without `.git` or build artifacts:
+
+```bash
+pnpm package
+```
 
 ## 🌐 Customization
 
@@ -141,6 +157,7 @@ Both dot-grid canvas banners hide interactive arcade minigames:
 | `pnpm dev` | Starts local Next.js development server on port 3000 |
 | `pnpm build` | Compiles optimized production build with static generation |
 | `pnpm start` | Runs production build locally |
+| `pnpm package` | Generates a clean standalone template ZIP package |
 | `pnpm tsc --noEmit` | Runs TypeScript static type checking without emitting files |
 
 ## 🤝 Contributing
@@ -149,7 +166,7 @@ Contributions, bug reports, and suggestions are welcome! Feel free to open an is
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
 
 ---
 

@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "package": "git archive --format=zip --output=gridline-portfolio-template.zip HEAD"
   },
   "dependencies": {
     "clsx": "^2.1.1",
