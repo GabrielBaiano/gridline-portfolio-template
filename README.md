@@ -14,6 +14,8 @@
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="README.pt.md">🇧🇷 Português</a>
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="https://gabrielbaiano.vercel.app/" target="_blank">🌐 Live Demo</a>
+  &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="https://github.com/GabrielBaiano/gridline-portfolio-template/generate">⚡ Use Template</a>
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="https://github.com/GabrielBaiano/gridline-portfolio-template/archive/refs/heads/main.zip">📦 Download ZIP</a>
@@ -32,6 +34,12 @@
 </p>
 
 ---
+
+<p align="center">
+  <a href="https://gabrielbaiano.vercel.app/" target="_blank">
+    <strong>🌐 Live Preview: https://gabrielbaiano.vercel.app/</strong>
+  </a>
+</p>
 
 **Gridline Portfolio Template** is an engineering-first personal website template structured around a 690px architectural drafting grid with dashed borders, zero-latency Web Audio sound synthesis, static contribution heatmaps, and hidden canvas minigames.
 

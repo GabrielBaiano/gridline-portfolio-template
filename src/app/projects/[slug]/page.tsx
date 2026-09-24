@@ -61,7 +61,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.vercel.app";
   const projectJsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",

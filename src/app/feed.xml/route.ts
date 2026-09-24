@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { portfolioData } from "@/data/portfolio";
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.vercel.app";
 
   const itemsXml = portfolioData.blogs
     .map((post) => {

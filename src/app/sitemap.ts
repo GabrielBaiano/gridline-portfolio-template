@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { portfolioData } from "@/data/portfolio";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.vercel.app";
 
   const routes: MetadataRoute.Sitemap = [
     {

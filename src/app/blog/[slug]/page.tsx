@@ -61,7 +61,7 @@ export default async function BlogPostDetailPage({
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.vercel.app";
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",

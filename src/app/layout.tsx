@@ -36,7 +36,7 @@ const instagramSans = localFont({
   ],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

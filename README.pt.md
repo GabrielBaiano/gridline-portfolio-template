@@ -14,6 +14,8 @@
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="README.pt.md">🇧🇷 Português</a>
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="https://gabrielbaiano.vercel.app/" target="_blank">🌐 Demonstração ao Vivo</a>
+  &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="https://github.com/GabrielBaiano/gridline-portfolio-template/generate">⚡ Usar Template</a>
   &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="https://github.com/GabrielBaiano/gridline-portfolio-template/archive/refs/heads/main.zip">📦 Baixar ZIP</a>
@@ -32,6 +34,12 @@
 </p>
 
 ---
+
+<p align="center">
+  <a href="https://gabrielbaiano.vercel.app/" target="_blank">
+    <strong>🌐 Demonstração ao Vivo: https://gabrielbaiano.vercel.app/</strong>
+  </a>
+</p>
 
 O **Gridline Portfolio Template** é um modelo de portfólio pessoal com foco em engenharia e arquitetura visual limpa. Ele utiliza um container de 690px com bordas pontilhadas estilo blueprint, sintetizador de som nativo sem arquivos de áudio pesados, heatmap de contribuições em Server Components e minigames ocultos em canvas.
 

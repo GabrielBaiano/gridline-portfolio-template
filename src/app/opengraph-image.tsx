@@ -11,7 +11,7 @@ export const contentType = "image/png";
 
 export default async function Image() {
   const siteDomain =
-    (process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.dev").replace(
+    (process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.vercel.app").replace(
       /^https?:\/\//,
       ""
     );
