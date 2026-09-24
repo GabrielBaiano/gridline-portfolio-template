@@ -182,9 +182,9 @@ export function StickyNav() {
                 <span className="text-sm text-[#9c9c9c] tabular-nums font-medium">
                   {animatedViews === null
                     ? "—"
-                    : animatedViews >= 1000
+                    : animatedViews >= 10000
                     ? `${(animatedViews / 1000).toFixed(1)}k`
-                    : animatedViews}
+                    : animatedViews.toLocaleString()}
                 </span>
               </div>
             </div>
