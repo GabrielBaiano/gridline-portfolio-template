@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSound } from "@/components/SoundProvider";
 
 const MAX_USER_CLAPS = 10;
@@ -39,26 +39,96 @@ export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
     }
   }, [storageKey]);
 
-  // 2. Sync total global claps from API
+  // 2. Sync total global claps from API with cache: "no-store"
   useEffect(() => {
     if (!slug) return;
-    fetch(`/api/claps?slug=${encodeURIComponent(slug)}`)
+    let isMounted = true;
+    fetch(`/api/claps?slug=${encodeURIComponent(slug)}`, {
+      cache: "no-store",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && typeof data.claps === "number") {
+          setTotalClaps(data.claps);
+          // Broadcast so any other instance receives the remote value
+          window.dispatchEvent(
+            new CustomEvent("portfolio-claps-sync", {
+              detail: { slug, totalClaps: data.claps },
+            })
+          );
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  // 3. Listen to cross-button sync events on the same page (top & bottom buttons)
+  useEffect(() => {
+    if (!slug) return;
+    const handleSync = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail && detail.slug === slug) {
+        if (typeof detail.totalClaps === "number") {
+          setTotalClaps(detail.totalClaps);
+        }
+        if (typeof detail.userClaps === "number") {
+          setUserClaps(detail.userClaps);
+        }
+      }
+    };
+
+    window.addEventListener("portfolio-claps-sync", handleSync);
+    return () => {
+      window.removeEventListener("portfolio-claps-sync", handleSync);
+    };
+  }, [slug]);
+
+  // 4. Send pending claps to API with keepalive
+  const flushPendingClaps = useCallback(() => {
+    if (!slug || pendingClapsRef.current <= 0) return;
+    const countToSend = pendingClapsRef.current;
+    pendingClapsRef.current = 0;
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+
+    fetch("/api/claps", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, count: countToSend }),
+      keepalive: true,
+    })
       .then((res) => res.json())
       .then((data) => {
         if (typeof data.claps === "number") {
           setTotalClaps(data.claps);
+          window.dispatchEvent(
+            new CustomEvent("portfolio-claps-sync", {
+              detail: { slug, totalClaps: data.claps },
+            })
+          );
         }
       })
       .catch(() => {});
   }, [slug]);
 
-  // Cleanup timeouts on unmount
+  // Flush on unmount or page reload so claps are never lost
   useEffect(() => {
+    const handleBeforeUnload = () => {
+      flushPendingClaps();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
-      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      flushPendingClaps();
       if (deniedTimeoutRef.current) clearTimeout(deniedTimeoutRef.current);
     };
-  }, []);
+  }, [flushPendingClaps]);
 
   const triggerDenied = () => {
     playError();
@@ -76,8 +146,18 @@ export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
     }
 
     const newUserCount = userClaps + 1;
+    const newTotal = totalClaps + 1;
     setUserClaps(newUserCount);
-    setTotalClaps((prev) => prev + 1);
+    setTotalClaps(newTotal);
+
+    // Broadcast immediately to the other clap button on the page!
+    if (slug) {
+      window.dispatchEvent(
+        new CustomEvent("portfolio-claps-sync", {
+          detail: { slug, totalClaps: newTotal, userClaps: newUserCount },
+        })
+      );
+    }
 
     // Spawn floating +1 bubble
     const id = Date.now() + Math.random();
@@ -87,7 +167,7 @@ export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
       setBubbles((prev) => prev.filter((b) => b.id !== id));
     }, 750);
 
-    // If reaching the 10th clap, trigger denied feedback as limit is hit
+    // Sound and animation feedback
     if (newUserCount >= MAX_USER_CLAPS) {
       triggerDenied();
     } else {
@@ -105,19 +185,17 @@ export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
       }
     }
 
-    // Debounce send to server
+    // Debounce send to server, or flush immediately if limit reached
     if (slug) {
       pendingClapsRef.current += 1;
-      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-      debounceTimerRef.current = setTimeout(() => {
-        const countToSend = pendingClapsRef.current;
-        pendingClapsRef.current = 0;
-        fetch("/api/claps", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ slug, count: countToSend }),
-        }).catch(() => {});
-      }, 400);
+      if (newUserCount >= MAX_USER_CLAPS) {
+        flushPendingClaps();
+      } else {
+        if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = setTimeout(() => {
+          flushPendingClaps();
+        }, 400);
+      }
     }
   };
 

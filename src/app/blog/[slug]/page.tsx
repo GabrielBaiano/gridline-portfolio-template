@@ -213,7 +213,7 @@ export default async function BlogPostDetailPage({
 
         {/* Article Footer & Navigation */}
         <div className="p-4 sm:p-6 flex items-center justify-between flex-wrap gap-4">
-          <ClapButton initialClaps={post.claps ?? 0} />
+          <ClapButton slug={post.slug} initialClaps={post.claps ?? 0} />
 
           <Link
             href="/blog"
