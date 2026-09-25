@@ -12,8 +12,22 @@ export async function GET(req: NextRequest) {
   const slug = searchParams.get("slug");
   const isDebug = searchParams.get("debug") === "1";
 
+  const noCacheHeaders = {
+    "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+    Pragma: "no-cache",
+  };
+
   if (!slug) {
-    return NextResponse.json({ error: "Missing slug parameter." }, { status: 400 });
+    const clapsMap: Record<string, number> = {};
+    await Promise.all(
+      portfolioData.blogs.map(async (blog) => {
+        if (!blog.slug) return;
+        const base = blog.claps ?? 0;
+        const remote = await redisGet(`portfolio:claps:${blog.slug}`);
+        clapsMap[blog.slug] = remote !== null ? base + remote : (inMemoryClaps.get(blog.slug) ?? base);
+      })
+    );
+    return NextResponse.json({ claps: clapsMap }, { headers: noCacheHeaders });
   }
 
   const blog = portfolioData.blogs.find((b) => b.slug === slug);
@@ -29,10 +43,7 @@ export async function GET(req: NextRequest) {
       ...(isDebug ? { connectedToRedis: remote !== null, baseClaps, remoteOffset: remote } : {}),
     },
     {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-        "Pragma": "no-cache",
-      },
+      headers: noCacheHeaders,
     }
   );
 }
