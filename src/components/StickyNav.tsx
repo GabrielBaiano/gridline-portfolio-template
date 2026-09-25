@@ -5,19 +5,28 @@ import Image from "next/image";
 import { ThemeToggle } from "./ThemeToggle";
 import { useSound } from "./SoundProvider";
 import { portfolioData } from "@/data/portfolio";
+import initialData from "@/data/visitors.json";
 
-function useAnimatedCount(target: number | null, duration = 1200) {
-  const [displayCount, setDisplayCount] = useState<number | null>(null);
+const FALLBACK_PAGEVIEWS = typeof initialData?.pageviews === "number" ? initialData.pageviews : 1422;
+
+function useAnimatedCount(target: number, duration = 1000) {
+  const [displayCount, setDisplayCount] = useState<number>(target);
   const animRef = useRef<number | null>(null);
+  const prevTargetRef = useRef<number>(target);
 
   useEffect(() => {
-    if (target === null) return;
+    const startVal = prevTargetRef.current;
+    prevTargetRef.current = target;
+    if (startVal === target) {
+      setDisplayCount(target);
+      return;
+    }
     const start = performance.now();
     const frame = (now: number) => {
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 3);
-      setDisplayCount(Math.round(target * ease));
+      setDisplayCount(Math.round(startVal + (target - startVal) * ease));
       if (progress < 1) {
         animRef.current = requestAnimationFrame(frame);
       }
@@ -55,13 +64,13 @@ export function StickyNav() {
     return () => clearInterval(interval);
   }, [subtitles.length]);
 
-  // 2. View count tracking & animation (deferred to avoid hydration contention)
-  const [pageviews, setPageviews] = useState<number | null>(null);
+  // 2. View count tracking & animation
+  const [pageviews, setPageviews] = useState<number>(FALLBACK_PAGEVIEWS);
   const animatedViews = useAnimatedCount(pageviews);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetch("/api/visitors", { method: "POST" })
+      fetch("/api/visitors", { method: "POST", cache: "no-store" })
         .then((res) => res.json())
         .then((data) => {
           if (typeof data.pageviews === "number") {
@@ -69,7 +78,7 @@ export function StickyNav() {
           }
         })
         .catch(() => {
-          setPageviews(1420);
+          setPageviews(FALLBACK_PAGEVIEWS);
         });
     }, 150);
     return () => clearTimeout(timer);
@@ -180,12 +189,10 @@ export function StickyNav() {
                   <circle cx="12" cy="12" r="3" />
                 </svg>
                 <span
-                  title={animatedViews !== null ? `${animatedViews.toLocaleString()} views` : undefined}
+                  title={`${animatedViews.toLocaleString()} views`}
                   className="text-sm text-[#9c9c9c] tabular-nums font-medium"
                 >
-                  {animatedViews === null
-                    ? "—"
-                    : animatedViews >= 1000
+                  {animatedViews >= 1000
                     ? `${(animatedViews / 1000).toFixed(1)}k`
                     : animatedViews}
                 </span>

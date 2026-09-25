@@ -38,9 +38,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Dynamic blog post pages
   portfolioData.blogs.forEach((post) => {
+    const parsedDate = post.date ? new Date(post.date) : new Date();
     routes.push({
       url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.date || new Date()),
+      lastModified: isNaN(parsedDate.getTime()) ? new Date() : parsedDate,
       changeFrequency: "monthly",
       priority: 0.7,
     });

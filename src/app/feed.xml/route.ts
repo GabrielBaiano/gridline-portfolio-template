@@ -7,7 +7,8 @@ export async function GET() {
   const itemsXml = portfolioData.blogs
     .map((post) => {
       const postUrl = `${baseUrl}/blog/${post.slug}`;
-      const pubDate = new Date(post.date || new Date()).toUTCString();
+      const parsedDate = post.date ? new Date(post.date) : new Date();
+      const pubDate = (isNaN(parsedDate.getTime()) ? new Date() : parsedDate).toUTCString();
       const tags = (post.tags || []).map((t) => `<category>${t}</category>`).join("");
 
       return `

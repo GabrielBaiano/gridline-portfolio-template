@@ -1,11 +1,42 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { BlogPostItem } from "@/data/portfolio";
 
 export function BlogItem({ post }: { post: BlogPostItem }) {
-  const clapsCount = post.claps ?? 0;
+  const [clapsCount, setClapsCount] = useState<number>(post.claps ?? 0);
   const hasTags = post.tags && post.tags.length > 0;
   const targetHref = post.slug ? `/blog/${post.slug}` : (post.url || "/blog");
+
+  useEffect(() => {
+    if (!post.slug) return;
+    let isMounted = true;
+
+    fetch(`/api/claps?slug=${encodeURIComponent(post.slug)}`, {
+      cache: "no-store",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && typeof data.claps === "number") {
+          setClapsCount(data.claps);
+        }
+      })
+      .catch(() => {});
+
+    const handleSync = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail && detail.slug === post.slug && typeof detail.totalClaps === "number") {
+        setClapsCount(detail.totalClaps);
+      }
+    };
+
+    window.addEventListener("portfolio-claps-sync", handleSync);
+    return () => {
+      isMounted = false;
+      window.removeEventListener("portfolio-claps-sync", handleSync);
+    };
+  }, [post.slug]);
 
   return (
     <div className="m-1">
