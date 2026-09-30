@@ -281,6 +281,11 @@ export const portfolioData: PortfolioConfig = {
       description: "Lightweight, accessible, and reactive SVG chart primitives for React and Next.js.",
       url: "https://github.com/GabrielBaiano/pure-svg-charts",
     },
+    {
+      name: "key-caster",
+      description: "Lightweight on-screen keystroke displayer for Linux (Wayland, COSMIC, X11).",
+      url: "https://github.com/GabrielBaiano/key-caster",
+    },
   ],
 
   wikis: [],
