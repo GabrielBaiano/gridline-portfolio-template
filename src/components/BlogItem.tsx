@@ -53,8 +53,15 @@ export function BlogItem({ post }: { post: BlogPostItem }) {
               {post.title}
             </h3>
 
-            {/* 2. Date */}
-            <div className="flex items-center gap-1 text-mutedForeground select-none">
+            {/* 2. Summary */}
+            {post.summary && (
+              <p className="text-xs text-mutedForeground line-clamp-2 leading-relaxed group-hover:text-foreground/85 transition-colors">
+                {post.summary}
+              </p>
+            )}
+
+            {/* 3. Date & Read Time */}
+            <div className="flex items-center gap-1.5 text-mutedForeground select-none text-xs">
               <svg
                 stroke="currentColor"
                 fill="none"
@@ -77,7 +84,13 @@ export function BlogItem({ post }: { post: BlogPostItem }) {
                   fill="currentColor"
                 />
               </svg>
-              <p className="text-xs font-medium">{post.date}</p>
+              <p className="font-medium">{post.date}</p>
+              {post.readTime && (
+                <>
+                  <span className="text-zinc-400">•</span>
+                  <span>{post.readTime}</span>
+                </>
+              )}
             </div>
 
             {/* 3. Claps & Tags */}

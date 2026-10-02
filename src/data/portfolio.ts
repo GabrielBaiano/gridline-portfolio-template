@@ -41,14 +41,31 @@ export interface WikiItem {
 
 export interface BlogArticleSection {
   heading?: string;
-  paragraphs: string[];
+  subheading?: string;
+  paragraphs?: string[];
+  bullets?: string[];
+  listOrdered?: boolean;
   code?: {
     language: string;
     code: string;
+    caption?: string;
   };
   callout?: {
     icon?: string;
     text: string;
+  };
+  quote?: {
+    text: string;
+    author?: string;
+  };
+  image?: {
+    src: string;
+    alt: string;
+    caption?: string;
+  };
+  table?: {
+    headers: string[];
+    rows: string[][];
   };
 }
 
@@ -272,6 +289,12 @@ export const portfolioData: PortfolioConfig = {
 
   tools: [
     {
+      name: "fireplace-experiment",
+      description: "60 FPS 3D pixel-art bonfire Pomodoro timer written in C99 with raymarching and gapless audio.",
+      url: "https://github.com/GabrielBaiano/fireplace-experiment",
+      language: "C",
+    },
+    {
       name: "Awesome README",
       description: "Generate professional, high-quality READMEs and GitHub templates in seconds.",
       url: "https://awesome-readme-nu.vercel.app/",
@@ -291,6 +314,231 @@ export const portfolioData: PortfolioConfig = {
   wikis: [],
 
   blogs: [
+    {
+      slug: "building-a-3d-pixel-art-bonfire-in-the-terminal",
+      title: "Building a 3D Pixel-Art Bonfire in the Terminal: Raymarching, Cellular Automata Fire, and ANSI TrueColor Sub-Pixels",
+      date: "Oct 2026",
+      readTime: "16 min read",
+      claps: 142,
+      tags: ["C99", "Graphics", "Audio", "Terminal", "Physics"],
+      url: "https://github.com/GabrielBaiano/fireplace-experiment",
+      image: "/images/blog/fireplace/dark_souls_bonfire.gif",
+      summary: "How we built a 60 FPS 3D pixel-art bonfire Pomodoro timer in pure C99 from first principles: spherical raymarching, cel-shaded quantization, buoyant cellular fire, gapless raw PCM streaming, and ANSI TrueColor half-blocks.",
+      sections: [
+        {
+          heading: "The Vision: Why 3D Pixel Art in a Terminal?",
+          image: {
+            src: "/images/blog/fireplace/dark_souls_bonfire.gif",
+            alt: "Real-time 60 FPS Dark Souls Bonfire terminal mode",
+            caption: "Real-time 60 FPS terminal bonfire running Dark Souls Coiled Sword mode with 3D raymarching and cellular fire.",
+          },
+          paragraphs: [
+            "Over the last few days, what began as an idea for a cozy command-line Pomodoro timer spiraled into an obsessive technical journey: writing a complete 3D software rendering engine from scratch in C99 that translates continuous 3D geometry into discrete, cel-shaded 16-bit pixel art, drives a buoyant cellular automata fire simulation, streams gapless PCM audio without dropping a single frame, and prints everything into standard Linux terminal emulators at 60 FPS using 24-bit TrueColor ANSI half-blocks.",
+            "Most terminal fire implementations (including the classic 1990s PSX Doom fire demo) rely on a 2D procedural heat matrix. You ignite the bottom line with random numbers, propagate the values upward with a smoothing kernel, and map the values to a color gradient.",
+            "While charming, 2D terminal fire has a glaring limitation: **it has no depth**. You cannot rotate the camera, you cannot place an object inside the fire and have flames wrap realistically around it, and you cannot have structural logs burn, char, and collapse under gravity.",
+            "Our architectural goal was fundamentally different:"
+          ],
+          bullets: [
+            "Model physical objects in continuous 3D world-space (wood logs, rocks, twigs, and the iconic Dark Souls Coiled Sword inserted into a mound of ash and human bones).",
+            "Allow full 3D spherical camera orbit (yaw and pitch controls, auto-turntable).",
+            "Transform that continuous 3D rasterization into **authentic 16-bit pixel art** — not low-poly 3D rendered at low resolution, but actual pixel art with 1-pixel cel-art dark silhouettes, discrete bark plates, and indexed color palettes.",
+            "Wrap it in a non-intrusive Pomodoro flow with authentic sound effects and zero external runtime dependencies."
+          ]
+        },
+        {
+          heading: "Visual Architecture: From 3D Space to Half-Blocks",
+          paragraphs: [
+            "The rendering pipeline executes every frame in five distinct stages with strict separation of concerns:"
+          ],
+          code: {
+            language: "text",
+            caption: "5-Stage 60 FPS Software Render Pipeline",
+            code: "Simulation Update (Combustion, Particles, Collapse)\n       │\n       ▼\n3D Rasterization & Raymarching (Camera Transform, G-Buffer Fill)\n       │\n       ▼\nPixel-Art Quantization (Depth Discontinuity Outlines, Palette Shading)\n       │\n       ▼\nCellular Automata Fire Layer (Convection, Wind, Flame Decay)\n       │\n       ▼\nANSI Frame Buffer Generator (Half-Block '▀', 24-bit RGB Pairing)\n       │\n       ▼\nSingle atomic write() to TTY stdout"
+          }
+        },
+        {
+          heading: "The Mathematics of the 3D Camera & Geometry",
+          subheading: "Spherical Orbit Coordinate Transform",
+          paragraphs: [
+            "The camera operates on a spherical coordinate orbit centered on the target focal point $T = (0, y_{target}, 0)$.",
+            "Given yaw $\\theta$ (horizontal azimuth) and pitch $\\phi$ (vertical elevation) with orbital distance $R$:",
+            "eye_x = T_x + R * cos(phi) * sin(theta)\neye_y = T_y + R * sin(phi)\neye_z = T_z + R * cos(phi) * cos(theta)",
+            "To map world-space vertices to view-space, we construct an orthonormal camera basis (u, v, w) using the Gram-Schmidt process. Perspective projection to screen coordinates accounts for the rectangular aspect ratio of terminal fonts (glyph height is roughly 2x width), setting `scale_y = 0.5 * scale_x` to guarantee a strictly isotropic 1:1 circular aspect ratio."
+          ],
+          image: {
+            src: "/images/blog/fireplace/camera_orbit_views.png",
+            alt: "3D Camera orbit spherical angles",
+            caption: "Spherical camera orbit views around the procedural hearth geometry at varying yaw and pitch.",
+          }
+        },
+        {
+          subheading: "Procedural Geometry: Coiled Sword & Skulls",
+          paragraphs: [
+            "The Dark Souls Coiled Sword (*Espada Espiral*) is modeled parametrically in pure math rather than loading an external 3D file. The blade twists along its longitudinal axis like a double-helix ribbon:",
+            "x(t) = r(t) * cos(omega * t),   z(t) = r(t) * sin(omega * t),   y(t) = y_base + h * t",
+            "Where $\\omega = 7.5\\text{ rad/unit}$ controls the helical twist frequency and $r(t)$ tapers from hilt to tip. The twisted ribs catch lighting normals dynamically.",
+            "Surrounding the sword is a mound of porous ash and human skull bones. Each skull combines an ellipsoidal cranial mass with negative spherical subtraction volumes positioned at the eye sockets and nasal cavity."
+          ]
+        },
+        {
+          heading: "The Quantization Pipeline: Continuous 3D to Discrete Pixel Art",
+          subheading: "G-Buffer Architecture & Cel-Art Silhouettes",
+          paragraphs: [
+            "If you simply rasterize 3D polygons at low resolutions (e.g. 80x48), the result looks like a muddy PlayStation 1 game — not pixel art. Handcrafted pixel art requires crisp 1-pixel cel-art silhouettes separating depth layers and discrete tonal shading bands.",
+            "To achieve this, the renderer outputs to a G-Buffer with three distinct layers per sub-pixel: Color Buffer $C(x, y)$, Float Depth Buffer $Z(x, y)$, and Material/Object ID Buffer $M(x, y)$ (e.g., sword, bone, bark, endcap, stone).",
+            "After rasterization, a post-processing pass scans the G-Buffer with a 4-neighborhood directional kernel: $\\mathcal{N}(x, y) = \\{(x+1, y), (x-1, y), (x, y+1), (x, y-1)\\}$. An edge is detected if either the depth gradient or the material boundary exceeds a perceptual threshold:",
+            "IsEdge(x, y) = ( max |Z(x, y) - Z(i, j)| > epsilon_z ) OR ( exists M(x, y) != M(i, j) )",
+            "Detected edge pixels are clamped to a dark silhouette tone ($C_{final} = C * 0.22$), creating comic-book cel outlines. Diffuse illumination is quantized into 3 to 4 discrete steps ($L_{band} = \\lfloor L * 4.0 \\rfloor / 4.0$), indexing into hand-tuned retro color ramps."
+          ]
+        },
+        {
+          heading: "The Fire Engine: Cellular Automata & Buoyant Convection",
+          paragraphs: [
+            "Once solid geometry is rasterized and cel-shaded, the cellular automata fire simulation takes over.",
+            "The fire is modeled as a 2D convective thermal grid $H(x, y) \\in [0.0, 1.0]$. Unlike classic Doom fire:",
+            "1. **Flames only emit from burning geometry**: We query the world-space heat of logs, kindling twigs, and the central ash bed. Only pixels with burning wood inject heat into the simulation base.",
+            "2. **Thermal buoyancy**: Hot air rises faster than cool air: $v_y(x, y) = v_0 + \\beta \\cdot H(x, y)$.",
+            "3. **Lateral turbulence**: A pseudo-random wind vector field simulates turbulent vortex shedding: $x' = x + \\sin(t \\cdot 4.2 + y \\cdot 0.3) + \\text{rand}(-1, 1)$.",
+            "Thermal energy decays as it ascends: $H_{t+1}(x', y - 1) = (H_t(x, y) \\cdot \\gamma) - \\delta_{cooling}$."
+          ],
+          code: {
+            language: "text",
+            caption: "Thermal Buoyancy & Convection Transfer",
+            code: "Hot Air Rises (y - 1)\n       ▲\n   [ 0.72 ]  <-- Heat decays & shifts laterally\n       ▲\n [0.85] [0.92] [0.81]\n       ▲\n  ╔═════════════╗\n  ║ Burning Log ║  <-- Fuel Source: T > Ignition\n  ╚═════════════╝"
+          }
+        },
+        {
+          heading: "Wood Thermodynamics & Kinematic Self-Collapse",
+          paragraphs: [
+            "Each log is subdivided into 10 independent longitudinal segments tracking Temperature, Moisture content, Structural mass, and Char layer thickness.",
+            "The combustion cycle evolves through 4 physical phases:"
+          ],
+          bullets: [
+            "**Drying Phase**: Ambient heat boils away moisture. While moisture remains, segment temperature is clamped below ignition threshold and steam particles emit.",
+            "**Flaming Combustion**: Once dry and above ignition threshold, combustion begins. Segments radiate heat to adjacent wood and spawn spark particles.",
+            "**Charring**: As structural mass is consumed, wood turns from fresh bark to blackened char, then brittle white ash.",
+            "**Structural Failure & Gravity Collapse**: If central segments burn away (mass < 20%), the log loses structural integrity. Kinematic angular acceleration collapses the upper logs into the embers bed."
+          ],
+          image: {
+            src: "/images/blog/fireplace/snapshot_roaring.png",
+            alt: "Roaring campfire with wood logs and glowing ember bed",
+            caption: "Roaring campfire mode with segmented burning logs, ash mantle, and stone fire ring.",
+          }
+        },
+        {
+          heading: "Sub-Character Resolution: The 24-bit Half-Block ANSI Trick",
+          paragraphs: [
+            "A standard terminal cell is roughly twice as tall as it is wide. If you print one character per simulation pixel, circular objects look like stretched vertical ovals.",
+            "To solve this, we use the Unicode upper half-block glyph `▀` (U+2580). In a single terminal cell, the top half represents pixel $(x, 2y)$ via ANSI foreground color, and the bottom half represents pixel $(x, 2y+1)$ via ANSI background color.",
+            "This effectively **doubles vertical resolution**: an 80x24 terminal window renders at 80x48 individual TrueColor pixels!",
+            "To guarantee zero tearing and zero flicker, the entire frame is formatted into a single contiguous buffer (`s_present_buf`) and sent to the kernel in a single atomic `write(STDOUT_FILENO, buf, len)` syscall."
+          ]
+        },
+        {
+          heading: "The Audio Architecture: Non-Blocking Gapless Raw PCM Streaming",
+          subheading: "The Zombie Process & Pipe Buffer Pitfall",
+          paragraphs: [
+            "Adding audio to a terminal C application without external runtime dependencies (like SDL2 or OpenAL) is notoriously tricky.",
+            "A naive `system(\"pw-play sound.wav &\")` is fatally flawed: it spawns a shell causing frame drops, generates zombie processes (`<defunct>`) that accumulate across a 25-minute Pomodoro session, and writing large audio chunks into Linux's default 64 KB pipe buffer causes the main render loop to freeze dead for 4.5 seconds waiting for the player!",
+            "To achieve zero frame drops, we engineered a double-fork detached worker architecture:"
+          ],
+          code: {
+            language: "text",
+            caption: "Double-Fork Non-Blocking Audio Architecture",
+            code: "Main C Render Loop (60 FPS)\n  │\n  ├─► fork() intermediate child  [Takes <0.05 ms]\n  │     │\n  │     ├─► fork() audio feeder grandchild\n  │     │     │\n  │     │     └─► exec(\"pw-play --raw ...\")\n  │     │\n  │     └─► _exit(0)\n  │\n  └─► waitpid(child)  [Reaped instantly! Process reparented to PID 1]\n      Loop continues at 60 FPS without zombie accumulation!"
+          }
+        },
+        {
+          subheading: "FFT Spectrum Hunting: Killing the 503 Hz Ethereal Drone",
+          quote: {
+            text: "O som do darksouls tem um som estranho de oooonnnnnnnnnnn que tá mt alto e meio chato, um barulho meio etereo.",
+            author: "Beta User Feedback",
+          },
+          paragraphs: [
+            "When we extracted the Dark Souls bonfire ambient audio from game recordings, users noted a loud ringing hum overpowering the crackle. We wrote a Python FFT spectrum analysis script and discovered an enormous resonant spike at **503 Hz** (musical pitch B4) — an ethereal choir hum from the Firelink Shrine background track!",
+            "We deployed a parametric notch filter via FFmpeg to attenuate 503 Hz by -36 dB and its first harmonic at 251 Hz by -18 dB. The 503 Hz peak dropped by 97%, leaving clean, warm ember crackles and low flame rumbles."
+          ],
+          code: {
+            language: "bash",
+            caption: "FFmpeg Parametric Notch Filter",
+            code: "ffmpeg -i input.wav -af \"equalizer=f=503:width_type=q:w=3:g=-36,equalizer=f=251:width_type=q:w=2:g=-18\" output.wav"
+          }
+        },
+        {
+          subheading: "Gapless Looping with Raw S16LE Streaming",
+          paragraphs: [
+            "When looping short audio clips, restarting a .wav player causes an audible 200–400 ms gap due to ALSA/PipeWire sink renegotiation.",
+            "The solution: launch `pw-play --raw --rate=22050 --channels=1 --format=s16 -` **once**. The feeder process keeps the pipe open and streams raw S16LE PCM chunks in an infinite circular buffer. When the sample index reaches the end, it wraps back to 0 instantaneously — resulting in seamless, click-free audio.",
+            "Multiplying samples in real-time by a volume factor also enables software volume scaling without touching system mixers."
+          ],
+          code: {
+            language: "c",
+            caption: "Gapless S16LE PCM Circular Streaming Loop",
+            code: "const int16_t *src = (const int16_t *)assets_ds_fire_ambient_pcm;\nsize_t total_samples = assets_ds_fire_ambient_pcm_len / sizeof(int16_t);\nfloat vol_factor = (float)volume_pct / 100.0f;\n\nint16_t chunk[1024];\nwhile (1) {\n    size_t sample_pos = 0;\n    while (sample_pos < total_samples) {\n        size_t batch = total_samples - sample_pos;\n        if (batch > 1024) batch = 1024;\n        for (size_t i = 0; i < batch; i++) {\n            chunk[i] = (int16_t)((float)src[sample_pos + i] * vol_factor);\n        }\n        write(audio_pipe[1], chunk, batch * sizeof(int16_t));\n        sample_pos += batch;\n    }\n}"
+          }
+        },
+        {
+          heading: "Debugging War Stories: The 9-Character Menu Drift",
+          paragraphs: [
+            "During development, the terminal configuration menu had a frustrating visual glitch: the top header box had width 66, but the middle option rows had their right border shifted inward by 9 characters, creating an ugly jagged notch.",
+            "By calculating visible columns: Border (1) + Space (1) + Cursor (2) + Label (24) + Arrow (2) + Value (23) + Arrow (2) + Space (1) + Border (1) = 57 columns. 66 - 57 = 9 columns missing!",
+            "Because lines are positioned using ANSI cursor escapes (`\\033[%d;%dH`), printing 57 characters placed the right border at column `start_c + 56` instead of `start_c + 65`. Every line was rewritten to guarantee exactly 64 inner columns between borders for 100% pixel-perfect borders."
+          ]
+        },
+        {
+          heading: "Performance Benchmarks & Headroom",
+          paragraphs: [
+            "We instrumented the engine with monotonic nanosecond timers (`clock_gettime(CLOCK_MONOTONIC)`) to measure frame budget at 60 FPS (16.6 ms budget):"
+          ],
+          table: {
+            headers: ["Stage", "Average Time (ms)", "Budget % (@ 60 FPS / 16.6 ms)"],
+            rows: [
+              ["Physics & Cellular Fire", "0.42 ms", "2.5%"],
+              ["3D Rasterization & Cel-Art", "0.88 ms", "5.3%"],
+              ["ANSI Frame Formatting", "0.35 ms", "2.1%"],
+              ["Kernel TTY write()", "0.18 ms", "1.1%"],
+              ["Total Engine Latency", "1.83 ms", "11.0%"]
+            ]
+          },
+          callout: {
+            icon: "⚡",
+            text: "With total frame time under 2 ms, the engine runs at over 500 FPS theoretical throughput, leaving +89% CPU headroom for background audio decoding and battery longevity."
+          }
+        },
+        {
+          heading: "Running It Yourself & Controls",
+          paragraphs: [
+            "The entire engine is contained in a single C file (`fireplace.c`) with zero external dependencies beyond libc and POSIX math:"
+          ],
+          code: {
+            language: "bash",
+            caption: "Compilation & Launch",
+            code: "git clone https://github.com/GabrielBaiano/fireplace-experiment.git\ncd fireplace-experiment\nmake clean && make\n./fireplace"
+          },
+          table: {
+            headers: ["Key", "Action"],
+            rows: [
+              ["[E] / [Space]", "Kindle or stoke bonfire / rekindle embers"],
+              ["[P]", "Pause / Resume Pomodoro session"],
+              ["[S]", "Skip current session (Focus <-> Rest)"],
+              ["[M]", "Mute / Unmute audio"],
+              ["[-] / [+]", "Volume down / up (10% increments)"],
+              ["[W] [A] [S] [D]", "Orbit 3D spherical camera"],
+              ["[Space]", "Toggle 3D turntable auto-rotation (classic mode)"],
+              ["[Q]", "Clean exit and terminal reset"]
+            ]
+          },
+          quote: {
+            text: "Written in the spirit of Simon Willison's weblog: sharing the code, the math, the bugs, and the joy of building custom software from first principles.",
+            author: "Gabriel Gama"
+          },
+          callout: {
+            icon: "🔥",
+            text: "Explore the full source code, architecture documentation, and star the repository on GitHub: https://github.com/GabrielBaiano/fireplace-experiment"
+          }
+        }
+      ]
+    },
     {
       slug: "the-frontend-performance-paradox-and-the-duck",
       title: "The Frontend Performance Paradox and the Duck",

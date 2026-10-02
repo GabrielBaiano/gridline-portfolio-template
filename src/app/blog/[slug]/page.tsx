@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { portfolioData } from "@/data/portfolio";
+import { portfolioData, BlogPostItem, BlogArticleSection } from "@/data/portfolio";
 import { SubPageNav } from "@/components/SubPageNav";
 import { ScrollToTop } from "@/components/ScrollToTop";
-import { ClapButton, CodeBlock } from "./BlogArticleClient";
+import { ClapButton, CodeBlock, ShareArticleButton } from "./BlogArticleClient";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -28,8 +28,11 @@ export async function generateMetadata({
     };
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gabrielbaiano.vercel.app";
+  const ogImages = post.image ? [`${siteUrl}${post.image}`] : undefined;
+
   return {
-    title: post.title,
+    title: `${post.title} · ${portfolioData.personal.name}`,
     description: post.summary,
     alternates: {
       canonical: `/blog/${slug}`,
@@ -42,13 +45,82 @@ export async function generateMetadata({
       authors: [portfolioData.personal.name],
       tags: post.tags,
       url: `/blog/${slug}`,
+      images: ogImages,
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.summary,
+      images: ogImages,
     },
   };
+}
+
+function renderRichText(text: string): React.ReactNode {
+  // Matches inline code `...`, bold **...**, italic *...*, markdown links [...](...), and inline math $...$
+  const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\)|\$[^$]+\$)/g;
+  const parts = text.split(regex);
+
+  return parts.map((part, i) => {
+    if (!part) return null;
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return (
+        <code
+          key={i}
+          className="px-1.5 py-0.5 mx-0.5 rounded text-[0.88em] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-border"
+        >
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-semibold text-title">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return (
+        <em key={i} className="italic text-foreground">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    if (part.startsWith("$") && part.endsWith("$")) {
+      return (
+        <span
+          key={i}
+          className="font-mono text-[0.88em] px-1 py-0.5 bg-zinc-100/80 dark:bg-zinc-800/60 rounded text-foreground italic border border-border/50"
+        >
+          {part.slice(1, -1)}
+        </span>
+      );
+    }
+    const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (linkMatch) {
+      return (
+        <a
+          key={i}
+          href={linkMatch[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-title font-medium underline underline-offset-4 decoration-border hover:decoration-title hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+        >
+          {linkMatch[1]}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
+function slugifyHeading(heading: string): string {
+  return heading
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
 }
 
 export default async function BlogPostDetailPage({
@@ -83,8 +155,15 @@ export default async function BlogPostDetailPage({
       "@type": "WebPage",
       "@id": `${siteUrl}/blog/${slug}`,
     },
+    image: post.image ? `${siteUrl}${post.image}` : undefined,
     keywords: post.tags?.join(", "),
   };
+
+  const currentIndex = portfolioData.blogs.findIndex((b) => b.slug === slug);
+  const prevPost = currentIndex > 0 ? portfolioData.blogs[currentIndex - 1] : null;
+  const nextPost = currentIndex < portfolioData.blogs.length - 1 ? portfolioData.blogs[currentIndex + 1] : null;
+
+  const headings = post.sections.filter((s) => s.heading);
 
   return (
     <div className="min-h-screen bg-background">
@@ -114,7 +193,7 @@ export default async function BlogPostDetailPage({
           {/* Meta Information Row */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-mutedForeground">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 <svg
                   stroke="currentColor"
                   fill="none"
@@ -141,13 +220,16 @@ export default async function BlogPostDetailPage({
               </div>
               {post.readTime && (
                 <>
-                  <span>•</span>
+                  <span className="text-zinc-400">•</span>
                   <span>{post.readTime}</span>
                 </>
               )}
             </div>
 
-            <ClapButton slug={post.slug} initialClaps={post.claps ?? 0} />
+            <div className="flex items-center gap-2">
+              <ShareArticleButton title={post.title} slug={post.slug} />
+              <ClapButton slug={post.slug} initialClaps={post.claps ?? 0} />
+            </div>
           </div>
 
           {/* Tags */}
@@ -166,76 +248,236 @@ export default async function BlogPostDetailPage({
 
           {/* Lead Summary Callout */}
           <div className="p-3.5 rounded-[8px] border border-border bg-zinc-50/70 dark:bg-zinc-900/50 text-sm leading-relaxed text-foreground font-medium">
-            {post.summary}
+            {renderRichText(post.summary)}
           </div>
+
+          {/* Table of Contents (if >= 3 headings) */}
+          {headings.length >= 3 && (
+            <details className="group p-3.5 rounded-[8px] border border-border bg-mutedBackground/20 text-xs sm:text-sm">
+              <summary className="font-semibold text-title cursor-pointer select-none flex items-center justify-between list-none">
+                <span className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-mutedForeground">
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                  </svg>
+                  Table of Contents
+                </span>
+                <span className="text-xs text-mutedForeground group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <ol className="mt-3 flex flex-col gap-1.5 pl-4 list-decimal text-mutedForeground">
+                {headings.map((s, idx) => {
+                  const headingId = slugifyHeading(s.heading!);
+                  return (
+                    <li key={idx} className="pl-1">
+                      <a
+                        href={`#${headingId}`}
+                        className="hover:text-title hover:underline underline-offset-2 transition-colors"
+                      >
+                        {s.heading}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ol>
+            </details>
+          )}
         </div>
 
         <div className="divider-dashed" />
 
         {/* Article Body Content */}
         <div className="p-4 sm:p-6 flex flex-col gap-6 text-[0.95rem] leading-7 text-[#333] dark:text-[#d9d9d9]">
-          {post.sections.map((section, sIdx) => (
-            <section key={sIdx} className="flex flex-col gap-3">
-              {section.heading && (
-                <h2 className="text-lg sm:text-xl font-bold text-title tracking-tight pt-2">
-                  {section.heading}
-                </h2>
-              )}
+          {post.sections.map((section, sIdx) => {
+            const headingId = section.heading ? slugifyHeading(section.heading) : undefined;
+            return (
+              <section key={sIdx} className="flex flex-col gap-3.5">
+                {section.heading && (
+                  <h2
+                    id={headingId}
+                    className="scroll-mt-20 text-lg sm:text-xl font-bold text-title tracking-tight pt-2 border-t border-border/30 first:border-t-0"
+                  >
+                    {section.heading}
+                  </h2>
+                )}
 
-              {section.paragraphs.map((para, pIdx) => (
-                <p key={pIdx}>{para}</p>
-              ))}
+                {section.subheading && (
+                  <h3 className="text-base sm:text-[1.05rem] font-semibold text-title tracking-tight pt-1">
+                    {renderRichText(section.subheading)}
+                  </h3>
+                )}
 
-              {section.callout && (
-                <div className="my-2 p-3.5 rounded-[8px] border border-border bg-zinc-50 dark:bg-zinc-900/70 text-sm flex items-start gap-2.5">
-                  {section.callout.icon && (
-                    <span className="text-base select-none shrink-0">
-                      {section.callout.icon}
+                {section.image && (
+                  <figure className="my-2 flex flex-col items-center">
+                    <div className="w-full overflow-hidden rounded-[8px] border border-border bg-[#101012] flex items-center justify-center p-2 sm:p-3">
+                      <img
+                        src={section.image.src}
+                        alt={section.image.alt}
+                        className="max-h-[460px] w-auto max-w-full rounded object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+                    {section.image.caption && (
+                      <figcaption className="mt-2 text-xs text-center text-mutedForeground font-sans flex items-center gap-1.5 justify-center">
+                        <span className="text-[10px]">▲</span>
+                        <span>{renderRichText(section.image.caption)}</span>
+                      </figcaption>
+                    )}
+                  </figure>
+                )}
+
+                {section.paragraphs?.map((para, pIdx) => (
+                  <p key={pIdx} className="leading-7">
+                    {renderRichText(para)}
+                  </p>
+                ))}
+
+                {section.bullets && (
+                  <ul
+                    className={`my-1 flex flex-col gap-2 ${
+                      section.listOrdered ? "list-decimal" : "list-disc"
+                    } list-inside text-foreground text-[0.93rem] leading-relaxed`}
+                  >
+                    {section.bullets.map((bullet, bIdx) => (
+                      <li key={bIdx} className="pl-1">
+                        <span>{renderRichText(bullet)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {section.table && (
+                  <div className="my-3 overflow-x-auto rounded-[8px] border border-border bg-background">
+                    <table className="w-full text-left text-xs sm:text-sm">
+                      <thead className="border-b border-border bg-mutedBackground/60">
+                        <tr>
+                          {section.table.headers.map((h, hIdx) => (
+                            <th key={hIdx} className="px-3.5 py-2.5 font-semibold text-title">
+                              {renderRichText(h)}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {section.table.rows.map((row, rIdx) => (
+                          <tr key={rIdx} className="hover:bg-mutedBackground/30 transition-colors">
+                            {row.map((cell, cIdx) => (
+                              <td
+                                key={cIdx}
+                                className="px-3.5 py-2 text-foreground font-mono text-[11.5px] sm:text-xs"
+                              >
+                                {renderRichText(cell)}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {section.quote && (
+                  <blockquote className="my-2 p-3.5 rounded-[8px] border-l-2 border-title/60 bg-mutedBackground/30 italic text-foreground text-sm sm:text-base leading-relaxed">
+                    <p>"{renderRichText(section.quote.text)}"</p>
+                    {section.quote.author && (
+                      <footer className="mt-1.5 text-xs text-mutedForeground not-italic font-normal">
+                        — {section.quote.author}
+                      </footer>
+                    )}
+                  </blockquote>
+                )}
+
+                {section.callout && (
+                  <div className="my-2 p-3.5 rounded-[8px] border border-border bg-zinc-50 dark:bg-zinc-900/70 text-sm flex items-start gap-2.5">
+                    {section.callout.icon && (
+                      <span className="text-base select-none shrink-0">
+                        {section.callout.icon}
+                      </span>
+                    )}
+                    <span className="text-foreground leading-relaxed">
+                      {renderRichText(section.callout.text)}
                     </span>
-                  )}
-                  <span className="text-foreground leading-relaxed">
-                    {section.callout.text}
-                  </span>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {section.code && (
-                <CodeBlock
-                  code={section.code.code}
-                  language={section.code.language}
-                />
-              )}
-            </section>
-          ))}
+                {section.code && (
+                  <CodeBlock
+                    code={section.code.code}
+                    language={section.code.language}
+                    caption={section.code.caption}
+                  />
+                )}
+              </section>
+            );
+          })}
         </div>
 
         <div className="divider-dashed" />
 
         {/* Article Footer & Navigation */}
-        <div className="p-4 sm:p-6 flex items-center justify-between flex-wrap gap-4">
-          <ClapButton slug={post.slug} initialClaps={post.claps ?? 0} />
+        <div className="p-4 sm:p-6 flex flex-col gap-4">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-2">
+              <ClapButton slug={post.slug} initialClaps={post.claps ?? 0} />
+              <ShareArticleButton title={post.title} slug={post.slug} />
+            </div>
 
-          <Link
-            href="/blog"
-            data-cuelume-hover="tick"
-            data-cuelume-press="true"
-            className="flex items-center gap-1.5 text-sm font-medium text-title hover:underline underline-offset-4 transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <Link
+              href="/blog"
+              data-cuelume-hover="tick"
+              data-cuelume-press="true"
+              className="flex items-center gap-1.5 text-sm font-medium text-title hover:underline underline-offset-4 transition-colors"
             >
-              <path d="m15 18-6-6 6-6" />
-            </svg>
-            All Articles
-          </Link>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+              All Articles
+            </Link>
+          </div>
+
+          {/* Previous / Next Article Links */}
+          {(prevPost || nextPost) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-border/40">
+              {prevPost ? (
+                <Link
+                  href={`/blog/${prevPost.slug}`}
+                  data-cuelume-hover="tick"
+                  className="flex flex-col p-3 rounded-[8px] border border-border bg-mutedBackground/20 hover:bg-mutedBackground/50 transition-colors group"
+                >
+                  <span className="text-[11px] text-mutedForeground font-mono">← Newer Article</span>
+                  <span className="text-xs sm:text-sm font-medium text-title group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors truncate mt-1">
+                    {prevPost.title}
+                  </span>
+                </Link>
+              ) : <div />}
+
+              {nextPost ? (
+                <Link
+                  href={`/blog/${nextPost.slug}`}
+                  data-cuelume-hover="tick"
+                  className="flex flex-col p-3 rounded-[8px] border border-border bg-mutedBackground/20 hover:bg-mutedBackground/50 transition-colors group sm:text-right"
+                >
+                  <span className="text-[11px] text-mutedForeground font-mono">Older Article →</span>
+                  <span className="text-xs sm:text-sm font-medium text-title group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors truncate mt-1">
+                    {nextPost.title}
+                  </span>
+                </Link>
+              ) : <div />}
+            </div>
+          )}
         </div>
       </article>
 

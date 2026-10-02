@@ -263,9 +263,10 @@ export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
 interface CodeBlockProps {
   code: string;
   language?: string;
+  caption?: string;
 }
 
-export function CodeBlock({ code, language = "typescript" }: CodeBlockProps) {
+export function CodeBlock({ code, language = "typescript", caption }: CodeBlockProps) {
   const { playClick } = useSound();
   const [copied, setCopied] = useState(false);
 
@@ -284,11 +285,19 @@ export function CodeBlock({ code, language = "typescript" }: CodeBlockProps) {
     <div className="relative my-4 rounded-[8px] border border-border bg-[#18181b] overflow-hidden group">
       {/* Code Header bar */}
       <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#27272a] bg-[#121214] text-xs text-mutedForeground select-none">
-        <span className="font-mono lowercase">{language}</span>
+        <div className="flex items-center gap-2 truncate">
+          <span className="font-mono lowercase text-zinc-400">{language}</span>
+          {caption && (
+            <>
+              <span className="text-zinc-600">•</span>
+              <span className="text-zinc-400 text-[11px] truncate font-sans">{caption}</span>
+            </>
+          )}
+        </div>
         <button
           type="button"
           onClick={copyToClipboard}
-          className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
+          className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer shrink-0 ml-2"
         >
           {copied ? (
             <>
@@ -316,3 +325,51 @@ export function CodeBlock({ code, language = "typescript" }: CodeBlockProps) {
     </div>
   );
 }
+
+export function ShareArticleButton({ title, slug }: { title: string; slug: string }) {
+  const { playClick } = useSound();
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    try {
+      playClick();
+      const url = typeof window !== "undefined" ? `${window.location.origin}/blog/${slug}` : "";
+      if (navigator.clipboard && url) {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleShare}
+      data-cuelume-hover="tick"
+      title="Copy link to clipboard"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] border border-border bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-xs font-medium text-foreground transition-all duration-200 cursor-pointer select-none"
+    >
+      {copied ? (
+        <>
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-500">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span className="text-green-600 dark:text-green-400">Copied!</span>
+        </>
+      ) : (
+        <>
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-mutedForeground">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+            <polyline points="16 6 12 2 8 6" />
+            <line x1="12" y1="2" x2="12" y2="15" />
+          </svg>
+          <span>Share</span>
+        </>
+      )}
+    </button>
+  );
+}
+
