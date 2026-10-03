@@ -13,17 +13,25 @@ export function TemplateNotification() {
 
   useEffect(() => {
     setMounted(true);
+    // Clean up any legacy permanent block from localStorage
     try {
-      if (localStorage.getItem(STORAGE_KEY) === "true") {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+
+    // Only hide within the same session if explicitly closed with X
+    try {
+      if (sessionStorage.getItem(STORAGE_KEY) === "true") {
         return;
       }
     } catch {
-      // ignore localStorage errors
+      // ignore
     }
 
     const timer = setTimeout(() => {
       setVisible(true);
-    }, 2800);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, []);
@@ -34,7 +42,7 @@ export function TemplateNotification() {
     playClick();
     setVisible(false);
     try {
-      localStorage.setItem(STORAGE_KEY, "true");
+      sessionStorage.setItem(STORAGE_KEY, "true");
     } catch {
       // ignore
     }
@@ -42,11 +50,6 @@ export function TemplateNotification() {
 
   const handleClick = () => {
     playClick();
-    try {
-      localStorage.setItem(STORAGE_KEY, "true");
-    } catch {
-      // ignore
-    }
   };
 
   if (!mounted) return null;
