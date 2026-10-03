@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SoundProvider } from "@/components/SoundProvider";
+import { TemplateNotification } from "@/components/TemplateNotification";
 import { portfolioData } from "@/data/portfolio";
 
 const instagramSans = localFont({
@@ -169,6 +170,7 @@ export default function RootLayout({
       <body className="bg-background text-foreground antialiased min-h-screen font-sans">
         <SoundProvider>
           {children}
+          <TemplateNotification />
         </SoundProvider>
       </body>
     </html>
