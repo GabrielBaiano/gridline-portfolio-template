@@ -289,12 +289,6 @@ export const portfolioData: PortfolioConfig = {
 
   tools: [
     {
-      name: "fireplace-experiment",
-      description: "60 FPS 3D pixel-art bonfire Pomodoro timer written in C99 with raymarching and gapless audio.",
-      url: "https://github.com/GabrielBaiano/fireplace-experiment",
-      language: "C",
-    },
-    {
       name: "Awesome README",
       description: "Generate professional, high-quality READMEs and GitHub templates in seconds.",
       url: "https://awesome-readme-nu.vercel.app/",
@@ -360,10 +354,16 @@ export const portfolioData: PortfolioConfig = {
           heading: "The Mathematics of the 3D Camera & Geometry",
           subheading: "Spherical Orbit Coordinate Transform",
           paragraphs: [
-            "The camera operates on a spherical coordinate orbit centered on the target focal point $T = (0, y_{target}, 0)$.",
+            "The camera operates on a spherical coordinate orbit centered on the target focal point $\\vec{T} = (0, y_{target}, 0)$.",
             "Given yaw $\\theta$ (horizontal azimuth) and pitch $\\phi$ (vertical elevation) with orbital distance $R$:",
-            "eye_x = T_x + R * cos(phi) * sin(theta)\neye_y = T_y + R * sin(phi)\neye_z = T_z + R * cos(phi) * cos(theta)",
-            "To map world-space vertices to view-space, we construct an orthonormal camera basis (u, v, w) using the Gram-Schmidt process. Perspective projection to screen coordinates accounts for the rectangular aspect ratio of terminal fonts (glyph height is roughly 2x width), setting `scale_y = 0.5 * scale_x` to guarantee a strictly isotropic 1:1 circular aspect ratio."
+            "$$\\begin{aligned} \\text{eye}_x &= T_x + R \\cos(\\phi) \\sin(\\theta) \\\\ \\text{eye}_y &= T_y + R \\sin(\\phi) \\\\ \\text{eye}_z &= T_z + R \\cos(\\phi) \\cos(\\theta) \\end{aligned}$$",
+            "To map world-space vertices to view-space, we construct an orthonormal camera basis $(\\vec{u}, \\vec{v}, \\vec{w})$ using the Gram-Schmidt process:",
+            "$$\\vec{w} = \\frac{\\vec{T} - \\vec{\\text{eye}}}{\\|\\vec{T} - \\vec{\\text{eye}}\\|}, \\quad \\vec{u} = \\frac{\\vec{w} \\times \\vec{\\text{up}}}{\\|\\vec{w} \\times \\vec{\\text{up}}\\|}, \\quad \\vec{v} = \\vec{u} \\times \\vec{w}$$",
+            "For any 3D world coordinate $\\vec{P}_w$, its camera-space position $\\vec{P}_c$ is:",
+            "$$\\vec{P}_c = \\begin{bmatrix} \\vec{u}_x & \\vec{u}_y & \\vec{u}_z \\\\ \\vec{v}_x & \\vec{v}_y & \\vec{v}_z \\\\ \\vec{w}_x & \\vec{w}_y & \\vec{w}_z \\end{bmatrix} (\\vec{P}_w - \\vec{\\text{eye}})$$",
+            "Perspective projection to screen coordinates $(x_s, y_s)$ is computed using the focal length $f$:",
+            "$$x_s = \\frac{W}{2} + \\frac{P_{c,x} \\cdot f}{P_{c,z}} \\cdot \\text{scale}_x, \\quad y_s = \\frac{H}{2} - \\frac{P_{c,y} \\cdot f}{P_{c,z}} \\cdot \\text{scale}_y$$",
+            "Because terminal font glyphs are roughly twice as tall as they are wide, we set $\\text{scale}_y = 0.5 \\cdot \\text{scale}_x$ to maintain a strictly isotropic 1:1 circular aspect ratio."
           ],
           image: {
             src: "/images/blog/fireplace/camera_orbit_views.png",
@@ -374,21 +374,28 @@ export const portfolioData: PortfolioConfig = {
         {
           subheading: "Procedural Geometry: Coiled Sword & Skulls",
           paragraphs: [
-            "The Dark Souls Coiled Sword (*Espada Espiral*) is modeled parametrically in pure math rather than loading an external 3D file. The blade twists along its longitudinal axis like a double-helix ribbon:",
-            "x(t) = r(t) * cos(omega * t),   z(t) = r(t) * sin(omega * t),   y(t) = y_base + h * t",
-            "Where $\\omega = 7.5\\text{ rad/unit}$ controls the helical twist frequency and $r(t)$ tapers from hilt to tip. The twisted ribs catch lighting normals dynamically.",
-            "Surrounding the sword is a mound of porous ash and human skull bones. Each skull combines an ellipsoidal cranial mass with negative spherical subtraction volumes positioned at the eye sockets and nasal cavity."
+            "The Dark Souls Coiled Sword (*Espada Espiral*) is modeled parametrically rather than loading an external 3D asset. The blade twists along its longitudinal axis like a double-helix ribbon:",
+            "$$x(t) = r(t) \\cdot \\cos(\\omega t), \\quad z(t) = r(t) \\cdot \\sin(\\omega t), \\quad y(t) = y_{\\text{base}} + h \\cdot t$$",
+            "Where $\\omega = 7.5 \\text{ rad/unit}$ controls the helical twist frequency and $r(t)$ tapers from hilt to tip. The twisted ribs catch lighting normals dynamically:",
+            "$$\\vec{N}(t) = \\left( \\frac{\\partial x}{\\partial t}, \\frac{\\partial y}{\\partial t}, \\frac{\\partial z}{\\partial t} \\right) \\times \\hat{e}_\\theta$$",
+            "Surrounding the sword is a mound of porous ash and human skull bones. Each skull is rendered by combining an ellipsoidal cranial mass:",
+            "$$\\frac{(x - x_0)^2}{a^2} + \\frac{(y - y_0)^2}{b^2} + \\frac{(z - z_0)^2}{c^2} \\le 1$$",
+            "with negative spherical subtraction volumes positioned at the eye sockets $(\\pm d_x, d_y, d_z)$ and nasal cavity."
           ]
         },
         {
           heading: "The Quantization Pipeline: Continuous 3D to Discrete Pixel Art",
           subheading: "G-Buffer Architecture & Cel-Art Silhouettes",
           paragraphs: [
-            "If you simply rasterize 3D polygons at low resolutions (e.g. 80x48), the result looks like a muddy PlayStation 1 game — not pixel art. Handcrafted pixel art requires crisp 1-pixel cel-art silhouettes separating depth layers and discrete tonal shading bands.",
-            "To achieve this, the renderer outputs to a G-Buffer with three distinct layers per sub-pixel: Color Buffer $C(x, y)$, Float Depth Buffer $Z(x, y)$, and Material/Object ID Buffer $M(x, y)$ (e.g., sword, bone, bark, endcap, stone).",
+            "If you simply rasterize 3D polygons at low resolutions (e.g. $80 \\times 48$), the result looks like a muddy PlayStation 1 game — not pixel art. Handcrafted pixel art requires crisp 1-pixel cel-art silhouettes separating depth layers and discrete tonal shading bands.",
+            "To achieve this, the renderer outputs to a G-Buffer with three distinct layers per sub-pixel: Color Buffer $C(x, y) \\in \\text{RGB}$, Float Depth Buffer $Z(x, y) \\in \\mathbb{R}^+$, and Material/Object ID Buffer $M(x, y) \\in \\mathbb{N}$ (e.g., $1 = \\text{sword}, 2 = \\text{bone}, 3 = \\text{bark}, 4 = \\text{endcap}, 5 = \\text{stone}$).",
             "After rasterization, a post-processing pass scans the G-Buffer with a 4-neighborhood directional kernel: $\\mathcal{N}(x, y) = \\{(x+1, y), (x-1, y), (x, y+1), (x, y-1)\\}$. An edge is detected if either the depth gradient or the material boundary exceeds a perceptual threshold:",
-            "IsEdge(x, y) = ( max |Z(x, y) - Z(i, j)| > epsilon_z ) OR ( exists M(x, y) != M(i, j) )",
-            "Detected edge pixels are clamped to a dark silhouette tone ($C_{final} = C * 0.22$), creating comic-book cel outlines. Diffuse illumination is quantized into 3 to 4 discrete steps ($L_{band} = \\lfloor L * 4.0 \\rfloor / 4.0$), indexing into hand-tuned retro color ramps."
+            "$$\\text{IsEdge}(x, y) = \\left( \\max_{(i, j) \\in \\mathcal{N}} |Z(x, y) - Z(i, j)| > \\epsilon_z \\right) \\lor \\left( \\exists (i, j) \\in \\mathcal{N} : M(x, y) \\neq M(i, j) \\right)$$",
+            "When an edge is detected, the pixel's RGB value is clamped to a dark silhouette tone:",
+            "$$C_{\\text{final}}(x, y) = \\begin{cases} C(x, y) \\times 0.22, & \\text{if IsEdge}(x, y) \\\\ C_{\\text{quantized}}(x, y), & \\text{otherwise} \\end{cases}$$",
+            "Surfaces do not use continuous Lambertian diffuse terms. Instead, diffuse illumination $L = \\vec{N} \\cdot \\vec{L}_{\\text{light}}$ is quantized into 3–4 discrete steps:",
+            "$$L_{\\text{band}} = \\left\\lfloor L \\cdot 4.0 \\right\\rfloor / 4.0$$",
+            "The result indexes into hand-tuned retro color ramps (`PALETTE_WOOD`, `PALETTE_EMBERS`, `PALETTE_STONE`)."
           ]
         },
         {
@@ -397,9 +404,12 @@ export const portfolioData: PortfolioConfig = {
             "Once solid geometry is rasterized and cel-shaded, the cellular automata fire simulation takes over.",
             "The fire is modeled as a 2D convective thermal grid $H(x, y) \\in [0.0, 1.0]$. Unlike classic Doom fire:",
             "1. **Flames only emit from burning geometry**: We query the world-space heat of logs, kindling twigs, and the central ash bed. Only pixels with burning wood inject heat into the simulation base.",
-            "2. **Thermal buoyancy**: Hot air rises faster than cool air: $v_y(x, y) = v_0 + \\beta \\cdot H(x, y)$.",
-            "3. **Lateral turbulence**: A pseudo-random wind vector field simulates turbulent vortex shedding: $x' = x + \\sin(t \\cdot 4.2 + y \\cdot 0.3) + \\text{rand}(-1, 1)$.",
-            "Thermal energy decays as it ascends: $H_{t+1}(x', y - 1) = (H_t(x, y) \\cdot \\gamma) - \\delta_{cooling}$."
+            "2. **Thermal buoyancy**: Hot air rises faster than cool air:",
+            "$$v_y(x, y) = v_0 + \\beta \\cdot H(x, y)$$",
+            "3. **Lateral turbulence**: A pseudo-random wind vector field simulates turbulent vortex shedding:",
+            "$$x' = x + \\sin(t \\cdot 4.2 + y \\cdot 0.3) + \\text{rand}(-1, 1)$$",
+            "Thermal energy decays as it ascends:",
+            "$$H_{t+1}(x', y - 1) = \\left( H_t(x, y) \\times \\gamma \\right) - \\delta_{\\text{cooling}}$$"
           ],
           code: {
             language: "text",
@@ -481,7 +491,9 @@ export const portfolioData: PortfolioConfig = {
           heading: "Debugging War Stories: The 9-Character Menu Drift",
           paragraphs: [
             "During development, the terminal configuration menu had a frustrating visual glitch: the top header box had width 66, but the middle option rows had their right border shifted inward by 9 characters, creating an ugly jagged notch.",
-            "By calculating visible columns: Border (1) + Space (1) + Cursor (2) + Label (24) + Arrow (2) + Value (23) + Arrow (2) + Space (1) + Border (1) = 57 columns. 66 - 57 = 9 columns missing!",
+            "By calculating visible columns:",
+            "$$1 (\\text{border}) + 1 (\\text{space}) + 2 (\\text{cursor}) + 24 (\\text{label}) + 2 (\\text{arrow}) + 23 (\\text{value}) + 2 (\\text{arrow}) + 1 (\\text{space}) + 1 (\\text{border}) = 57 \\text{ columns}$$",
+            "$$66 - 57 = 9\\text{ columns missing!}$$",
             "Because lines are positioned using ANSI cursor escapes (`\\033[%d;%dH`), printing 57 characters placed the right border at column `start_c + 56` instead of `start_c + 65`. Every line was rewritten to guarantee exactly 64 inner columns between borders for 100% pixel-perfect borders."
           ]
         },

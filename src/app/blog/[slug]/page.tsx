@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import { portfolioData, BlogPostItem, BlogArticleSection } from "@/data/portfolio";
 import { SubPageNav } from "@/components/SubPageNav";
 import { ScrollToTop } from "@/components/ScrollToTop";
@@ -57,12 +59,62 @@ export async function generateMetadata({
 }
 
 function renderRichText(text: string): React.ReactNode {
-  // Matches inline code `...`, bold **...**, italic *...*, markdown links [...](...), and inline math $...$
-  const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\)|\$[^$]+\$)/g;
+  const trimmed = text.trim();
+  // Pure block math formula
+  if (trimmed.startsWith("$$") && trimmed.endsWith("$$")) {
+    const expr = trimmed.slice(2, -2).trim();
+    try {
+      const html = katex.renderToString(expr, { displayMode: true, throwOnError: false });
+      return (
+        <div
+          className="my-3 overflow-x-auto py-2 text-center text-title font-sans"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      );
+    } catch {
+      return <div className="my-2 font-mono text-center text-sm">{expr}</div>;
+    }
+  }
+
+  // Matches block math, inline math, inline code, bold, italic, and links
+  const regex = /(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/g;
   const parts = text.split(regex);
 
   return parts.map((part, i) => {
     if (!part) return null;
+
+    if (part.startsWith("$$") && part.endsWith("$$")) {
+      const expr = part.slice(2, -2).trim();
+      try {
+        const html = katex.renderToString(expr, { displayMode: true, throwOnError: false });
+        return (
+          <div
+            key={i}
+            className="my-3 overflow-x-auto py-2 text-center text-title font-sans"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        );
+      } catch {
+        return <div key={i} className="my-2 font-mono text-center text-sm">{expr}</div>;
+      }
+    }
+
+    if (part.startsWith("$") && part.endsWith("$")) {
+      const expr = part.slice(1, -1).trim();
+      try {
+        const html = katex.renderToString(expr, { displayMode: false, throwOnError: false });
+        return (
+          <span
+            key={i}
+            className="inline-block px-0.5 text-title align-baseline font-sans"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        );
+      } catch {
+        return <span key={i} className="font-mono text-[0.88em]">{expr}</span>;
+      }
+    }
+
     if (part.startsWith("`") && part.endsWith("`")) {
       return (
         <code
@@ -85,16 +137,6 @@ function renderRichText(text: string): React.ReactNode {
         <em key={i} className="italic text-foreground">
           {part.slice(1, -1)}
         </em>
-      );
-    }
-    if (part.startsWith("$") && part.endsWith("$")) {
-      return (
-        <span
-          key={i}
-          className="font-mono text-[0.88em] px-1 py-0.5 bg-zinc-100/80 dark:bg-zinc-800/60 rounded text-foreground italic border border-border/50"
-        >
-          {part.slice(1, -1)}
-        </span>
       );
     }
     const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
@@ -311,12 +353,12 @@ export default async function BlogPostDetailPage({
                 )}
 
                 {section.image && (
-                  <figure className="my-2 flex flex-col items-center">
-                    <div className="w-full overflow-hidden rounded-[8px] border border-border bg-[#101012] flex items-center justify-center p-2 sm:p-3">
+                  <figure className="my-4 flex flex-col items-center w-full">
+                    <div className="w-full overflow-hidden rounded-[8px] border border-border bg-[#101012] flex items-center justify-center p-2 sm:p-4">
                       <img
                         src={section.image.src}
                         alt={section.image.alt}
-                        className="max-h-[460px] w-auto max-w-full rounded object-contain"
+                        className="w-full h-auto max-h-[560px] rounded object-contain [image-rendering:pixelated]"
                         loading="lazy"
                       />
                     </div>
