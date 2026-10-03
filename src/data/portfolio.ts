@@ -353,8 +353,8 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "Visual Architecture: Doing Everything in 1.8 Milliseconds",
           paragraphs: [
-            "To maintain a locked 60 FPS without frame jitter, tearing, or frying laptop batteries, the entire simulation, 3D rasterization, fire automata, and terminal formatting must execute in under 16.6 milliseconds per frame.",
-            "The pipeline executes in five strictly decoupled stages:"
+            "When I started coding this, I wanted it to run at a locked 60 FPS in any terminal without burning CPU or draining my laptop battery. At 60 FPS, you have roughly 16.6 milliseconds per frame.",
+            "The engine ends up executing in around 1.8 ms, split across five clean stages:"
           ],
           code: {
             language: "text",
@@ -366,7 +366,7 @@ export const portfolioData: PortfolioConfig = {
           heading: "The Mathematics of the 3D Camera & Geometry",
           subheading: "Spherical Orbit Coordinate Transform",
           paragraphs: [
-            "The camera operates on a spherical coordinate orbit centered on the target focal point $\\vec{T} = (0, y_{\\text{target}}, 0)$.",
+            "Because I wanted to be able to smoothly orbit the camera around the bonfire with the mouse or arrow keys, I set up a spherical coordinate camera centered on the target $\\vec{T} = (0, y_{\\text{target}}, 0)$:",
             "Given yaw $\\theta$ (horizontal azimuth) and pitch $\\phi$ (vertical elevation) with orbital distance $R$:",
             "$$\\begin{aligned} \\text{eye}_x &= T_x + R \\cos(\\phi) \\sin(\\theta) \\\\ \\text{eye}_y &= T_y + R \\sin(\\phi) \\\\ \\text{eye}_z &= T_z + R \\cos(\\phi) \\cos(\\theta) \\end{aligned}$$",
             "To map world-space coordinates to camera view-space, we construct an orthonormal basis $(\\vec{u}, \\vec{v}, \\vec{w})$ using the Gram-Schmidt process:",
@@ -460,9 +460,9 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "Audio from First Principles: The Pipe Buffer and the 503 Hz Ghost",
           paragraphs: [
-            "Playing audio in a terminal application without heavyweight dependencies like SDL2 or OpenAL is deceptively hard.",
-            "A naive approach like `system(\"pw-play sound.wav &\")` is fatally broken: spawning a subshell causes 30 ms frame drops, generates zombie processes (`<defunct>`) that pile up during a 25-minute Pomodoro session, and writing large audio chunks into Linux's default 64 KB pipe buffer causes the main render loop to freeze dead for 4.5 seconds waiting for the player to consume bytes.",
-            "To keep the render loop locked at 60 FPS, we implemented a double-fork detached worker architecture:"
+            "Adding audio sounded like a quick 5-minute task. It wasn't. Playing audio in a terminal application without heavyweight dependencies like SDL2 or OpenAL turned into its own mini adventure.",
+            "A naive attempt like calling `system(\"pw-play sound.wav &\")` is totally broken: spawning a subshell causes 30 ms frame drops, generates zombie processes (`<defunct>`) that pile up during a study session, and writing large audio chunks into Linux's default 64 KB pipe buffer can freeze the main render loop dead for 4.5 seconds waiting for the player to consume bytes.",
+            "To keep the render loop locked at 60 FPS without dropping frames or leaving zombies behind, I built a double-fork detached worker architecture:"
           ],
           code: {
             language: "text",
@@ -474,12 +474,12 @@ export const portfolioData: PortfolioConfig = {
           subheading: "FFT Spectrum Hunting: Killing the 503 Hz Ethereal Drone",
           quote: {
             text: "O som do darksouls tem um som estranho de oooonnnnnnnnnnn que tá mt alto e meio chato, um barulho meio etereo.",
-            author: "Beta User Feedback",
+            author: "Friend on Discord call",
           },
           paragraphs: [
-            "When we extracted the Dark Souls bonfire ambient audio from game recordings, users immediately caught an irritating ringing drone overpowering the crackle.",
+            "When I first extracted the Dark Souls bonfire ambient audio from game recordings, a friend on our Discord call immediately noticed that irritating ringing drone overpowering the crackle.",
             "Running an FFT spectrum analysis on the audio clip revealed an enormous resonant spike at **503 Hz** (musical pitch B4) — an ethereal choir hum from the Firelink Shrine background track.",
-            "We deployed a parametric notch filter via FFmpeg to attenuate 503 Hz by -36 dB and its first harmonic at 251 Hz by -18 dB. The 503 Hz peak dropped by 97%, leaving clean, warm ember crackles and low flame rumbles."
+            "I threw a parametric notch filter via FFmpeg to attenuate 503 Hz by -36 dB and its first harmonic at 251 Hz by -18 dB. The 503 Hz peak dropped by 97%, leaving only clean, warm ember crackles and low flame rumbles."
           ],
           code: {
             language: "bash",
@@ -503,7 +503,7 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "The Bug That Stole 9 Terminal Columns",
           paragraphs: [
-            "During development, the terminal configuration menu had a frustrating visual glitch: the top header box had width 66, but the middle option rows had their right border shifted inward by 9 characters, creating an unsightly jagged notch.",
+            "One of the funniest visual bugs during development happened in the interactive settings menu: the top header box had width 66, but the options below had their right border shifted inward by exactly 9 characters, creating an unsightly notch.",
             "By calculating visible columns:",
             "$$1 (\\text{border}) + 1 (\\text{space}) + 2 (\\text{cursor}) + 24 (\\text{label}) + 2 (\\text{arrow}) + 23 (\\text{value}) + 2 (\\text{arrow}) + 1 (\\text{space}) + 1 (\\text{border}) = 57 \\text{ columns}$$",
             "$$66 - 57 = 9\\text{ columns missing!}$$",
@@ -513,7 +513,7 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "Performance Benchmarks & Headroom",
           paragraphs: [
-            "We instrumented the engine with monotonic nanosecond timers (`clock_gettime(CLOCK_MONOTONIC)`) to measure frame budget at 60 FPS (16.6 ms budget):"
+            "Out of curiosity, I instrumented the engine with monotonic nanosecond timers (`clock_gettime(CLOCK_MONOTONIC)`) to see where the frame budget actually goes at 60 FPS (16.6 ms budget):"
           ],
           table: {
             headers: ["Stage", "Average Time (ms)", "Budget % (@ 60 FPS / 16.6 ms)"],
