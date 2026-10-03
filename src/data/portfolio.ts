@@ -317,39 +317,37 @@ export const portfolioData: PortfolioConfig = {
       tags: ["C99", "Graphics", "Audio", "Terminal", "Physics"],
       url: "https://github.com/GabrielBaiano/fireplace-experiment",
       image: "/images/blog/fireplace/dark_souls_bonfire.gif",
-      summary: "Why build a 60 FPS 3D pixel-art bonfire Pomodoro timer from scratch in pure C99 when 600 MB Electron apps exist? A deep dive into software rasterization, cellular automata, non-blocking raw PCM audio streaming, and the craft of doing more with less.",
+      summary: "I'm an addicted Soulslike player with a strict study routine. While playing Dark Souls, I used to leave my character AFK at a bonfire to study for an hour and review exercises on call with friends before playing again. I built this 60 FPS terminal bonfire purely for fun, while studying 3D rendering concepts and prototyping graphics experiments for my upcoming Playdate game.",
       sections: [
         {
-          heading: "The 600 MB Pomodoro Timer",
+          heading: "AFK at the Bonfire: How the Idea Started",
           image: {
             src: "/images/blog/fireplace/dark_souls_bonfire.gif",
             alt: "Real-time 60 FPS Dark Souls Bonfire terminal mode",
             caption: "Real-time 60 FPS terminal bonfire running Dark Souls Coiled Sword mode with 3D raymarching, cel-shading outlines, and cellular fire.",
           },
           paragraphs: [
-            "Productivity software... If you search for a 'cozy pomodoro timer' today, you will almost certainly find an Electron app.",
-            "It will ask for 600 MB of RAM. It will spawn four or five Chromium helper processes. It will pull down 180 npm dependencies, bundle a video player, and claim 12% of your GPU just to loop an 8-second MP4 of a crackling fire while a numeric countdown ticks from 25:00 to 00:00.",
-            "We have normalized an engineering culture where drawing a timer on a screen requires more computational power than the guidance computer that landed Apollo 11 on the Moon.",
-            "This is the exact same paradox I wrote about in my reflection on frontend performance: convenience has been conflated with efficiency. When modern software hits any problem, our default reflex is to throw another abstraction layer at it until the problem becomes invisible."
+            "If you look at how I spend my time, two things stand out immediately: I am an addicted Soulslike player, and I follow my daily study schedule strictly to the letter.",
+            "Whenever I was playing Dark Souls and study time arrived, I had a specific habit: instead of shutting down the game, I would rest my character at the nearest bonfire, leave it AFK with the crackling fire sound echoing in the background, jump into a Discord call with friends, and spend a full hour reviewing technical questions, computer science fundamentals, and exercises before picking up the controller again.",
+            "That bonfire wasn't just a checkpoint in Lordran; it became the anchor of my study routine. Eventually I asked myself: why not bring that exact feeling straight into my development terminal?",
+            "To be clear: I didn't build this project to fight against modern frameworks or make any grand statement. I built it purely for fun, curiosity, and the joy of experimenting. At the time, I was studying 3D software rendering from first principles and prototyping graphics ideas for a game I'm developing for the Panic Playdate handheld. A terminal bonfire was the perfect playground."
           ],
           callout: {
-            icon: "💡",
-            text: "What is the minimal amount of technology required to render a living, authentic 3D pixel-art bonfire inside a Linux terminal at 60 FPS with zero runtime dependencies? No Electron, no OpenGL, no SDL2 — just pure C99 and the terminal itself."
+            icon: "🔥",
+            text: "The goal was simple and fun: render a living 3D pixel-art Dark Souls bonfire inside a Linux terminal at locked 60 FPS with zero runtime dependencies — pure C99, raw math, and the terminal itself."
           }
         },
         {
-          heading: "The Bonfire as Sacred Focus",
+          heading: "The Bonfire as a Study Anchor",
           paragraphs: [
-            "My GitHub bio has a phrase I take quite literally: 'Coding with the persistence of a Soulslike player.'",
-            "In Dark Souls, the bonfire is sacred. It is the only space in a relentlessly hostile universe where nothing can harm you. You kneel down, the world resets, your Estus Flasks refill, and you take a breath before the next trial.",
-            "Most Pomodoro timers treat work cycles like a stopwatch in a factory: an abrasive digital bell ordering you to stop. But deep work doesn't feel like a factory shift; it feels like exploring a difficult dungeon. When focus ends, you shouldn't be jolted by a loud alarm — you should return to the sanctuary of the bonfire.",
-            "To reflect this psychologically, the engine models the entire timer lifecycle through the physics of fire:"
+            "In Dark Souls, the bonfire is the ultimate sanctuary. It is the only place in a punishing world where you can rest, reset, refill your flasks, and plan your next move. Bringing that ritual into a terminal timer made total sense for long study and coding sessions.",
+            "Instead of an annoying buzzer or a generic countdown, the entire lifecycle is modeled through the state and physics of the fire itself:"
           ],
           bullets: [
             "**Unlit State**: The bonfire sits cold and dormant — the coiled sword thrust into a bed of charred ash and bone.",
             "**Ignition (`[E]` / `Space`)**: Kindling the flame triggers a radial spark burst, plays the iconic Dark Souls chime, and burns the golden banner 'BONFIRE LIT' across the terminal.",
-            "**Focus Phase**: The fire roars with turbulent buoyancy, shedding embers and casting dynamic heat across the hearth.",
-            "**Rest Phase**: As focus expires, the flame settles into glowing crimson embers (`FIRE_STATE_SMOLDERING_REST`), naturally inviting you to step away from the keyboard."
+            "**Focus Phase**: The fire roars with turbulent buoyancy, shedding embers and casting dynamic heat across the hearth as you work.",
+            "**Rest Phase**: When study time is up, the flame settles into glowing crimson embers (`FIRE_STATE_SMOLDERING_REST`), signaling that it's time to take a breath."
           ]
         },
         {
@@ -533,12 +531,11 @@ export const portfolioData: PortfolioConfig = {
           }
         },
         {
-          heading: "Learning to Build Without Safety Nets",
+          heading: "Experiments, Playdate, and Building for Fun",
           paragraphs: [
-            "In web development, we spend a massive amount of time managing the blast radius of our own tools. We add layers to fix the shortcomings of previous layers. When the bundle gets too large, we add code splitting; when code splitting creates waterfall requests, we add prefetching; when prefetching consumes too much bandwidth, we add heuristic caching.",
-            "Working directly in C99, without a framework or an engine to shield you, is humbling. When the pipe deadlocks, there is no error boundary. When the audio server glitches, there is no retry middleware. You either understand the system calls and memory buffers, or your program crashes.",
-            "This project wasn't about proving that C should replace modern tools. It was about remembering the value of building software where you understand every single byte on the screen.",
-            "A 600 MB Electron app will get you a timer in an afternoon. But building a 60 FPS 3D pixel-art bonfire in a couple of kilobytes of C proves something else: that when you respect the machine and do less, software can still feel like magic."
+            "Writing a software rasterizer and cellular simulation in C99 without external engines or graphics libraries was one of the most fun and educational experiments I've tackled.",
+            "Handling raymarching, spherical camera math, cellular automata, and raw terminal VT100 sequences by hand gave me immense intuition for low-level graphics. Many of the mathematical optimizations and memory layout tricks I explored here are feeding directly into how I design graphics and physics routines for my upcoming Playdate game, where hardware constraints are real and every CPU cycle counts.",
+            "At the end of the day, programming shouldn't always be about optimizing business metrics or following convention. Sometimes the best projects are the ones you build simply because you love video games, love learning how things work under the hood, and wanted a cozy bonfire running while you study with your friends."
           ],
           callout: {
             icon: "🔥",
