@@ -40,7 +40,7 @@ export default function BlogPage() {
         <div className="flex flex-col">
           {portfolioData.blogs.map((post, idx) => (
             <div key={idx}>
-              <BlogItem post={post} />
+              <BlogItem post={post} index={idx + 1} />
               {idx < portfolioData.blogs.length - 1 && (
                 <div className="divider-dashed" />
               )}

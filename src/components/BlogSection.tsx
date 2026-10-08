@@ -17,7 +17,7 @@ export function BlogSection() {
       <div className="flex flex-col">
         {displayedPosts.map((post, idx) => (
           <div key={idx}>
-            <BlogItem post={post} />
+            <BlogItem post={post} index={idx + 1} />
             {idx < displayedPosts.length - 1 && (
               <div className="divider-dashed"></div>
             )}
