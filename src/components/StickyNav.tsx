@@ -6,39 +6,9 @@ import { ThemeToggle } from "./ThemeToggle";
 import { useSound } from "./SoundProvider";
 import { portfolioData } from "@/data/portfolio";
 import initialData from "@/data/visitors.json";
+import { useAnimatedCount } from "@/lib/useAnimatedCount";
 
 const FALLBACK_PAGEVIEWS = typeof initialData?.pageviews === "number" ? initialData.pageviews : 1422;
-
-function useAnimatedCount(target: number, duration = 1000) {
-  const [displayCount, setDisplayCount] = useState<number>(target);
-  const animRef = useRef<number | null>(null);
-  const prevTargetRef = useRef<number>(target);
-
-  useEffect(() => {
-    const startVal = prevTargetRef.current;
-    prevTargetRef.current = target;
-    if (startVal === target) {
-      setDisplayCount(target);
-      return;
-    }
-    const start = performance.now();
-    const frame = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      setDisplayCount(Math.round(startVal + (target - startVal) * ease));
-      if (progress < 1) {
-        animRef.current = requestAnimationFrame(frame);
-      }
-    };
-    animRef.current = requestAnimationFrame(frame);
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-    };
-  }, [target, duration]);
-
-  return displayCount;
-}
 
 export function StickyNav() {
   const { isMuted, toggleMute, playClick } = useSound();

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSound } from "@/components/SoundProvider";
+import { useAnimatedCount } from "@/lib/useAnimatedCount";
 
 const MAX_USER_CLAPS = 10;
 
@@ -13,6 +14,7 @@ interface ClapButtonProps {
 export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
   const { playClick, playError } = useSound();
   const [totalClaps, setTotalClaps] = useState(initialClaps);
+  const animatedClaps = useAnimatedCount(totalClaps);
   const [userClaps, setUserClaps] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isDenied, setIsDenied] = useState(false);
@@ -253,7 +255,7 @@ export function ClapButton({ initialClaps, slug }: ClapButtonProps) {
         </svg>
 
         <span className={`text-xs font-semibold tabular-nums ${isDenied ? "text-red-500 dark:text-red-400" : "text-foreground"}`}>
-          {totalClaps} {totalClaps === 1 ? "clap" : "claps"}
+          {animatedClaps} {animatedClaps === 1 ? "clap" : "claps"}
         </span>
       </button>
     </div>
