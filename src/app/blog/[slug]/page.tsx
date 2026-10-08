@@ -235,14 +235,6 @@ export default async function BlogPostDetailPage({
           {/* Meta Information Row */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-mutedForeground">
             <div className="flex flex-wrap items-center gap-2">
-              {currentIndex !== -1 && (
-                <>
-                  <span className="font-mono text-mutedForeground font-medium text-[11.5px] tabular-nums">
-                    {String(currentIndex + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-zinc-400">•</span>
-                </>
-              )}
               <div className="flex items-center gap-1.5">
                 <svg
                   stroke="currentColor"

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { BlogPostItem } from "@/data/portfolio";
 
-export function BlogItem({ post, index }: { post: BlogPostItem; index?: number }) {
+export function BlogItem({ post }: { post: BlogPostItem }) {
   const [clapsCount, setClapsCount] = useState<number>(post.claps ?? 0);
   const hasTags = post.tags && post.tags.length > 0;
   const targetHref = post.slug ? `/blog/${post.slug}` : (post.url || "/blog");
@@ -54,15 +54,7 @@ export function BlogItem({ post, index }: { post: BlogPostItem; index?: number }
             </h3>
 
             {/* 2. Date */}
-            <div className="flex items-center gap-1.5 text-mutedForeground select-none text-xs">
-              {typeof index === "number" && (
-                <>
-                  <span className="font-mono text-mutedForeground font-medium text-[11.5px] tabular-nums">
-                    {String(index).padStart(2, "0")}
-                  </span>
-                  <span className="text-border" aria-hidden="true">•</span>
-                </>
-              )}
+            <div className="flex items-center gap-1 text-mutedForeground select-none">
               <svg
                 stroke="currentColor"
                 fill="none"
@@ -85,13 +77,7 @@ export function BlogItem({ post, index }: { post: BlogPostItem; index?: number }
                   fill="currentColor"
                 />
               </svg>
-              <p className="font-medium">{post.date}</p>
-              {post.readTime && (
-                <>
-                  <span className="text-zinc-400">•</span>
-                  <span>{post.readTime}</span>
-                </>
-              )}
+              <p className="text-xs font-medium">{post.date}</p>
             </div>
 
             {/* 3. Claps & Tags */}
