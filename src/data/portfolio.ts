@@ -280,10 +280,10 @@ export const portfolioData: PortfolioConfig = {
       url: "https://github.com/GabrielBaiano/Deskstamp",
     },
     {
-      name: "Paperback",
-      description: "Clean, fast, and lightweight collaborative e-book reader in the browser.",
-      icon: "/images/apps/paperback.png",
-      url: "https://github.com/GabrielBaiano/paperback",
+      name: "Clubo",
+      description: "Real-time social reading platform & virtual book club in the browser.",
+      icon: "/images/apps/clubo.png",
+      url: "https://github.com/GabrielBaiano/Clubo",
     },
   ],
 
