@@ -317,7 +317,7 @@ export const portfolioData: PortfolioConfig = {
       tags: ["AI", "Scientometrics", "Data Engineering", "Python", "Open Source"],
       url: "/blog/how-i-use-ai-in-scientific-research-auditable-pipelines",
       summary: "Why treating scientific methodology like a software engineering pipeline turns messy academic data collection into reproducible, testable, and auditable research.",
-      image: "/images/blog/scientific-ai-pipeline/pipeline-etapas.jpg",
+      image: "/images/blog/scientific-ai-pipeline/pipeline-stages.jpg",
       sections: [
         {
           heading: "Approaching Academic Research with a Developer Mindset",
@@ -336,22 +336,22 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "The Theoretical Model: Scientific Methodology as a Pipeline",
           image: {
-            src: "/images/blog/scientific-ai-pipeline/pipeline-etapas.jpg",
-            alt: "Conceptual scientific pipeline diagram: Início -> Etapa 1 -> Etapa 2 -> Etapa 3 -> Fim",
+            src: "/images/blog/scientific-ai-pipeline/pipeline-stages.jpg",
+            alt: "Conceptual scientific pipeline diagram: Start -> Stage 1 -> Stage 2 -> Stage 3 -> End",
             caption: "The abstract model: Any data-driven research workflow deconstructs into sequential stages separated by automated verification gates."
           },
           paragraphs: [
             "Before diving into lines of code or specific datasets, it helps to step back and examine the conceptual model. At an abstract level, almost any empirical research study that processes data can be conceptualized as a unidirectional software pipeline.",
             "The defining characteristic of this approach is working backward from the research objective:",
             "1. You Start with the End in Mind: The objective of your study (the 'End' node) is fixed by your research question or formal hypothesis (for example: 'How do software adoption patterns correlate with empirical data sources across specialized literature?').",
-            "2. Deconstruction into Modular Stages: Because you know the required output format (e.g., a validated statistical matrix or citation network), you can decompose the path into discrete, sequential steps: Ingestion (Etapa 1), Transformation & Validation (Etapa 2), and Enrichment & Semantic Analysis (Etapa 3).",
+            "2. Deconstruction into Modular Stages: Because you know the required output format (e.g., a validated statistical matrix or citation network), you can decompose the path into discrete, sequential steps: Ingestion (Stage 1), Transformation & Validation (Stage 2), and Enrichment & Semantic Analysis (Stage 3).",
             "3. Verification Gates: Between every single stage, there is an automated validation checkpoint. Stage 2 never assumes Stage 1 succeeded silently; it executes unit test assertions and schema guards against the incoming data contract. If an upstream format changes, the pipeline fails early, loudly, and locally before corrupted data reaches your analytical models."
           ]
         },
         {
           heading: "Folder Architecture: Decoupling Lifecycle and Verification",
           image: {
-            src: "/images/blog/scientific-ai-pipeline/arquitetura-etapas.jpg",
+            src: "/images/blog/scientific-ai-pipeline/architecture-stages.jpg",
             alt: "Directory structure separating stages, test guards, and tiered data directories",
             caption: "Directory architecture: Every script in src/stages/ mirrors a dedicated test file in tests/, with strict tiered data separation."
           },
