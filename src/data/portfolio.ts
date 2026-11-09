@@ -379,14 +379,31 @@ export const portfolioData: PortfolioConfig = {
         },
         {
           heading: "The Role of AI: A Constrained Component, Not an Oracle",
+          subheading: "1. Use the LLM to Write the Pipeline, Not to Run It",
           paragraphs: [
-            "The fundamental mistake when using LLMs in research is treating them like conversational human assistants. In a chat window, models are encouraged to be creative and conversational. In scientific methodology, creativity in data parsing is a fatal bug.",
-            "To make artificial intelligence scientifically auditable, we apply three core software principles:"
+            "The fundamental mistake when using LLMs in research is treating them like conversational human assistants. In a chat window, models are encouraged to be creative and verbose. In scientific methodology, unconstrained creativity in data parsing is a fatal bug.",
+            "The highest-leverage way to use modern AI in research is as an engineering accelerator: using it to write the pipeline rather than executing the analysis directly through prompts.",
+            "If you need to parse a tricky file format, extract meta tags from HTML, or calculate co-occurrence matrices, someone has almost certainly already solved that exact problem and published a battle-tested library on PyPI or GitHub. Instead of reinventing the wheel—or worse, asking an LLM chat window to 'summarize this data for me'—use the model to research existing tools, discover the right libraries, draft the integration glue code, and write unit tests.",
+            "Using an LLM to produce deterministic Python code gives you three immediate scientific advantages:"
           ],
           bullets: [
-            "Never Accept Free-Text Output: Constrain model responses using formal Structured Outputs (JSON Schema). By enforcing a rigid schema at the API level, the model cannot produce speculative commentary, markdown wrappers, or hallucinated conversational filler.",
-            "Pre-Filter Deterministically: Do not use expensive, probabilistic models for tasks that regular expressions or deterministic parsers solve perfectly. A regex filter can quickly detect obvious keywords, reserving the LLM solely for ambiguous semantic disambiguation.",
-            "Atomic Incremental Checkpointing: Save curated records in discrete batches (e.g., every 10 articles) directly to disk. If an API rate limit or network error triggers, the pipeline resumes from the last confirmed checkpoint with zero lost progress."
+            "Instant Execution: Pure code runs locally in milliseconds without network latency.",
+            "Zero Ongoing Cost: You pay no token fees to rerun your analysis.",
+            "Strict Reproducibility: Executing deterministic code ten times produces the exact same output ten times."
+          ]
+        },
+        {
+          subheading: "2. When AI Must Be in the Execution Loop: Constrained Semantic Disambiguation",
+          paragraphs: [
+            "There are cases where deterministic code alone hits a wall. In bibliometrics and scientometrics, you frequently encounter qualitative coding and semantic extraction tasks that cannot be solved with regular expressions alone. For instance, identifying software tools or empirical data sources from unstructured academic abstracts is notoriously tricky: authors use colloquial names, omit version numbers, or refer to single-letter tools like 'R', which regex easily confuses with amino acids, electrical resistance, or statistical correlation coefficients.",
+            "When you genuinely need an LLM inside the execution loop to comprehend text or execute a repetitive qualitative classification, you must treat it like an untrusted, probabilistic component governed by strict software constraints:"
+          ],
+          bullets: [
+            "Strict Context Sandboxing (Zero External Search): Feed the model only the specific corpus extract (such as the title and abstract text) and explicitly disallow external web browsing or ungrounded retrieval. Confining the model's universe strictly to the project data prevents hallucinations ('devaneios') from importing outside assumptions or fabricated citations into your dataset.",
+            "Never Accept Free-Text Output (JSON Schema): Constrain model responses using formal Structured Outputs enforced at the API level. If the schema only accepts a boolean flag, a restricted enum of known categories, and an exact verbatim quote from the text as evidence, the model is physically prevented from generating conversational filler, speculative commentary, or markdown formatting quirks.",
+            "Pre-Filter Deterministically: Never feed your entire corpus blindly through an LLM. Use fast regular expressions or keyword heuristics as a coarse pre-filter. If an abstract has zero mentions of software or data terminology, discard or label it immediately. Reserve LLM calls exclusively for the ambiguous records that genuinely require semantic disambiguation.",
+            "Multi-Pass Validation and Consistency Checks: Because language models are probabilistic, sensitive classifications should be processed more than once—either through repeated sampling or deterministic zero-temperature cross-validation. If two independent passes disagree on a classification, the pipeline flags that record for manual peer review rather than quietly committing an uncertain label to the dataset.",
+            "Atomic Incremental Checkpointing: Save curated records in discrete batches directly to disk (e.g., writing checkpoints every 10 articles). If an API rate limit or network error triggers on record 350, the pipeline resumes cleanly from the last confirmed checkpoint without losing progress or repeating paid requests."
           ]
         },
         {
