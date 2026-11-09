@@ -362,7 +362,7 @@ export const portfolioData: PortfolioConfig = {
           ],
           code: {
             language: "text",
-            code: "research-project/\n├── data/\n│   ├── raw/                  # Pristine API responses and raw dumps (read-only, never modified)\n│   ├── processed/            # Cleaned, schema-validated JSON records and checkpoints\n│   └── outputs/              # Final publication-ready matrices, CSVs, and plots\n├── src/\n│   └── stages/\n│       ├── 01_fetch_raw.py         # Single responsibility: harvest raw data to data/raw\n│       ├── 02_clean_and_dedupe.py  # Strip noise, resolve identifiers, normalize structure\n│       └── 03_calculate_metrics.py # Controlled semantic enrichment and metrics calculation\n└── tests/\n    ├── test_stage1_fetch.py        # Verifies network timeouts, response headers, and raw formats\n    ├── test_stage2_clean.py        # Verifies parsing invariants, string sanitizers, and schemas\n    └── test_stage3_metrics.py      # Verifies AI JSON schemas, counts, and statistical outputs",
+            code: "research-project/\n├── data/\n│   ├── raw/                  # Pristine API responses and raw dumps (read-only, never modified)\n│   ├── processed/            # Cleaned, schema-validated JSON records and checkpoints\n│   └── outputs/              # Final publication-ready matrices, CSVs, and plots\n├── src/\n│   └── stages/\n│       ├── 01_stage_1.py         # Single responsibility: Stage 1 data extraction & caching\n│       ├── 02_stage_2.py         # Stage 2: parsing, deduplication, schema normalization\n│       └── 03_stage_3.py         # Stage 3: AI enrichment with strict schema, metrics calculation\n└── tests/\n    ├── test_stage_1.py           # Verifies Stage 1 extraction integrity and schema invariants\n    ├── test_stage_2.py           # Verifies Stage 2 sanitization and deterministic transitions\n    └── test_stage_3.py           # Verifies Stage 3 JSON schema conformance and outputs",
             caption: "Directory layout enforcing single-responsibility stages and automated test coverage."
           }
         },
@@ -371,7 +371,7 @@ export const portfolioData: PortfolioConfig = {
             "This layout enforces three practical safeguards:"
           ],
           bullets: [
-            "Fault Isolation: If a source website updates its DOM structure, only 01_fetch_raw.py requires maintenance. Stages 2 and 3 remain untouched.",
+            "Fault Isolation: If Stage 1 extraction changes, only 01_stage_1.py and test_stage_1.py require updates. Stages 2 and 3 remain untouched.",
             "Local Caching & Polite Scraping: Because raw responses persist in data/raw/, you can test and iterate on transformation logic hundreds of times without sending a single redundant HTTP request to external servers.",
             "Auditability by Independent Peers: Any reviewer or collaborator can run pytest to inspect intermediate outputs and verify that every transformation behaves according to the published methodology."
           ]
