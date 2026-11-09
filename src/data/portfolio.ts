@@ -362,18 +362,19 @@ export const portfolioData: PortfolioConfig = {
           ],
           code: {
             language: "text",
-            code: "research-project/\n├── data/\n│   ├── raw/                  # Pristine API responses and raw dumps (read-only, never modified)\n│   ├── processed/            # Cleaned, schema-validated JSON records and checkpoints\n│   └── outputs/              # Final publication-ready matrices, CSVs, and plots\n├── src/\n│   └── stages/\n│       ├── 01_etapa_1.py         # Single responsibility: Stage 1 data extraction & caching\n│       ├── 02_etapa_2.py         # Stage 2: parsing, deduplication, schema normalization\n│       └── 03_etapa_3.py         # Stage 3: AI enrichment with strict schema, metrics calculation\n└── tests/\n    ├── test_etapa_1.py           # Verifies Stage 1 extraction integrity and schema invariants\n    ├── test_etapa_2.py           # Verifies Stage 2 sanitization and deterministic transitions\n    └── test_etapa_3.py           # Verifies Stage 3 JSON schema conformance and outputs",
-            caption: "Directory layout enforcing single-responsibility stages and automated test coverage."
+            code: "research-project/\n├── data/\n│   ├── raw/                  # Immutable primary inputs and upstream data snapshots\n│   ├── processed/            # Validated intermediate transformation checkpoints\n│   └── outputs/              # Final deterministic research artifacts (matrices, figures, tables)\n├── src/\n│   ├── main.py               # Orchestrator: manages execution flow, logs checkpoints, and handles errors\n│   └── stages/\n│       ├── 01_stage_1.py     # Stage 1: Ingests raw inputs and guarantees immutable caching\n│       ├── 02_stage_2.py     # Stage 2: Applies intermediate transformation rules and schema validation\n│       └── 03_stage_3.py     # Stage 3: Executes analytical models and emits final research outputs\n└── tests/\n    ├── test_stage_1.py       # Unit tests verifying Stage 1 data extraction and format invariants\n    ├── test_stage_2.py       # Unit tests verifying Stage 2 transformation contracts\n    ├── test_stage_3.py       # Unit tests verifying Stage 3 analytical consistency and bounds\n    └── test_pipeline.py      # Integration test executing and verifying the pipeline end-to-end",
+            caption: "Directory layout enforcing centralized orchestration, single-responsibility stages, and automated test coverage."
           }
         },
         {
           paragraphs: [
-            "This layout enforces three practical safeguards:"
+            "This layout enforces four practical safeguards:"
           ],
           bullets: [
-            "Fault Isolation: If Stage 1 extraction changes, only 01_etapa_1.py and test_etapa_1.py require updates. Stages 2 and 3 remain untouched.",
-            "Local Caching & Polite Scraping: Because raw responses persist in data/raw/, you can test and iterate on transformation logic hundreds of times without sending a single redundant HTTP request to external servers.",
-            "Auditability by Independent Peers: Any reviewer or collaborator can run pytest to inspect intermediate outputs and verify that every transformation behaves according to the published methodology."
+            "Centralized Orchestration: main.py is the single entry point that drives the entire pipeline sequentially. It checks preconditions, triggers each stage, validates exit status, and handles graceful error reporting without hardcoded coupling between individual steps.",
+            "Fault Isolation: If the requirements or format for Stage 1 change, only 01_stage_1.py and test_stage_1.py require updates. Stages 2 and 3 rely on standard intermediate schemas and remain completely untouched.",
+            "Immutable Checkpoints & Fast Iteration: Because every stage persists its results to distinct directories (data/raw/, data/processed/, data/outputs/), intermediate states are fully auditable. You can experiment with downstream analytical models without needing to re-run upstream ingestion.",
+            "Test-Driven Verification: Unit tests validate each transformation independently against defined data schemas, while test_pipeline.py ensures that a clean end-to-end execution generates reproducible artifacts."
           ]
         },
         {
