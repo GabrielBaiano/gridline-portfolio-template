@@ -693,62 +693,66 @@ export const portfolioData: PortfolioConfig = {
           }
         },
         {
-          heading: "Deconstructing the Methodology as a Software Pipeline",
+          heading: "The Theoretical Model: Scientific Methodology as a Pipeline",
           image: {
             src: "/images/blog/scientific-ai-pipeline/pipeline-metodologica.jpg",
-            alt: "Methodological scientific pipeline with unit test verification gates",
-            caption: "The scientific pipeline: Start -> Data Extraction -> Deduplication & Schema Validation -> Bibliometric Metrics -> Verifiable End Results."
+            alt: "Conceptual scientific pipeline diagram: Start -> Stage 1 -> Stage 2 -> Stage 3 -> End",
+            caption: "The abstract model: Any data-driven research workflow deconstructs into sequential stages separated by automated verification gates."
           },
           paragraphs: [
-            "In data engineering, any robust processing system follows a predictable, unidirectional pipeline. Scientific methodology benefits enormously when modelled the exact same way. Each phase of the experimental design directly maps to an isolated pipeline stage:"
-          ],
-          bullets: [
-            "[Start] Target Corpus Definition: Identifying the exact publication volumes, ISSNs, and open repositories under investigation.",
-            "[Stage 1] Data Extraction / APIs: Automated fetching of raw payloads with persistent local caching in data/raw.",
-            "[Stage 2] Deduplication & Schema Validation: Cleaning messy author strings, assigning deterministic fallback identifiers, and validating structure against explicit schemas.",
-            "[Stage 3] Bibliometric Metrics & AI Curation: Structured entity extraction, contextual software usage classification, and co-occurrence counts.",
-            "[End] Verifiable Artifacts: Generating auditable correspondence matrices, clean CSVs, and reproducible publication figures."
+            "Before diving into lines of code or specific datasets, it helps to step back and examine the conceptual model. At an abstract level, almost any empirical research study that processes data can be conceptualized as a unidirectional software pipeline.",
+            "The defining characteristic of this approach is working backward from the research objective:",
+            "1. You Start with the End in Mind: The objective of your study (the 'End' node) is fixed by your research question or formal hypothesis (for example: 'How do software adoption patterns correlate with empirical data sources across specialized literature?').",
+            "2. Deconstruction into Modular Stages: Because you know the required output format (e.g., a validated statistical matrix or citation network), you can decompose the path into discrete, sequential steps: Ingestion (Stage 1), Transformation & Validation (Stage 2), and Enrichment & Semantic Analysis (Stage 3).",
+            "3. Verification Gates: Between every single stage, there is an automated validation checkpoint. Stage 2 never assumes Stage 1 succeeded silently; it executes unit test assertions and schema guards against the incoming data contract. If an upstream format changes, the pipeline fails early, loudly, and locally before corrupted data reaches your analytical models."
           ]
         },
         {
-          paragraphs: [
-            "The guiding insight is simple: you know the destination from day one. The objective of your study (the 'End' node) is established by your research question — for instance: 'Which computational software tools and empirical data sources were used in scientometrics literature across the past 5 years?'",
-            "Because you know the destination, constructing the methodology becomes a matter of backwards engineering. And between every single stage, there is a non-negotiable architectural gate: automated unit tests and schema guards. If Stage 1 produces an invalid payload, the pipeline halts immediately with an assertion error rather than poisoning downstream statistical analysis."
-          ]
-        },
-        {
-          heading: "File Architecture: Separating Lifecycle and Verification",
+          heading: "Folder Architecture: Decoupling Lifecycle and Verification",
           image: {
             src: "/images/blog/scientific-ai-pipeline/arquitetura-pastas-testes.jpg",
             alt: "Directory structure separating stages, test guards, and tiered data directories",
             caption: "Directory architecture: Every script in src/stages/ mirrors a dedicated test file in tests/, with strict tiered data separation."
           },
           paragraphs: [
-            "The most frequent failure mode in computational research is the monolithic script: a single 2,000-line Python or R file that handles web scraping, text parsing, regex matching, LLM prompting, and matplotlib rendering all in one run.",
-            "When something fails in a monolith — whether a network timeout, a modified HTML tag, or an API quota exhaustion — your runtime crashes, leaving intermediate data in an undefined state. You have to start over from scratch, wasting compute and API budget.",
-            "To solve this, I organize research repositories into decoupled, single-responsibility stages:"
+            "The most common engineering pitfall in scientific programming is the monolithic script: a single 2,000-line file that fetches HTML, runs regex, calls an API, computes statistics, and renders plots all in one unrepeatable pass.",
+            "When a network connection drops or an unexpected character appears on record 350, the script crashes, leaving intermediate data in an undefined state. You are forced to start over, wasting time and compute.",
+            "To prevent this, the repository architecture should physically decouple each lifecycle phase and mirror it with dedicated unit tests:"
           ],
           code: {
             language: "text",
-            code: "research-project/\n├── data/\n│   ├── raw/                  # Pristine API responses and raw HTML dumps (never modified)\n│   ├── processed/            # Normalized, deduplicated, and schema-validated JSON records\n│   └── outputs/              # Final publication-ready matrices, CSVs, and plots\n├── src/\n│   └── stages/\n│       ├── 01_fetch_raw.py         # Single job: fetch source data and persist to data/raw\n│       ├── 02_clean_and_dedupe.py  # Strip noise, resolve DOIs, normalize metadata\n│       └── 03_calculate_metrics.py # Controlled AI curation and multivariate metrics\n└── tests/\n    ├── test_stage1_fetch.py        # Validates HTTP headers, timeout guards, and response schemas\n    ├── test_stage2_clean.py        # Verifies parsing invariants, string sanitizers, and deduplication\n    └── test_stage3_metrics.py      # Checks AI structured JSON schemas, counts, and statistical matrices",
+            code: "research-project/\n├── data/\n│   ├── raw/                  # Pristine API responses and raw dumps (read-only, never modified)\n│   ├── processed/            # Cleaned, schema-validated JSON records and checkpoints\n│   └── outputs/              # Final publication-ready matrices, CSVs, and plots\n├── src/\n│   └── stages/\n│       ├── 01_fetch_raw.py         # Single responsibility: harvest raw data to data/raw\n│       ├── 02_clean_and_dedupe.py  # Strip noise, resolve identifiers, normalize structure\n│       └── 03_calculate_metrics.py # Controlled semantic enrichment and metrics calculation\n└── tests/\n    ├── test_stage1_fetch.py        # Verifies network timeouts, response headers, and raw formats\n    ├── test_stage2_clean.py        # Verifies parsing invariants, string sanitizers, and schemas\n    └── test_stage3_metrics.py      # Verifies AI JSON schemas, counts, and statistical outputs",
             caption: "Directory layout enforcing single-responsibility stages and automated test coverage."
           }
         },
         {
           paragraphs: [
-            "This architecture yields three major practical advantages:"
+            "This layout enforces three practical safeguards:"
           ],
           bullets: [
-            "Decoupling: If a journal portal changes its layout, only 01_fetch_raw.py requires modification. Stages 2 and 3 remain untouched and execute identically.",
-            "Local Caching & Polite Scraping: All raw data is cached in data/raw/. You can rerun transformations 500 times during development without making a single redundant network request to academic servers.",
-            "Independent Auditability: Peer reviewers or lab colleagues do not have to blindly trust your code. They can run pytest and inspect every intermediate artifact step-by-step."
+            "Fault Isolation: If a source website updates its DOM structure, only 01_fetch_raw.py requires maintenance. Stages 2 and 3 remain untouched.",
+            "Local Caching & Polite Scraping: Because raw responses persist in data/raw/, you can test and iterate on transformation logic hundreds of times without sending a single redundant HTTP request to external servers.",
+            "Auditability by Independent Peers: Any reviewer or collaborator can run pytest to inspect intermediate outputs and verify that every transformation behaves according to the published methodology."
           ]
         },
         {
-          heading: "Case Study 1: Scraping Conference Proceedings from EBBC (OJS)",
+          heading: "The Role of AI: A Constrained Component, Not an Oracle",
           paragraphs: [
-            "In an empirical study analyzing Brazilian scientometrics, I needed to extract every published paper from the 2020, 2022, and 2024 editions of the Encontro Brasileiro de Bibliometria e Cientometria (EBBC).",
-            "EBBC hosts its proceedings on Open Journal Systems (OJS). Rather than relying on fragile CSS class selectors that break on the next CMS template update, OJS pages embed standardized academic metadata tags in the HTML header (Dublin Core and Highwire Press specs)."
+            "The fundamental mistake when using LLMs in research is treating them like conversational human assistants. In a chat window, models are encouraged to be creative and conversational. In scientific methodology, creativity in data parsing is a fatal bug.",
+            "To make artificial intelligence scientifically auditable, we apply three core software principles:"
+          ],
+          bullets: [
+            "Never Accept Free-Text Output: Constrain model responses using formal Structured Outputs (JSON Schema). By enforcing a rigid schema at the API level, the model cannot produce speculative commentary, markdown wrappers, or hallucinated conversational filler.",
+            "Pre-Filter Deterministically: Do not use expensive, probabilistic models for tasks that regular expressions or deterministic parsers solve perfectly. A regex filter can quickly detect obvious keywords, reserving the LLM solely for ambiguous semantic disambiguation.",
+            "Atomic Incremental Checkpointing: Save curated records in discrete batches (e.g., every 10 articles) directly to disk. If an API rate limit or network error triggers, the pipeline resumes from the last confirmed checkpoint with zero lost progress."
+          ]
+        },
+        {
+          heading: "Putting Theory into Practice: My Scientometrics Research Pipeline",
+          paragraphs: [
+            "To see how this theoretical framework translates into real-world code, here is how I implemented it in my initial research project (GabrielBaiano/qss-ebbc-curator-ai), which investigated computational software tools and empirical data sources across scientometrics publications.",
+            "In practice, a full research project often involves more than three stages. My pipeline deconstructed into several specialized steps:",
+            "Stage 1: Scraping Conference Proceedings from EBBC (OJS). Rather than writing fragile CSS selectors, the ingestion script parses standardized academic meta tags embedded in HTML headers (Dublin Core and Highwire Press) and assigns deterministic fallback identifiers for articles lacking DOIs."
           ],
           code: {
             language: "python",
@@ -758,31 +762,8 @@ export const portfolioData: PortfolioConfig = {
         },
         {
           paragraphs: [
-            "This approach consistently captures DC.Title, citation_author, DC.Description (abstract), and citation_publication_date across hundreds of articles without third-party dependencies.",
-            "The methodology challenge: many national conference proceedings lack registered DOIs or suffer from dead external links. In the pipeline, each record without a DOI is assigned a deterministic slug (e.g. ebbc-2022-article-142), and the full text of the abstract is saved in a local cache (datasets/cache/abstracts_ebbc_2022.json)."
-          ],
-          code: {
-            language: "python",
-            code: "def test_ebbc_metadata_extraction():\n    # Validates parser invariants against known OJS HTML fixture\n    parser = OJSArticleParser()\n    parser.feed(MOCK_OJS_HTML)\n    \n    assert \"DC.Title\" in parser.meta_data\n    assert len(parser.meta_data[\"DC.Title\"]) == 1\n    assert parser.meta_data[\"DC.Title\"][0] != \"\"\n    assert \"DC.Description\" in parser.meta_data",
-            caption: "Unit test verifying metadata extraction invariants on Stage 1."
-          }
-        },
-        {
-          heading: "Case Study 2: Bulk Extraction via OpenAlex API (Quantitative Science Studies)",
-          paragraphs: [
-            "To compare Brazilian production against leading international scientometrics literature, I targeted the flagship journal Quantitative Science Studies (QSS), published by MIT Press and the International Society for Scientometrics and Informetrics (ISSI).",
-            "QSS is indexed on the OpenAlex open scholarly database. OpenAlex provides a well-documented REST API with cursor-based pagination and a 'polite pool' (providing your email in the User-Agent header gives you faster, dedicated rate limits):"
-          ],
-          code: {
-            language: "python",
-            code: "import urllib.request\nimport json\n\ndef fetch_qss_volume(issn=\"2641-3337\", volume=6, per_page=100):\n    results = []\n    page = 1\n    \n    while True:\n        url = (\n            f\"https://api.openalex.org/works\"\n            f\"?filter=locations.source.issn:{issn},biblio.volume:{volume}\"\n            f\"&per_page={per_page}&page={page}\"\n        )\n        req = urllib.request.Request(\n            url,\n            headers={\"User-Agent\": \"mailto:gabriel@example.com\"}\n        )\n        with urllib.request.urlopen(req, timeout=30) as res:\n            data = json.loads(res.read().decode(\"utf-8\"))\n            page_results = data.get(\"results\", [])\n            if not page_results:\n                break\n            results.extend(page_results)\n            page += 1\n            \n    return results",
-            caption: "Querying OpenAlex works endpoint with ISSN and volume filters."
-          }
-        },
-        {
-          paragraphs: [
-            "Here is the catch with OpenAlex: due to licensing and copyright agreements with commercial publishers, OpenAlex cannot distribute the raw text of abstracts directly under an abstract key. Instead, they provide an inverted index under abstract_inverted_index, where each word maps to an array of integer token positions.",
-            "To reconstruct the full human-readable abstract before running any text analysis, you have to invert the index in Python:"
+            "Stage 2: Ingesting International Literature via OpenAlex API (Quantitative Science Studies). The pipeline queried the OpenAlex REST API with polite pool headers and cursor pagination to fetch all publications from QSS (MIT Press / ISSI).",
+            "Because OpenAlex distributes abstracts as inverted token indices (abstract_inverted_index) for copyright compliance, the pipeline uses a pure reconstruction function:"
           ],
           code: {
             language: "python",
@@ -792,24 +773,7 @@ export const portfolioData: PortfolioConfig = {
         },
         {
           paragraphs: [
-            "Because this function is pure and deterministic, it is trivial to unit test with fixture inputs, guaranteeing that no article text is garbled or truncated before curation."
-          ]
-        },
-        {
-          heading: "Where AI Enters: Controlled Semantic Curation with JSON Schema",
-          paragraphs: [
-            "Once abstracts are collected for both EBBC and QSS, we reach the actual analytical question: Which computational tools (e.g. VOSviewer, Gephi, bibliometrix, Python, R, Pajek) were used in each study, where were they applied (data collection, statistical analysis, or network visualization), and what empirical data sources (e.g. Scopus, Web of Science, PubMed, Crossref, Lattes) were mined?",
-            "Regular expressions (regex) are fast and catch exact strings like VOSviewer or Python, but regex fails miserably on semantic intent:"
-          ],
-          bullets: [
-            "Mention vs. Actual Use: A paper stating 'While previous authors utilized VOSviewer, in this work we deployed Gephi for clustering' mentions both tools, but only actually used Gephi.",
-            "Ambiguous Keywords: Searching for 'R' matches thousands of false positives (authors' initials, statistical variables, or generic bullet points).",
-            "Implicit Usage: An abstract describing 'co-citation networks were visualized using spring-embedder layouts in an open-source graph platform' describes Gephi without ever mentioning the word 'Gephi'."
-          ]
-        },
-        {
-          paragraphs: [
-            "This is where an LLM (I used gemini-flash-lite) provides immense value. However, rather than prompting the model in free-text prose, we enforce a strict JSON Schema using Structured Outputs:"
+            "Stage 3: Controlled Semantic Curation with JSON Schema. Regex detected lexical mentions, while Gemini Flash Lite was reserved for classifying actual tool deployment (data collection, analysis, visualization) and data sources (Scopus, Web of Science, PubMed, Lattes) using a rigid JSON Schema:"
           ],
           code: {
             language: "json",
@@ -819,26 +783,20 @@ export const portfolioData: PortfolioConfig = {
         },
         {
           paragraphs: [
-            "Enforcing JSON Schema provides four critical guarantees:"
-          ],
-          bullets: [
-            "Zero Conversational Drift: The model is physically constrained from outputting markdown fences, conversational greetings, or speculative text.",
-            "Direct Serialization: Output deserializes directly into typed Python dictionaries via json.loads().",
-            "Automated Schema Validation: Any structural error triggers immediate rejection and exponential backoff retry.",
-            "Incremental Batch Saving: Output is committed to data/processed/ every 10 articles. If a network blip occurs, no tokens or runtime progress are lost."
+            "Stage 4: Multivariate Correspondence Analysis (CA). With normalized, curated datasets in hand, the final script computed contingency tables and ran Correspondence Analysis, rendering publication-ready biplots that visually correlate specific software packages with their predominant data sources."
           ]
         },
         {
           heading: "The Payoff: True Reproducibility, Agility, and Auditability",
           paragraphs: [
-            "Comparing this workflow against the traditional manual academic method reveals the magnitude of the difference:"
+            "Comparing this automated engineering framework against manual academic data entry illustrates why this distinction matters:"
           ],
           table: {
             headers: ["Dimension", "Manual Academic Method", "Auditable Software Pipeline"],
             rows: [
               ["Data Extraction", "Manual browser downloads & copy-paste", "Automated script with polite API rate limiting"],
               ["Handling Edge Cases", "Subjective notes hidden inside cells", "Explicit schema fallback rules & assertions"],
-              ["Semantic Curation", "Manual reading or unstructured ChatGPT prompt", "LLM with enforced JSON Schema & regex pre-filter"],
+              ["Semantic Curation", "Unstructured ChatGPT prompt or manual reading", "LLM with enforced JSON Schema & regex pre-filter"],
               ["Reproducibility", "Near zero (author-dependent)", "100% reproducible via single command & pytest"],
               ["Scope Change Latency", "Weeks of manual re-reading", "Minutes to update config and rerun pipeline"]
             ]
@@ -846,12 +804,12 @@ export const portfolioData: PortfolioConfig = {
         },
         {
           paragraphs: [
-            "The most transformative benefit is agility. If my committee asks: 'Can you extend this comparison to include the newly published 2025 volumes?', a manual researcher faces weeks of tedious labor. With an auditable pipeline, I update the volume parameter in the configuration file and execute the runner. Ten minutes later, raw records are fetched, validated against schemas, curated, and new Correspondence Analysis biplots are rendered.",
-            "The role of artificial intelligence in scientific research is not to replace the scientific method or outsource critical evaluation. It is to automate well-defined, auditable stages within a transparent software architecture where inputs are guarded, transformations are tested, and outputs are mathematically verifiable."
+            "The biggest reward is agility. If a reviewer or committee member asks to expand the temporal window to include an additional volume, a manual workflow requires weeks of repetitive rereading. In a modular pipeline, you update a single parameter in the configuration file and rerun the stages. Minutes later, the new corpus is harvested, verified, curated, and analyzed.",
+            "The role of artificial intelligence in scientific research is not to replace academic discernment or bypass critical thinking. It is to automate well-defined, auditable stages within a transparent software architecture where inputs are guarded, transformations are tested, and outputs are mathematically reproducible."
           ],
           callout: {
             icon: "⚡",
-            text: "Explore the open research tools, schemas, and curated datasets on GitHub: https://github.com/BRAN-Org/ebbc-open-database"
+            text: "Explore the open research tools, schemas, and curated datasets on GitHub: https://github.com/GabrielBaiano/qss-ebbc-curator-ai"
           }
         }
       ]
