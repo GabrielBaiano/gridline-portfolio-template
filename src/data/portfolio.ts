@@ -317,7 +317,7 @@ export const portfolioData: PortfolioConfig = {
       tags: ["AI", "Scientometrics", "Data Engineering", "Python", "Open Source"],
       url: "/blog/how-i-use-ai-in-scientific-research-auditable-pipelines",
       summary: "Why treating scientific methodology like a software engineering pipeline turns messy academic data collection into reproducible, testable, and auditable research.",
-      image: "/images/blog/scientific-ai-pipeline/pipeline-metodologica.jpg",
+      image: "/images/blog/scientific-ai-pipeline/pipeline-etapas.jpg",
       sections: [
         {
           heading: "Approaching Academic Research with a Developer Mindset",
@@ -336,22 +336,22 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "The Theoretical Model: Scientific Methodology as a Pipeline",
           image: {
-            src: "/images/blog/scientific-ai-pipeline/pipeline-metodologica.jpg",
-            alt: "Conceptual scientific pipeline diagram: Start -> Stage 1 -> Stage 2 -> Stage 3 -> End",
+            src: "/images/blog/scientific-ai-pipeline/pipeline-etapas.jpg",
+            alt: "Conceptual scientific pipeline diagram: Início -> Etapa 1 -> Etapa 2 -> Etapa 3 -> Fim",
             caption: "The abstract model: Any data-driven research workflow deconstructs into sequential stages separated by automated verification gates."
           },
           paragraphs: [
             "Before diving into lines of code or specific datasets, it helps to step back and examine the conceptual model. At an abstract level, almost any empirical research study that processes data can be conceptualized as a unidirectional software pipeline.",
             "The defining characteristic of this approach is working backward from the research objective:",
             "1. You Start with the End in Mind: The objective of your study (the 'End' node) is fixed by your research question or formal hypothesis (for example: 'How do software adoption patterns correlate with empirical data sources across specialized literature?').",
-            "2. Deconstruction into Modular Stages: Because you know the required output format (e.g., a validated statistical matrix or citation network), you can decompose the path into discrete, sequential steps: Ingestion (Stage 1), Transformation & Validation (Stage 2), and Enrichment & Semantic Analysis (Stage 3).",
+            "2. Deconstruction into Modular Stages: Because you know the required output format (e.g., a validated statistical matrix or citation network), you can decompose the path into discrete, sequential steps: Ingestion (Etapa 1), Transformation & Validation (Etapa 2), and Enrichment & Semantic Analysis (Etapa 3).",
             "3. Verification Gates: Between every single stage, there is an automated validation checkpoint. Stage 2 never assumes Stage 1 succeeded silently; it executes unit test assertions and schema guards against the incoming data contract. If an upstream format changes, the pipeline fails early, loudly, and locally before corrupted data reaches your analytical models."
           ]
         },
         {
           heading: "Folder Architecture: Decoupling Lifecycle and Verification",
           image: {
-            src: "/images/blog/scientific-ai-pipeline/arquitetura-pastas-testes.jpg",
+            src: "/images/blog/scientific-ai-pipeline/arquitetura-etapas.jpg",
             alt: "Directory structure separating stages, test guards, and tiered data directories",
             caption: "Directory architecture: Every script in src/stages/ mirrors a dedicated test file in tests/, with strict tiered data separation."
           },
@@ -362,7 +362,7 @@ export const portfolioData: PortfolioConfig = {
           ],
           code: {
             language: "text",
-            code: "research-project/\n├── data/\n│   ├── raw/                  # Pristine API responses and raw dumps (read-only, never modified)\n│   ├── processed/            # Cleaned, schema-validated JSON records and checkpoints\n│   └── outputs/              # Final publication-ready matrices, CSVs, and plots\n├── src/\n│   └── stages/\n│       ├── 01_stage_1.py         # Single responsibility: Stage 1 data extraction & caching\n│       ├── 02_stage_2.py         # Stage 2: parsing, deduplication, schema normalization\n│       └── 03_stage_3.py         # Stage 3: AI enrichment with strict schema, metrics calculation\n└── tests/\n    ├── test_stage_1.py           # Verifies Stage 1 extraction integrity and schema invariants\n    ├── test_stage_2.py           # Verifies Stage 2 sanitization and deterministic transitions\n    └── test_stage_3.py           # Verifies Stage 3 JSON schema conformance and outputs",
+            code: "research-project/\n├── data/\n│   ├── raw/                  # Pristine API responses and raw dumps (read-only, never modified)\n│   ├── processed/            # Cleaned, schema-validated JSON records and checkpoints\n│   └── outputs/              # Final publication-ready matrices, CSVs, and plots\n├── src/\n│   └── stages/\n│       ├── 01_etapa_1.py         # Single responsibility: Stage 1 data extraction & caching\n│       ├── 02_etapa_2.py         # Stage 2: parsing, deduplication, schema normalization\n│       └── 03_etapa_3.py         # Stage 3: AI enrichment with strict schema, metrics calculation\n└── tests/\n    ├── test_etapa_1.py           # Verifies Stage 1 extraction integrity and schema invariants\n    ├── test_etapa_2.py           # Verifies Stage 2 sanitization and deterministic transitions\n    └── test_etapa_3.py           # Verifies Stage 3 JSON schema conformance and outputs",
             caption: "Directory layout enforcing single-responsibility stages and automated test coverage."
           }
         },
@@ -371,7 +371,7 @@ export const portfolioData: PortfolioConfig = {
             "This layout enforces three practical safeguards:"
           ],
           bullets: [
-            "Fault Isolation: If Stage 1 extraction changes, only 01_stage_1.py and test_stage_1.py require updates. Stages 2 and 3 remain untouched.",
+            "Fault Isolation: If Stage 1 extraction changes, only 01_etapa_1.py and test_etapa_1.py require updates. Stages 2 and 3 remain untouched.",
             "Local Caching & Polite Scraping: Because raw responses persist in data/raw/, you can test and iterate on transformation logic hundreds of times without sending a single redundant HTTP request to external servers.",
             "Auditability by Independent Peers: Any reviewer or collaborator can run pytest to inspect intermediate outputs and verify that every transformation behaves according to the published methodology."
           ]
