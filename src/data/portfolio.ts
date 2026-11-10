@@ -85,6 +85,7 @@ export interface BlogArticleSection {
     src: string;
     alt: string;
     caption?: string;
+    pixelated?: boolean;
   };
   table?: {
     headers: string[];
@@ -613,6 +614,7 @@ export const portfolioData: PortfolioConfig = {
             src: "/images/blog/fireplace/dark_souls_bonfire.gif",
             alt: "Real-time 60 FPS Dark Souls Bonfire terminal mode",
             caption: "Real-time 60 FPS terminal bonfire running Dark Souls Coiled Sword mode with 3D raymarching, cel-shading outlines, and cellular fire.",
+            pixelated: true,
           },
           paragraphs: [
             "If you look at how I spend my time, two things stand out immediately: I am an addicted Soulslike player, and I follow my daily study schedule strictly to the letter.",

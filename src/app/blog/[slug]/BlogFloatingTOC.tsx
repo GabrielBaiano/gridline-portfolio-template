@@ -34,7 +34,8 @@ export function BlogFloatingTOC({ headings }: BlogFloatingTOCProps) {
       const scrollPos = window.scrollY + 160;
       let currentActive = headings[0].id;
       for (const el of headingElements) {
-        if (el.offsetTop <= scrollPos) {
+        const elTop = el.getBoundingClientRect().top + window.scrollY;
+        if (elTop <= scrollPos) {
           currentActive = el.id;
         } else {
           break;
@@ -73,7 +74,7 @@ export function BlogFloatingTOC({ headings }: BlogFloatingTOCProps) {
       aria-label="Table of contents"
       className="hidden min-[1300px]:block absolute left-[calc(100%+32px)] top-0 w-[220px] h-full pointer-events-none select-none z-20"
     >
-      <div className="sticky top-[135px] pointer-events-auto max-h-[calc(100vh-160px)] overflow-y-auto pr-2 scrollbar-none">
+      <div className="sticky top-[135px] pointer-events-auto max-h-[calc(100vh-160px)] overflow-y-auto pr-2 no-scrollbar">
         <div className="text-[11px] font-mono tracking-wider text-mutedForeground uppercase mb-2.5 flex items-center gap-1.5 font-semibold">
           <svg
             xmlns="http://www.w3.org/2000/svg"

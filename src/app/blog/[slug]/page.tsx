@@ -42,7 +42,7 @@ export async function generateMetadata({
   const ogImages = post.image ? [`${siteUrl}${post.image}`] : undefined;
 
   return {
-    title: `${post.title} · ${portfolioData.personal.name}`,
+    title: post.title,
     description: post.summary,
     alternates: {
       canonical: `/blog/${slug}`,
@@ -481,7 +481,9 @@ export default async function BlogPostDetailPage({
                       <img
                         src={section.image.src}
                         alt={section.image.alt}
-                        className="w-full h-auto max-h-[560px] rounded object-contain [image-rendering:pixelated]"
+                        className={`w-full h-auto max-h-[560px] rounded object-contain ${
+                          section.image.pixelated ? "[image-rendering:pixelated]" : ""
+                        }`}
                         loading="lazy"
                       />
                     </div>
