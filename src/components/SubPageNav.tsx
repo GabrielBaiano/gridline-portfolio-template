@@ -77,7 +77,7 @@ export function SubPageNav({ backHref = "/", title }: SubPageNavProps) {
             </Link>
             <div
               ref={containerRef}
-              className="flex-1 min-w-0 overflow-hidden"
+              className="flex-1 min-w-0 overflow-hidden [contain:paint]"
               title={title}
             >
               <h1

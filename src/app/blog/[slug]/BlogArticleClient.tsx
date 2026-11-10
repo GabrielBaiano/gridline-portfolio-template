@@ -284,7 +284,7 @@ export function CodeBlock({ code, language = "typescript", caption }: CodeBlockP
   };
 
   return (
-    <div className="relative my-4 rounded-[8px] border border-border bg-[#18181b] overflow-hidden group">
+    <div className="relative my-4 rounded-[8px] border border-border bg-[#18181b] overflow-hidden group [contain:paint]">
       {/* Code Header bar */}
       <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#27272a] bg-[#121214] text-xs text-mutedForeground select-none">
         <div className="flex items-center gap-2 truncate">

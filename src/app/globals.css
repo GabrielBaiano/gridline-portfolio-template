@@ -112,10 +112,12 @@ body {
 .bg-dot-grid {
   background-image: radial-gradient(var(--grid-color) 1.25px, transparent 1.25px);
   background-size: 7.5px 7.5px;
+  contain: paint;
 }
 
 .bg-striped {
   background-image: repeating-linear-gradient(-45deg, var(--grid-color) 0, var(--grid-color) 1px, transparent 1px, transparent 6px);
+  contain: paint;
 }
 
 .container-dashed {
@@ -132,6 +134,12 @@ body {
   background-image: repeating-linear-gradient(to right, var(--border-color) 0px, var(--border-color) 6px, transparent 6px, transparent 14px);
   background-size: 100% 1px;
   background-repeat: no-repeat;
+  contain: paint;
+}
+
+.section-cv {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 .no-scrollbar::-webkit-scrollbar {

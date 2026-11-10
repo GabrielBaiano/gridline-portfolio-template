@@ -276,9 +276,22 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof document === "undefined") return;
 
+    let isScrolling = false;
+    let scrollTimeout: NodeJS.Timeout | null = null;
+
+    const handleScroll = () => {
+      isScrolling = true;
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false;
+      }, 100);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     const handlePointerEnter = (e: PointerEvent) => {
-      // Ignore simulated touch mouse events
-      if (e.pointerType === "touch") return;
+      // Bail immediately if user is scrolling, on touch, muted, or audio engine is still unactivated
+      if (isScrolling || e.pointerType === "touch" || isMutedRef.current || !isUnlockedRef.current) return;
 
       const target = (e.target as Element)?.closest?.("[data-cuelume-hover]");
       if (!target) return;
@@ -323,6 +336,8 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     document.addEventListener("click", handleClick, true);
 
     return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
       document.removeEventListener("pointerenter", handlePointerEnter, true);
       document.removeEventListener("pointerdown", handlePointerDown, true);
       document.removeEventListener("pointerup", handlePointerUp, true);

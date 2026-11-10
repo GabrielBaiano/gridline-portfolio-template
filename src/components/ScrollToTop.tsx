@@ -8,8 +8,21 @@ export function ScrollToTop() {
   const { playClick } = useSound();
 
   useEffect(() => {
+    let ticking = false;
+    let prevVisible = false;
+
     const handleScroll = () => {
-      setVisible(window.scrollY > 300);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const nextVisible = window.scrollY > 300;
+          if (nextVisible !== prevVisible) {
+            prevVisible = nextVisible;
+            setVisible(nextVisible);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);

@@ -336,7 +336,10 @@ export default async function BlogPostDetailPage({
           {post.sections.map((section, sIdx) => {
             const headingId = section.heading ? slugifyHeading(section.heading) : undefined;
             return (
-              <section key={sIdx} className="flex flex-col gap-3.5">
+              <section
+                key={sIdx}
+                className={`flex flex-col gap-3.5 ${sIdx > 1 ? "section-cv" : ""}`}
+              >
                 {section.heading && (
                   <h2
                     id={headingId}
