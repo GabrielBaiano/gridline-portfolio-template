@@ -306,7 +306,24 @@ export default async function BlogPostDetailPage({
   const prevPost = currentIndex > 0 ? portfolioData.blogs[currentIndex - 1] : null;
   const nextPost = currentIndex < portfolioData.blogs.length - 1 ? portfolioData.blogs[currentIndex + 1] : null;
 
-  const headings = post.sections.filter((s) => s.heading);
+  const headings = post.sections.flatMap((s) => {
+    const items: Array<{ id: string; text: string; level: 2 | 3 }> = [];
+    if (s.heading) {
+      items.push({
+        id: slugifyHeading(s.heading),
+        text: s.heading,
+        level: 2,
+      });
+    }
+    if (s.subheading) {
+      items.push({
+        id: slugifyHeading(s.subheading),
+        text: s.subheading,
+        level: 3,
+      });
+    }
+    return items;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -332,13 +349,8 @@ export default async function BlogPostDetailPage({
 
       {/* Main Article Container with relative wrapper for Floating TOC */}
       <div className="relative max-w-[690px] mx-2 sm:mx-8 md:mx-auto">
-        {/* Floating Aside TOC for wide screens (>= 1300px) */}
-        <BlogFloatingTOC
-          headings={headings.map((s) => ({
-            id: slugifyHeading(s.heading!),
-            text: s.heading!,
-          }))}
-        />
+        {/* Floating Aside TOC for wide screens (hidden on mobile/tablet) */}
+        <BlogFloatingTOC headings={headings} />
 
         <article className="w-full border-[#d1d1d1] dark:border-[#313131] container-dashed bg-background">
           {/* Article Header */}
@@ -412,41 +424,6 @@ export default async function BlogPostDetailPage({
           <div className="p-3.5 rounded-[8px] border border-border bg-zinc-50/70 dark:bg-zinc-900/50 text-sm leading-relaxed text-foreground font-medium">
             {renderRichText(post.summary)}
           </div>
-
-          {/* Table of Contents (if >= 3 headings) */}
-          {headings.length >= 3 && (
-            <details className="group p-3.5 rounded-[8px] border border-border bg-mutedBackground/20 text-xs sm:text-sm">
-              <summary className="font-semibold text-title cursor-pointer select-none flex items-center justify-between list-none">
-                <span className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-mutedForeground">
-                    <line x1="8" y1="6" x2="21" y2="6" />
-                    <line x1="8" y1="12" x2="21" y2="12" />
-                    <line x1="8" y1="18" x2="21" y2="18" />
-                    <line x1="3" y1="6" x2="3.01" y2="6" />
-                    <line x1="3" y1="12" x2="3.01" y2="12" />
-                    <line x1="3" y1="18" x2="3.01" y2="18" />
-                  </svg>
-                  Table of Contents
-                </span>
-                <span className="text-xs text-mutedForeground group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <ol className="mt-3 flex flex-col gap-1.5 pl-4 list-decimal text-mutedForeground">
-                {headings.map((s, idx) => {
-                  const headingId = slugifyHeading(s.heading!);
-                  return (
-                    <li key={idx} className="pl-1">
-                      <a
-                        href={`#${headingId}`}
-                        className="hover:text-title hover:underline underline-offset-2 transition-colors"
-                      >
-                        {s.heading}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ol>
-            </details>
-          )}
         </div>
 
         <div className="divider-dashed" />
@@ -455,6 +432,7 @@ export default async function BlogPostDetailPage({
         <div className="p-4 sm:p-6 flex flex-col gap-6 text-[0.95rem] leading-7 text-[#333] dark:text-[#d9d9d9]">
           {post.sections.map((section, sIdx) => {
             const headingId = section.heading ? slugifyHeading(section.heading) : undefined;
+            const subheadingId = section.subheading ? slugifyHeading(section.subheading) : undefined;
             return (
               <section
                 key={sIdx}
@@ -470,7 +448,10 @@ export default async function BlogPostDetailPage({
                 )}
 
                 {section.subheading && (
-                  <h3 className="text-base sm:text-[1.05rem] font-semibold text-title tracking-tight pt-1">
+                  <h3
+                    id={subheadingId}
+                    className="scroll-mt-20 text-base sm:text-[1.05rem] font-semibold text-title tracking-tight pt-1"
+                  >
                     {renderRichText(section.subheading)}
                   </h3>
                 )}
