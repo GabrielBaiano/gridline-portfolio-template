@@ -323,10 +323,11 @@ export const portfolioData: PortfolioConfig = {
           heading: "Approaching Academic Research with a Developer Mindset",
           paragraphs: [
             "Recently, I started getting deeper into academic research, specifically in scientometrics and bibliometric analysis. Coming from a software engineering background, my initial instinct when designing data-heavy studies was to treat the methodology much like a software system: you define pristine inputs, establish modular data transformations, and verify outputs against testable invariants.",
-            "As I spent more time chatting with colleagues in research groups and graduate seminars, I noticed this wasn't an obvious workflow for everyone. Many researchers I talked to were simply unaware that these software patterns existed, while others had legitimate questions and doubts about where automation and artificial intelligence actually fit into the scientific method.",
-            "In conversations, two common situations kept coming up. Some colleagues avoided modern LLMs entirely—often because they had tried generic prompts in the past that yielded inconsistent results, or because they understandably feared introducing errors into their studies. As a consequence, they spent weeks in exhausting manual loops: copying and pasting article metadata across browser tabs, cross-referencing PDFs by hand, and dealing with the natural fatigue that comes with repetitive data entry.",
-            "On the other hand, some researchers experimented with chat interfaces by uploading batches of PDFs and asking models to extract methodologies and metrics directly. That introduces a different challenge: hallucinations ('devaneios'). When asked open-ended questions about scientific text, language models can subtly fabricate citations, misattribute software libraries, or invent statistical confidence that isn't present in the source paper. Because the output reads like polished, authoritative academic writing, these phantom details are remarkably difficult to spot by eye.",
-            "Neither extreme is ideal: avoiding automation entirely leads to tedious manual labor, while unconstrained prompts risk quiet inaccuracies. Since this came up frequently as a shared challenge among peers, I wanted to share the practical architecture I developed for my own bibliometrics research. By treating AI as a strictly constrained, auditable stage inside a modular pipeline with automated tests, you can eliminate manual drudgery while keeping your findings verifiable, reproducible, and grounded in truth."
+            "In practice, data-driven research often encounters two common methodological pitfalls:",
+            "• The Fragility of Purely Manual Workflows: Extracting, cross-referencing, and cleaning bibliographic metadata by hand across hundreds of records is exhausting and difficult to audit. When an ad-hoc spreadsheet workflow breaks or when corpus criteria expand, researchers are forced to restart tedious manual loops from scratch.",
+            "• The Risks of Unconstrained AI: At the other extreme, passing raw papers into conversational chat windows to extract metrics introduces hallucinations ('devaneios'). When prompted without rigid constraints, LLMs can subtly fabricate citations, misattribute software libraries, or project statistical confidence that does not exist in the source paper. Because these answers read like polished academic prose, phantom errors easily slip through visual review.",
+            "The purpose of this guide is educational: rather than treating artificial intelligence as an all-or-nothing choice, we can apply software engineering patterns to build auditable, testable, and reproducible research pipelines.",
+            "By treating AI as a strictly constrained, modular component—and relying on deterministic code for everything else—you can eliminate repetitive manual toil while ensuring your findings remain verifiable, reproducible, and grounded in ground truth."
           ],
           callout: {
             icon: "🔬",
@@ -381,7 +382,7 @@ export const portfolioData: PortfolioConfig = {
           heading: "The Role of AI: A Constrained Component, Not an Oracle",
           subheading: "1. Use the LLM to Write the Pipeline, Not to Run It",
           paragraphs: [
-            "The fundamental mistake when using LLMs in research is treating them like conversational human assistants. In a chat window, models are encouraged to be creative and verbose. In scientific methodology, unconstrained creativity in data parsing is a fatal bug.",
+            "In interactive chat interfaces, LLMs are designed to be conversational and creative. In scientific research, however, unconstrained creativity during data parsing is an anti-pattern: scientific methodology requires strict determinism, verifiable data contracts, and reproducible transformations.",
             "The highest-leverage way to use modern AI in research is as an engineering accelerator: using it to write the pipeline rather than executing the analysis directly through prompts.",
             "If you need to parse a tricky file format, extract meta tags from HTML, or calculate co-occurrence matrices, someone has almost certainly already solved that exact problem and published a battle-tested library on PyPI or GitHub. Instead of reinventing the wheel—or worse, asking an LLM chat window to 'summarize this data for me'—use the model to research existing tools, discover the right libraries, draft the integration glue code, and write unit tests.",
             "Using an LLM to produce deterministic Python code gives you three immediate scientific advantages:"
@@ -450,7 +451,7 @@ export const portfolioData: PortfolioConfig = {
         {
           subheading: "3. Deterministic Regex Pre-Filtering Before Any LLM Call",
           paragraphs: [
-            "The most expensive mistake in automated research is throwing every raw record directly into an LLM. In my corpus of several hundred papers, roughly 45% made zero empirical claims involving computational tools or databases (e.g. theoretical essays or historical overviews).",
+            "A common anti-pattern in automated research workflows is passing every raw record unconditionally into an LLM. In my corpus of several hundred papers, roughly 45% made zero empirical claims involving computational tools or databases (e.g., purely conceptual essays or historical overviews).",
             "Before invoking any API, Stage 2 applies a fast regular expression screen. If an abstract contains zero candidate mentions, it is classified immediately with zero API calls:"
           ],
           code: {
@@ -506,10 +507,10 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "The Payoff: True Reproducibility, Agility, and Auditability",
           paragraphs: [
-            "Comparing this automated engineering framework against manual academic data entry illustrates why this distinction matters:"
+            "Comparing an auditable software pipeline against an ad-hoc manual workflow illustrates the practical benefits:"
           ],
           table: {
-            headers: ["Dimension", "Manual Academic Method", "Auditable Software Pipeline"],
+            headers: ["Dimension", "Ad-Hoc Manual Workflow", "Auditable Software Pipeline"],
             rows: [
               ["Data Extraction", "Manual browser downloads & copy-paste", "Automated script with polite API rate limiting"],
               ["Handling Edge Cases", "Subjective notes hidden inside cells", "Explicit schema fallback rules & assertions"],
