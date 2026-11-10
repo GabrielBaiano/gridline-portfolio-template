@@ -39,6 +39,31 @@ export interface WikiItem {
   url?: string;
 }
 
+export type CalloutType = "info" | "warning" | "success" | "danger" | "note";
+
+export interface BlogCallout {
+  type?: CalloutType;
+  icon?: string;
+  text: string;
+}
+
+export interface BlogColumnItem {
+  heading?: string;
+  paragraphs?: string[];
+  bullets?: string[];
+  code?: {
+    language: string;
+    code: string;
+    caption?: string;
+  };
+  callout?: BlogCallout;
+}
+
+export interface BlogColumns {
+  left: BlogColumnItem;
+  right: BlogColumnItem;
+}
+
 export interface BlogArticleSection {
   heading?: string;
   subheading?: string;
@@ -50,10 +75,8 @@ export interface BlogArticleSection {
     code: string;
     caption?: string;
   };
-  callout?: {
-    icon?: string;
-    text: string;
-  };
+  callout?: BlogCallout;
+  columns?: BlogColumns;
   quote?: {
     text: string;
     author?: string;
@@ -72,6 +95,7 @@ export interface BlogArticleSection {
 export interface BlogPostItem {
   slug: string;
   title: string;
+  icon?: string;
   date: string;
   readTime?: string;
   claps?: number;
@@ -311,6 +335,7 @@ export const portfolioData: PortfolioConfig = {
     {
       slug: "how-i-use-ai-in-scientific-research-auditable-pipelines",
       title: "How I Use AI in Scientific Research: Modular Pipelines and Auditable Code",
+      icon: "🔬",
       date: "Nov 2026",
       readTime: "9 min read",
       claps: 0,
@@ -330,6 +355,7 @@ export const portfolioData: PortfolioConfig = {
             "By treating AI as a strictly constrained, modular component—and relying on deterministic code for everything else—you can eliminate repetitive manual toil while ensuring your findings remain verifiable, reproducible, and grounded in ground truth."
           ],
           callout: {
+            type: "info",
             icon: "🔬",
             text: "Scientific rigor requires computational reproducibility: if another researcher executes your pipeline two years from today, they must reach the exact same deterministic conclusions."
           }
@@ -405,7 +431,44 @@ export const portfolioData: PortfolioConfig = {
             "Pre-Filter Deterministically: Never feed your entire corpus blindly through an LLM. Use fast regular expressions or keyword heuristics as a coarse pre-filter. If an abstract has zero mentions of software or data terminology, discard or label it immediately. Reserve LLM calls exclusively for the ambiguous records that genuinely require semantic disambiguation.",
             "Multi-Pass Validation and Consistency Checks: Because language models are probabilistic, sensitive classifications should be processed more than once—either through repeated sampling or deterministic zero-temperature cross-validation. If two independent passes disagree on a classification, the pipeline flags that record for manual peer review rather than quietly committing an uncertain label to the dataset.",
             "Atomic Incremental Checkpointing: Save curated records in discrete batches directly to disk (e.g., writing checkpoints every 10 articles). If an API rate limit or network error triggers on record 350, the pipeline resumes cleanly from the last confirmed checkpoint without losing progress or repeating paid requests."
-          ]
+          ],
+          callout: {
+            type: "warning",
+            icon: "⚠️",
+            text: "Unconstrained LLMs are probabilistic text generators. When scientific accuracy matters, treat them as untrusted components: constrain outputs with schemas, sandbox context, and verify with automated unit tests."
+          },
+          columns: {
+            left: {
+              heading: "❌ Fragile (Unconstrained AI)",
+              bullets: [
+                "Pasting entire PDFs into web chat prompts",
+                "Subtle hallucinations and fabricated citations",
+                "Non-reproducible results across runs",
+                "Accumulating token costs on every rerun",
+                "Impossible to peer-review or unit test"
+              ],
+              callout: {
+                type: "danger",
+                icon: "🛑",
+                text: "Prompt drift creates phantom errors that easily slip through visual review."
+              }
+            },
+            right: {
+              heading: "✅ Auditable (Modular Pipeline)",
+              bullets: [
+                "Strict context sandboxing with JSON Schema",
+                "Deterministic stages with immutable caches",
+                "Automated unit tests on data contracts",
+                "Zero API costs on local recalculations",
+                "Cryptographic SHA-256 provenance"
+              ],
+              callout: {
+                type: "success",
+                icon: "✨",
+                text: "Verifiable outputs allow any researcher to reproduce your exact numbers."
+              }
+            }
+          }
         },
         {
           heading: "Putting Theory into Practice: My Scientometrics Research Pipeline",
@@ -535,6 +598,7 @@ export const portfolioData: PortfolioConfig = {
     {
       slug: "building-a-3d-pixel-art-bonfire-in-the-terminal",
       title: "Building a 3D Pixel-Art Bonfire in the Terminal: Raymarching, Cellular Automata Fire, and ANSI TrueColor Sub-Pixels",
+      icon: "🔥",
       date: "Oct 2026",
       readTime: "16 min read",
       claps: 142,
@@ -771,6 +835,7 @@ export const portfolioData: PortfolioConfig = {
     {
       slug: "the-frontend-performance-paradox-and-the-duck",
       title: "The Frontend Performance Paradox and the Duck",
+      icon: "🦆",
       date: "Sep 2026",
       readTime: "12 min read",
       claps: 74,

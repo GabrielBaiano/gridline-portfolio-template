@@ -8,9 +8,11 @@ import { useSound } from "./SoundProvider";
 interface SubPageNavProps {
   backHref?: string;
   title: string;
+  parentLabel?: string;
+  icon?: string;
 }
 
-export function SubPageNav({ backHref = "/", title }: SubPageNavProps) {
+export function SubPageNav({ backHref = "/", title, parentLabel, icon }: SubPageNavProps) {
   const { isMuted, toggleMute, playClick, playTick } = useSound();
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
@@ -51,30 +53,69 @@ export function SubPageNav({ backHref = "/", title }: SubPageNavProps) {
     <>
       <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-2.5 container-dashed">
         <div className="flex items-center justify-between gap-3">
-          {/* Left: Back Link + Title */}
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-            <Link
-              href={backHref}
-              aria-label="Go back"
-              onMouseEnter={playTick}
-              onClick={playClick}
-              className="relative z-10 cursor-pointer p-1 border border-transparent hover:border-border hover:bg-mutedBackground rounded-[6px] transition-colors duration-300 shrink-0 text-foreground"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-chevron-left"
+          {/* Left: Back Link / Breadcrumb + Title */}
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            {parentLabel ? (
+              <Link
+                href={backHref}
+                aria-label={`Back to ${parentLabel}`}
+                onMouseEnter={playTick}
+                onClick={playClick}
+                className="relative z-10 cursor-pointer px-1.5 py-0.5 border border-transparent hover:border-border hover:bg-mutedBackground rounded-[6px] transition-colors duration-300 shrink-0 text-foreground flex items-center gap-1 group"
               >
-                <path d="m15 18-6-6 6-6" />
-              </svg>
-            </Link>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-left transition-transform group-hover:-translate-x-0.5"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+                <span className="text-xs sm:text-[13px] font-medium text-mutedForeground group-hover:text-title transition-colors">
+                  {parentLabel}
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href={backHref}
+                aria-label="Go back"
+                onMouseEnter={playTick}
+                onClick={playClick}
+                className="relative z-10 cursor-pointer p-1 border border-transparent hover:border-border hover:bg-mutedBackground rounded-[6px] transition-colors duration-300 shrink-0 text-foreground"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-left"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </Link>
+            )}
+
+            {parentLabel && (
+              <span className="text-xs text-mutedForeground/60 select-none">/</span>
+            )}
+
+            {icon && (
+              <span className="text-sm sm:text-base select-none shrink-0" aria-hidden="true">
+                {icon}
+              </span>
+            )}
+
             <div
               ref={containerRef}
               className="flex-1 min-w-0 overflow-hidden [contain:paint]"

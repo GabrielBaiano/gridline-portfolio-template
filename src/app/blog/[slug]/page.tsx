@@ -3,10 +3,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import katex from "katex";
 import "katex/dist/katex.min.css";
-import { portfolioData, BlogPostItem, BlogArticleSection } from "@/data/portfolio";
+import {
+  portfolioData,
+  BlogPostItem,
+  BlogArticleSection,
+  BlogCallout,
+  BlogColumnItem,
+  CalloutType,
+} from "@/data/portfolio";
 import { SubPageNav } from "@/components/SubPageNav";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ClapButton, CodeBlock, ShareArticleButton } from "./BlogArticleClient";
+import { BlogFloatingTOC } from "./BlogFloatingTOC";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -165,6 +173,99 @@ function slugifyHeading(heading: string): string {
     .replace(/\s+/g, "-");
 }
 
+const CALLOUT_STYLES: Record<
+  CalloutType,
+  { bg: string; border: string; text: string; defaultIcon: string }
+> = {
+  info: {
+    bg: "bg-blue-500/10 dark:bg-blue-500/15",
+    border: "border-blue-500/30 dark:border-blue-500/40",
+    text: "text-blue-900 dark:text-blue-200",
+    defaultIcon: "💡",
+  },
+  warning: {
+    bg: "bg-amber-500/10 dark:bg-amber-500/15",
+    border: "border-amber-500/30 dark:border-amber-500/40",
+    text: "text-amber-900 dark:text-amber-200",
+    defaultIcon: "⚠️",
+  },
+  success: {
+    bg: "bg-emerald-500/10 dark:bg-emerald-500/15",
+    border: "border-emerald-500/30 dark:border-emerald-500/40",
+    text: "text-emerald-900 dark:text-emerald-200",
+    defaultIcon: "🚀",
+  },
+  danger: {
+    bg: "bg-rose-500/10 dark:bg-rose-500/15",
+    border: "border-rose-500/30 dark:border-rose-500/40",
+    text: "text-rose-900 dark:text-rose-200",
+    defaultIcon: "🛑",
+  },
+  note: {
+    bg: "bg-zinc-100/90 dark:bg-zinc-900/70",
+    border: "border-border",
+    text: "text-foreground",
+    defaultIcon: "📝",
+  },
+};
+
+function renderCallout(callout: BlogCallout, key?: string | number) {
+  const type = callout.type || "note";
+  const style = CALLOUT_STYLES[type] || CALLOUT_STYLES.note;
+  const icon = callout.icon || style.defaultIcon;
+
+  return (
+    <div
+      key={key}
+      className={`my-3 p-3.5 sm:p-4 rounded-[8px] border text-sm flex items-start gap-3 transition-colors ${style.bg} ${style.border}`}
+    >
+      <span className="text-base sm:text-lg select-none shrink-0 leading-tight" aria-hidden="true">
+        {icon}
+      </span>
+      <div className={`leading-relaxed ${style.text} flex-1`}>
+        {renderRichText(callout.text)}
+      </div>
+    </div>
+  );
+}
+
+function renderColumnItem(col: BlogColumnItem, colIdx: number) {
+  return (
+    <div
+      key={colIdx}
+      className="flex flex-col gap-2.5 p-3.5 rounded-[8px] border border-border/70 bg-mutedBackground/15 text-sm"
+    >
+      {col.heading && (
+        <h4 className="font-semibold text-title text-sm tracking-tight border-b border-border/40 pb-1.5">
+          {col.heading}
+        </h4>
+      )}
+      {col.paragraphs?.map((p, pIdx) => (
+        <p key={pIdx} className="leading-relaxed text-foreground text-[0.9rem]">
+          {renderRichText(p)}
+        </p>
+      ))}
+      {col.bullets && (
+        <ul className="flex flex-col gap-1.5 list-disc list-inside text-[0.88rem] text-foreground">
+          {col.bullets.map((b, bIdx) => (
+            <li key={bIdx} className="pl-0.5">
+              <span>{renderRichText(b)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {col.callout && renderCallout(col.callout)}
+      {col.code && (
+        <CodeBlock
+          code={col.code.code}
+          language={col.code.language}
+          caption={col.code.caption}
+        />
+      )}
+    </div>
+  );
+}
+
 export default async function BlogPostDetailPage({
   params,
 }: BlogPostPageProps) {
@@ -222,15 +323,34 @@ export default async function BlogPostDetailPage({
       </div>
 
       {/* SubPage Navigation */}
-      <SubPageNav title={post.title} backHref="/blog" />
+      <SubPageNav
+        title={post.title}
+        backHref="/blog"
+        parentLabel="Wiki"
+        icon={post.icon}
+      />
 
-      {/* Main Article Container */}
-      <article className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto border-[#d1d1d1] dark:border-[#313131] container-dashed bg-background">
-        {/* Article Header */}
-        <div className="p-4 sm:p-6 flex flex-col gap-4">
-          <h1 className="text-2xl sm:text-[1.85rem] font-bold leading-tight text-title tracking-tight">
-            {post.title}
-          </h1>
+      {/* Main Article Container with relative wrapper for Floating TOC */}
+      <div className="relative max-w-[690px] mx-2 sm:mx-8 md:mx-auto">
+        {/* Floating Aside TOC for wide screens (>= 1300px) */}
+        <BlogFloatingTOC
+          headings={headings.map((s) => ({
+            id: slugifyHeading(s.heading!),
+            text: s.heading!,
+          }))}
+        />
+
+        <article className="w-full border-[#d1d1d1] dark:border-[#313131] container-dashed bg-background">
+          {/* Article Header */}
+          <div className="p-4 sm:p-6 flex flex-col gap-4">
+            {post.icon && (
+              <div className="text-4xl sm:text-5xl select-none pt-1" aria-hidden="true">
+                {post.icon}
+              </div>
+            )}
+            <h1 className="text-2xl sm:text-[1.85rem] font-bold leading-tight text-title tracking-tight">
+              {post.title}
+            </h1>
 
           {/* Meta Information Row */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-mutedForeground">
@@ -435,16 +555,12 @@ export default async function BlogPostDetailPage({
                   </blockquote>
                 )}
 
-                {section.callout && (
-                  <div className="my-2 p-3.5 rounded-[8px] border border-border bg-zinc-50 dark:bg-zinc-900/70 text-sm flex items-start gap-2.5">
-                    {section.callout.icon && (
-                      <span className="text-base select-none shrink-0">
-                        {section.callout.icon}
-                      </span>
-                    )}
-                    <span className="text-foreground leading-relaxed">
-                      {renderRichText(section.callout.text)}
-                    </span>
+                {section.callout && renderCallout(section.callout)}
+
+                {section.columns && (
+                  <div className="my-3 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {renderColumnItem(section.columns.left, 0)}
+                    {renderColumnItem(section.columns.right, 1)}
                   </div>
                 )}
 
@@ -525,6 +641,7 @@ export default async function BlogPostDetailPage({
           )}
         </div>
       </article>
+      </div>
 
       <div className="divider-dashed" />
 
