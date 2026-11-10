@@ -326,7 +326,7 @@ export default async function BlogPostDetailPage({
       <SubPageNav
         title={post.title}
         backHref="/blog"
-        parentLabel="Wiki"
+        parentLabel="Blog"
         icon={post.icon}
       />
 
