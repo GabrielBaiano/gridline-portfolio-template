@@ -306,24 +306,12 @@ export default async function BlogPostDetailPage({
   const prevPost = currentIndex > 0 ? portfolioData.blogs[currentIndex - 1] : null;
   const nextPost = currentIndex < portfolioData.blogs.length - 1 ? portfolioData.blogs[currentIndex + 1] : null;
 
-  const headings = post.sections.flatMap((s) => {
-    const items: Array<{ id: string; text: string; level: 2 | 3 }> = [];
-    if (s.heading) {
-      items.push({
-        id: slugifyHeading(s.heading),
-        text: s.heading,
-        level: 2,
-      });
-    }
-    if (s.subheading) {
-      items.push({
-        id: slugifyHeading(s.subheading),
-        text: s.subheading,
-        level: 3,
-      });
-    }
-    return items;
-  });
+  const headings = post.sections
+    .filter((s) => s.heading)
+    .map((s) => ({
+      id: slugifyHeading(s.heading!),
+      text: s.heading!,
+    }));
 
   return (
     <div className="min-h-screen bg-background">
