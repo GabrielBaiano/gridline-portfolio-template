@@ -14,7 +14,6 @@ import {
 import { SubPageNav } from "@/components/SubPageNav";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ClapButton, CodeBlock, ShareArticleButton } from "./BlogArticleClient";
-import { BlogFloatingTOC } from "./BlogFloatingTOC";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -335,11 +334,8 @@ export default async function BlogPostDetailPage({
         icon={post.icon}
       />
 
-      {/* Main Article Container with relative wrapper for Floating TOC */}
+      {/* Main Article Container */}
       <div className="relative max-w-[690px] mx-2 sm:mx-8 md:mx-auto">
-        {/* Floating Aside TOC for wide screens (hidden on mobile/tablet) */}
-        <BlogFloatingTOC headings={headings} />
-
         <article className="w-full border-[#d1d1d1] dark:border-[#313131] container-dashed bg-background">
           {/* Article Header */}
           <div className="p-4 sm:p-6 flex flex-col gap-4">
@@ -412,6 +408,51 @@ export default async function BlogPostDetailPage({
           <div className="p-3.5 rounded-[8px] border border-border bg-zinc-50/70 dark:bg-zinc-900/50 text-sm leading-relaxed text-foreground font-medium">
             {renderRichText(post.summary)}
           </div>
+
+          {/* Table of Contents (if >= 3 headings) */}
+          {headings.length >= 3 && (
+            <details className="group p-3.5 rounded-[8px] border border-border bg-mutedBackground/20 text-xs sm:text-sm">
+              <summary className="font-semibold text-title cursor-pointer select-none flex items-center justify-between list-none">
+                <span className="flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-mutedForeground"
+                  >
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                  </svg>
+                  Table of Contents
+                </span>
+                <span className="text-xs text-mutedForeground group-open:rotate-180 transition-transform">
+                  ▼
+                </span>
+              </summary>
+              <ol className="mt-3 flex flex-col gap-1.5 pl-4 list-decimal text-mutedForeground">
+                {headings.map((s, idx) => (
+                  <li key={idx} className="pl-1">
+                    <a
+                      href={`#${s.id}`}
+                      className="hover:text-title hover:underline underline-offset-2 transition-colors"
+                    >
+                      {s.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </details>
+          )}
         </div>
 
         <div className="divider-dashed" />
