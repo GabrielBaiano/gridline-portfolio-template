@@ -5,7 +5,7 @@ import { getRedisCredentials, redisGet, redisIncr } from "@/lib/redis";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const BASE_PAGEVIEWS = typeof initialData?.pageviews === "number" ? initialData.pageviews : 1422;
+const BASE_PAGEVIEWS = typeof initialData?.pageviews === "number" ? initialData.pageviews : 0;
 let inMemoryCount = BASE_PAGEVIEWS;
 
 const noCacheHeaders = {

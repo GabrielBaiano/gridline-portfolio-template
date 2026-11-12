@@ -8,7 +8,7 @@ import { portfolioData } from "@/data/portfolio";
 import initialData from "@/data/visitors.json";
 import { useAnimatedCount } from "@/lib/useAnimatedCount";
 
-const FALLBACK_PAGEVIEWS = typeof initialData?.pageviews === "number" ? initialData.pageviews : 1422;
+const FALLBACK_PAGEVIEWS = typeof initialData?.pageviews === "number" ? initialData.pageviews : 0;
 
 export function StickyNav() {
   const { isMuted, toggleMute, playClick } = useSound();
