@@ -14,6 +14,11 @@ export interface Experience {
   color?: string;
   bullets: string[];
   skills: string[];
+  link?: {
+    title: string;
+    url: string;
+    image?: string;
+  };
 }
 
 export interface ProjectItem {
@@ -194,12 +199,33 @@ export const portfolioData: PortfolioConfig = {
 
   experiences: [
     {
+      company: "Lightsprint (YC P26)",
+      role: "Frontend Software Engineer (Freelancer)",
+      type: "Freelance",
+      period: "Oct 2026 - Nov 2026 · 2 mos",
+      location: "United States · Remote",
+      color: "#FF4B00",
+      logo: "/images/experience/lightsprint.png",
+      bullets: [
+        "Built and shipped responsive web applications and high-fidelity user interfaces for Y Combinator-backed software factory products",
+        "Engineered client-side features and modular design system components using React, Next.js, and TypeScript",
+        "Collaborated with international cross-functional teams in a fast-paced environment to deliver pixel-perfect frontend experiences"
+      ],
+      skills: ["React.js", "Next.js", "TypeScript", "Tailwind CSS", "Frontend Architecture", "Git"],
+      link: {
+        title: "Lightsprint - Software factory for product teams",
+        url: "https://lightsprint.ai",
+        image: "/images/experience/lightsprint-media.webp"
+      }
+    },
+    {
       company: "Flash",
       role: "Frontend Software Engineer (Mid-level)",
       type: "Full-time",
       period: "Jun 2025 - Aug 2026 · 1 yr 3 mos",
       location: "São Paulo, Brazil · Hybrid",
       color: "#FF007A", // Rosa choque Flash
+      logo: "/images/experience/flash.png",
       bullets: [
         "Designed and implemented scalable frontend architecture using React.js, Next.js, and TypeScript with Micro Frontends",
         "Improved Core Web Vitals and reduced page load time by 40% using lazy loading, code splitting, and bundle optimization",
@@ -217,6 +243,7 @@ export const portfolioData: PortfolioConfig = {
       period: "Oct 2024 - Apr 2025 · 7 mos",
       location: "São Paulo, Brazil · Remote",
       color: "#FF6A00", // Laranja Compass
+      logo: "/images/experience/uol.png",
       bullets: [
         "Developed cross-platform mobile applications using React Native and TypeScript",
         "Implemented navigation, async data handling, and API integration",
@@ -232,6 +259,7 @@ export const portfolioData: PortfolioConfig = {
       period: "May 2023 - Nov 2024 · 1 yr 7 mos",
       location: "Curitiba, Paraná, Brazil · Remote",
       color: "#0066FF", // Azul Techsolution
+      logo: "/images/experience/techsolution.png",
       bullets: [
         "Built responsive, accessible web applications using React.js, Next.js, and TypeScript",
         "Developed Backend-for-Frontend (BFF) layers with Node.js and Prisma ORM to optimize client data pipelines",

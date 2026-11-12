@@ -21,7 +21,7 @@ export function ExperienceSection() {
         // eslint-disable-next-line @next/next/no-img-element
         <img
           alt={exp.company}
-          className="w-full h-full object-cover border border-border rounded-[8px] p-1.5"
+          className="w-full h-full object-cover rounded-[8px]"
           decoding="async"
           draggable="false"
           height="56"
@@ -168,6 +168,53 @@ export function ExperienceSection() {
                             </span>
                           ))}
                         </div>
+
+                        {/* Media Link (LinkedIn style) */}
+                        {exp.link && (
+                          <div className="mt-4">
+                            <a
+                              href={exp.link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              data-cuelume-hover="tick"
+                              data-cuelume-press="true"
+                              className="inline-flex items-center gap-3 p-1.5 sm:p-2 rounded-[8px] border border-border bg-background hover:bg-mutedBackground/50 hover:border-border/80 transition-all duration-200 group/link max-w-full"
+                            >
+                              {exp.link.image && (
+                                <div className="relative w-16 h-10 sm:w-20 sm:h-12 rounded-[6px] overflow-hidden shrink-0 border border-border/60">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={exp.link.image}
+                                    alt={exp.link.title}
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                  />
+                                </div>
+                              )}
+                              <div className="flex items-center gap-2 min-w-0 pr-1">
+                                <span className="text-xs sm:text-sm font-medium text-title truncate group-hover/link:underline underline-offset-2">
+                                  {exp.link.title}
+                                </span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="text-mutedForeground shrink-0 group-hover/link:text-title transition-colors"
+                                >
+                                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                  <polyline points="15 3 21 3 21 9" />
+                                  <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                              </div>
+                            </a>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

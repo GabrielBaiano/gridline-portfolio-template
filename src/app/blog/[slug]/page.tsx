@@ -74,13 +74,13 @@ function renderRichText(text: string): React.ReactNode {
     try {
       const html = katex.renderToString(expr, { displayMode: true, throwOnError: false });
       return (
-        <div
-          className="my-3 overflow-x-auto py-2 text-center text-title font-sans"
+        <span
+          className="block my-3 overflow-x-auto py-2 text-center text-title font-sans"
           dangerouslySetInnerHTML={{ __html: html }}
         />
       );
     } catch {
-      return <div className="my-2 font-mono text-center text-sm">{expr}</div>;
+      return <span className="block my-2 font-mono text-center text-sm">{expr}</span>;
     }
   }
 
@@ -96,14 +96,14 @@ function renderRichText(text: string): React.ReactNode {
       try {
         const html = katex.renderToString(expr, { displayMode: true, throwOnError: false });
         return (
-          <div
+          <span
             key={i}
-            className="my-3 overflow-x-auto py-2 text-center text-title font-sans"
+            className="block my-3 overflow-x-auto py-2 text-center text-title font-sans"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         );
       } catch {
-        return <div key={i} className="my-2 font-mono text-center text-sm">{expr}</div>;
+        return <span key={i} className="block my-2 font-mono text-center text-sm">{expr}</span>;
       }
     }
 
@@ -466,9 +466,9 @@ export default async function BlogPostDetailPage({
                 )}
 
                 {section.paragraphs?.map((para, pIdx) => (
-                  <p key={pIdx} className="leading-7">
+                  <div key={pIdx} className="leading-7">
                     {renderRichText(para)}
-                  </p>
+                  </div>
                 ))}
 
                 {section.bullets && (
