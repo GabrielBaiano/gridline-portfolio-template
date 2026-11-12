@@ -328,14 +328,14 @@ export const portfolioData: PortfolioConfig = {
     {
       name: "Deskstamp",
       description: "Native desktop watermark overlay with seamless click-through for Linux & COSMIC.",
-      icon: "/images/apps/deskstamp.png",
+      icon: "/images/apps/deskstamp.webp",
       iconFit: "contain",
       url: "https://github.com/GabrielBaiano/Deskstamp",
     },
     {
       name: "Clubo",
       description: "Real-time social reading platform & virtual book club in the browser.",
-      icon: "/images/apps/clubo.png",
+      icon: "/images/apps/clubo.webp",
       url: "https://github.com/GabrielBaiano/Clubo",
     },
   ],
@@ -371,7 +371,7 @@ export const portfolioData: PortfolioConfig = {
       tags: ["AI", "Scientometrics", "Data Engineering", "Python", "Open Source"],
       url: "/blog/how-i-use-ai-in-scientific-research-auditable-pipelines",
       summary: "Why treating scientific methodology like a software engineering pipeline turns messy academic data collection into reproducible, testable, and auditable research.",
-      image: "/images/blog/scientific-ai-pipeline/pipeline-stages.jpg",
+      image: "/images/blog/scientific-ai-pipeline/pipeline-stages.webp",
       sections: [
         {
           heading: "Approaching Academic Research with a Developer Mindset",
@@ -392,7 +392,7 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "The Theoretical Model: Scientific Methodology as a Pipeline",
           image: {
-            src: "/images/blog/scientific-ai-pipeline/pipeline-stages.jpg",
+            src: "/images/blog/scientific-ai-pipeline/pipeline-stages.webp",
             alt: "Conceptual scientific pipeline diagram: Start -> Stage 1 -> Stage 2 -> Stage 3 -> End",
             caption: "The abstract model: Any data-driven research workflow deconstructs into sequential stages separated by automated verification gates."
           },
@@ -407,7 +407,7 @@ export const portfolioData: PortfolioConfig = {
         {
           heading: "Folder Architecture: Decoupling Lifecycle and Verification",
           image: {
-            src: "/images/blog/scientific-ai-pipeline/architecture-stages.jpg",
+            src: "/images/blog/scientific-ai-pipeline/architecture-stages.webp",
             alt: "Directory structure separating stages, test guards, and tiered data directories",
             caption: "Directory architecture: Every script in src/stages/ mirrors a dedicated test file in tests/, with strict tiered data separation."
           },

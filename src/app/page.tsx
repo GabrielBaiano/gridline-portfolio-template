@@ -33,41 +33,53 @@ export default function Home() {
         <div className="divider-dashed"></div>
 
         {/* Experiences Section (Accordion) */}
-        <ExperienceSection />
+        <div className="section-cv">
+          <ExperienceSection />
+        </div>
 
         <div className="divider-dashed"></div>
 
         {/* Projects Section (2x2 Grid with Crosshairs) */}
-        <ProjectsSection />
+        <div className="section-cv">
+          <ProjectsSection />
+        </div>
 
         <div className="divider-dashed"></div>
 
         {/* Blog Section (4 items on home, View All -> /blog) */}
-        <BlogSection />
+        <div className="section-cv">
+          <BlogSection />
+        </div>
 
         <div className="divider-dashed"></div>
 
         {/* Skills Section */}
-        <SkillsSection />
+        <div className="section-cv">
+          <SkillsSection />
+        </div>
 
         {/* Newsletter Section */}
         {portfolioData.features?.newsletter !== false && (
           <>
             <div className="divider-dashed"></div>
-            <NewsletterSection />
+            <div className="section-cv">
+              <NewsletterSection />
+            </div>
           </>
         )}
 
         <div className="divider-dashed"></div>
 
         {/* Quote Footer Section */}
-        <FooterSection />
+        <div className="section-cv">
+          <FooterSection />
+        </div>
       </div>
 
       <div className="divider-dashed"></div>
 
       {/* Bottom Dot Grid Banner */}
-      <div className="max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">
+      <div className="section-cv max-w-[690px] mx-2 sm:mx-8 md:mx-auto relative p-3 flex flex-col container-dashed">
         <DotGridSpaceInvaders className="w-full sm:min-h-[220px] min-h-[120px] h-full grow" />
       </div>
 

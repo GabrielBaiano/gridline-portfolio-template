@@ -8,24 +8,24 @@ import { portfolioData } from "@/data/portfolio";
 const instagramSans = localFont({
   src: [
     {
-      path: "../../public/fonts/InstagramSans-Regular.ttf",
+      path: "../../public/fonts/InstagramSans-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/fonts/InstagramSans-Medium.ttf",
+      path: "../../public/fonts/InstagramSans-Medium.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../../public/fonts/InstagramSans-Bold.ttf",
+      path: "../../public/fonts/InstagramSans-Bold.woff2",
       weight: "700",
       style: "normal",
     },
   ],
   variable: "--font-instagram-sans",
   display: "swap",
-  preload: false,
+  preload: true,
   fallback: [
     "-apple-system",
     "BlinkMacSystemFont",

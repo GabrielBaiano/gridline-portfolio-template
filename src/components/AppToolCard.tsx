@@ -37,6 +37,10 @@ export function AppToolCard({ item }: AppToolCardProps) {
           <img
             src={item.icon}
             alt={item.name}
+            width={48}
+            height={48}
+            loading="lazy"
+            decoding="async"
             className={`w-full h-full ${
               item.iconFit === "contain" ? "object-contain" : "object-cover"
             }`}
