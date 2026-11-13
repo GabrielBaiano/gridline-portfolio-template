@@ -35,10 +35,55 @@ export function ActivityCalendar() {
     weeks: WeekData[];
   };
 
-  const weeksList = data.weeks || [];
+  const rawWeeksList = data.weeks || [];
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const months: { name: string; x: number }[] = [];
 
+  // Normalize weeks so every column has all 7 days (no ragged/cut-off ends)
+  const weeksList = rawWeeksList.map((week, wIdx) => {
+    const days = [...week.days];
+    const firstDay = days[0];
+    const lastDay = days[days.length - 1];
+
+    if (wIdx === 0 && firstDay && firstDay.weekday > 0) {
+      const prepend: DayData[] = [];
+      const baseDate = new Date(firstDay.date + "T00:00:00");
+      for (let wd = 0; wd < firstDay.weekday; wd++) {
+        const d = new Date(baseDate);
+        d.setDate(d.getDate() - (firstDay.weekday - wd));
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        prepend.push({
+          date: `${yyyy}-${mm}-${dd}`,
+          count: 0,
+          weekday: wd,
+          level: 0,
+        });
+      }
+      days.unshift(...prepend);
+    }
+
+    if (wIdx === rawWeeksList.length - 1 && lastDay && lastDay.weekday < 6) {
+      const baseDate = new Date(lastDay.date + "T00:00:00");
+      for (let wd = lastDay.weekday + 1; wd <= 6; wd++) {
+        const d = new Date(baseDate);
+        d.setDate(d.getDate() + (wd - lastDay.weekday));
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        days.push({
+          date: `${yyyy}-${mm}-${dd}`,
+          count: 0,
+          weekday: wd,
+          level: 0,
+        });
+      }
+    }
+
+    return { days };
+  });
+
+  const months: { name: string; x: number }[] = [];
   let lastMonth = -1;
   weeksList.forEach((week, wIdx) => {
     const firstDay = week.days[0];
@@ -85,7 +130,7 @@ export function ActivityCalendar() {
   return (
     <section className="max-w-[690px] mx-2 flex justify-center sm:mx-8 md:mx-auto p-3 border-[#d1d1d1] dark:border-[#313131] container-dashed">
       <article
-        className="react-activity-calendar select-none"
+        className="react-activity-calendar select-none w-full"
         style={{
           width: "max-content",
           maxWidth: "100%",
@@ -102,7 +147,7 @@ export function ActivityCalendar() {
             maxWidth: "100%",
             overflowX: "auto",
             overflowY: "hidden",
-            paddingTop: "2px",
+            padding: "2px 2px",
             WebkitOverflowScrolling: "touch",
             scrollbarWidth: "none",
             msOverflowStyle: "none",
