@@ -45,7 +45,7 @@ export function NewsletterSection() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
-                className="flex-1 px-2.5 py-[6px] placeholder:select-none rounded-[8px] w-full border border-border bg-background text-foreground focus:outline-none transition-all duration-300 placeholder:text-mutedForeground"
+                className="flex-1 px-2.5 py-[6px] placeholder:select-none rounded-[6px] w-full bg-background text-foreground focus:outline-none transition-all duration-300 placeholder:text-mutedForeground"
               />
             </div>
 
@@ -53,7 +53,7 @@ export function NewsletterSection() {
               type="submit"
               className="w-full sm:w-32 border cursor-pointer rounded-lg border-border p-0.5 group bg-background select-none"
             >
-              <div className="flex gap-1 items-center justify-center rounded-[8px] border border-border w-full h-full px-4 py-1.5 sm:py-0 bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] transition duration-300 text-white dark:text-black">
+              <div className="flex gap-1 items-center justify-center rounded-[6px] w-full h-full px-4 py-1.5 sm:py-0 bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] transition duration-300 text-white dark:text-black">
                 <span className="text-[0.95rem] font-medium text-white dark:text-black">
                   Subscribe
                 </span>

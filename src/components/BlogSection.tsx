@@ -35,7 +35,7 @@ export function BlogSection() {
           data-cuelume-press="true"
           className="group w-fit rounded-lg border border-border p-0.5 no-underline"
         >
-            <div className="flex h-full w-full items-center justify-center gap-1 rounded-[8px] border border-border bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] px-2.5 py-1 transition duration-300">
+            <div className="flex h-full w-full items-center justify-center gap-1 rounded-[6px] bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] px-2.5 py-1 transition duration-300">
               <span className="text-[0.95rem] font-medium text-white dark:text-black">
                 View All
               </span>

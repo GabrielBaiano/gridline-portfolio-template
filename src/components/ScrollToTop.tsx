@@ -44,7 +44,7 @@ export function ScrollToTop() {
           : "opacity-0 translate-y-4 pointer-events-none"
       }`}
     >
-      <div className="flex h-full w-full items-center justify-center rounded-[8px] border border-border bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] p-1.5 transition duration-300">
+      <div className="flex h-full w-full items-center justify-center rounded-[6px] bg-[#555] dark:bg-[#aaa] group-hover:bg-[#222] dark:group-hover:bg-[#f5f5f5] p-1.5 transition duration-300">
         <svg
           aria-hidden="true"
           className="size-6 text-white dark:text-black"
