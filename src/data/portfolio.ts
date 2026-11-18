@@ -362,6 +362,124 @@ export const portfolioData: PortfolioConfig = {
 
   blogs: [
     {
+      slug: "optimizing-on-m-string-matching-without-ai-or-heavy-libs",
+      title: "Nerd Talk: Optimizing an O(N × M) Fuzzy Match Bottleneck Without AI or Heavy Libs",
+      icon: "⚡",
+      date: "Nov 2026",
+      readTime: "7 min read",
+      claps: 0,
+      tags: ["Algorithms", "Performance", "R", "Scientometrics", "Big-O"],
+      url: "https://www.tabnews.com.br/gabrielbaiano/papo-nerd-otimizacao-de-caso-on-m-sem-ia-nem-libs-pesadas",
+      summary: "How a foundational metric triangle inequality and precomputed string bounds eliminated 80-90% of expensive Levenshtein distance calculations in Latin American academic deduplication pipelines.",
+      sections: [
+        {
+          heading: "Context & Motivation: The Realities of Non-DOI Data",
+          paragraphs: [
+            "Just an essay from my blog and a nerdy discussion about optimizing a hyper-specific edge case that rarely occurs in casual projects. For better or worse, I spent significant time solving this efficiently, and I hope anyone who enjoys algorithmic optimizations finds the process interesting.",
+            "I am currently developing [bibliolatam](https://github.com/BRAN-Org/bibliolatam), an R package designed for integration, harmonization, and scientometrics across Latin American academic databases (SciELO, BDTD, Oasisbr, Redalyc, LA Referencia, SPELL).",
+            "One of the most sensitive operations in the tool is merge and deduplication (`merge_bibliolatam`). When papers possess a persistent unique identifier like a DOI, the task is trivial: direct hash indexing runs in $O(N)$ and resolves cross-source pairs deterministically.",
+            "The bottleneck emerges when we hit the messy reality of regional scientific production: hundreds of thousands of papers simply **have no registered DOI**. In these cases, the mandatory fallback is fuzzy matching on normalized paper titles crossed with complementary metadata (publication year and authorship)."
+          ],
+          callout: {
+            type: "info",
+            icon: "🔬",
+            text: "In Latin American scientometrics, a massive fraction of regional conference proceedings, institutional repositories, and book chapters lack DOIs, making fuzzy title deduplication unavoidable."
+          }
+        },
+        {
+          heading: "Where the CPU Cries: The O(N × M) Combinatorial Trap",
+          paragraphs: [
+            "If you understand Big-O complexity, you immediately see the trap: crossing a dataset of 20,000 non-DOI articles against another of 30,000 non-DOI articles via naive all-pairs dynamic programming (Levenshtein distance matrix) would trigger 600 million string distance operations.",
+            "In practice, this isn\'t catastrophic for 90% of everyday queries because we already apply upfront heuristic blocking rules:"
+          ],
+          bullets: [
+            "Publication Year Window: We enforce a publication window of $\\pm 1$ year tolerance.",
+            "Phonetic Author Matching: We require compatible author surnames using phonetic tolerance (Soundex / Double Metaphone)."
+          ]
+        },
+        {
+          paragraphs: [
+            "Yet pathological scenarios routinely surface during massive bibliometric censuses (> 50,000 records):"
+          ],
+          bullets: [
+            "Missing Author Metadata: Conference proceedings papers frequently arrive with missing authors (metadata tagged as ANONYMOUS or NA), preventing author guardrails from pruning candidate pools.",
+            "Frequent Regional Surnames: In Latin America, high-density surnames like Silva, Santos, or Oliveira are ubiquitous. Within a single year, you can easily encounter hundreds or thousands of theses and papers sharing identical surname buckets."
+          ],
+          callout: {
+            type: "warning",
+            icon: "⚠️",
+            text: "Running Wagner-Fischer / Levenshtein (even compiled in C within R\'s adist) across hundreds of candidates for each non-DOI line turns into a massive waste of CPU clock cycles."
+          }
+        },
+        {
+          paragraphs: [
+            "There is always room for algorithmic refinement. Following a suggestion from my professor (thanks, Prof. Carlos), we introduced a **Length Bound Filter**."
+          ],
+          quote: {
+            text: "The Levenshtein distance matrix is a dynamic programming table that calculates the minimum number of single-character edits (insertions, deletions, or substitutions) needed to transform string t1 into string t2."
+          }
+        },
+        {
+          heading: "The Mathematical Solution: Length Bound Filter",
+          paragraphs: [
+            "The Levenshtein distance between two strings $t_1$ and $t_2$, denoted by $\\text{dist}(t_1, t_2)$, obeys metric triangle inequality axioms. From this, a fundamental lower bound holds: the minimum edit distance between two words is strictly bounded below by the absolute difference of their lengths in characters:",
+            "$$\\text{dist}(t_1, t_2) \\ge ||t_1| - |t_2||$$",
+            "In bibliolatam, normalized similarity is computed by dividing edit distance by the length of the longer string:",
+            "$$\\text{sim}(t_1, t_2) = 1 - \\frac{\\text{dist}(t_1, t_2)}{\\max(|t_1|, |t_2|)}$$",
+            "If we set a strict similarity cutoff threshold $\\theta$ (for instance, $\\theta = 0.90$ for 90% minimum similarity), candidate pairs must satisfy:",
+            "$$\\frac{\\text{dist}(t_1, t_2)}{\\max(|t_1|, |t_2|)} \\le 1 - \\theta$$",
+            "Substituting the metric inequality $\\text{dist}(t_1, t_2) \\ge ||t_1| - |t_2||$, we evaluate two complementary cases:"
+          ],
+          bullets: [
+            "Case 1 — Candidate is shorter or equal ($|t_2| \\le |t_1|$): Since $\\max(|t_1|, |t_2|) = |t_1|$, we get $\\frac{|t_1| - |t_2|}{|t_1|} \\le 1 - \\theta \\iff |t_2| \\ge |t_1| \\cdot \\theta$. Because string lengths are non-negative integers: $|t_2| \\ge \\lceil |t_1| \\cdot \\theta \\rceil$.",
+            "Case 2 — Candidate is strictly longer ($|t_2| > |t_1|$): Since $\\max(|t_1|, |t_2|) = |t_2|$, we get $\\frac{|t_2| - |t_1|}{|t_2|} \\le 1 - \\theta \\iff |t_2| \\le \\frac{|t_1|}{\\theta}$. Because string lengths are non-negative integers: $|t_2| \\le \\lfloor |t_1| / \\theta \\rfloor$."
+          ]
+        },
+        {
+          heading: "What This Means in Practice",
+          paragraphs: [
+            "Suppose the normalized reference title has 60 characters and our similarity threshold is $\\theta = 0.90$:",
+            "$$\\lceil 60 \\times 0.90 \\rceil = 54 \\le |t_2| \\le \\lfloor 60 / 0.90 \\rfloor = 66$$",
+            "**Any candidate title with fewer than 54 or more than 66 characters has a 0% mathematical probability of reaching 90% similarity.**",
+            "It does not matter what characters are inside the candidate string—it is mathematically impossible for it to pass the cutoff score.",
+            "The efficiency gain here is brutal: measuring string length via `nchar()` (or querying a precomputed integer array once per batch) is an $O(1)$ operation executing in nanoseconds directly on CPU registers. A simple boolean range check (`lens >= min_len & lens <= max_len`) immediately prunes between 80% and 90% of all candidates from the pool before any Levenshtein dynamic programming is ever invoked."
+          ],
+          callout: {
+            type: "success",
+            icon: "⚡",
+            text: "Length filtering is a lossless pruning step: it provably introduces zero false negatives while skipping up to 90% of edit distance operations."
+          }
+        },
+        {
+          heading: "Completing the Pipeline: Exact Fast-Path & Canopy Clustering",
+          paragraphs: [
+            "Alongside the length bound filter, we layered two additional protective stages into bibliolatam:"
+          ],
+          bullets: [
+            "Exact Match Fast-Path ($O(1)$ Vectorized): In real-world bibliometric workflows, approximately 70% of cross-database duplicates share exact titles (with minor casing and diacritics stripped during normalization). Running a vectorized check (`cand_titles == t1`) before Levenshtein resolves exact matches immediately with compatible authors, yielding a ~230x speedup for identical pairs.",
+            "Significant Content Word Canopy: If more than 15 candidates remain even after year, author, and length filtering (a common pattern in standardized government reports), candidates must share at least one significant content word of $\\ge 4$ characters before allocating matrix dynamic programming."
+          ]
+        },
+        {
+          heading: "Benchmark Results & Takeaways",
+          paragraphs: [
+            "Benchmarked inside an isolated test container against an adversarial evaluation pool of 100 edge cases and synthetic spelling perturbations:"
+          ],
+          bullets: [
+            "Traditional All-Pairs Levenshtein: ~0.57s for 300 repeated pairwise comparisons.",
+            "With Length Bound Filter: ~0.10s (~5.2x speedup on text-divergent pairs).",
+            "With Exact Match Fast-Path: ~0.002s (~230x speedup on identical pairs).",
+            "False Positive Rate (FPR): Maintained strictly at 0.0% across all 1,840 automated unit tests."
+          ],
+          callout: {
+            type: "note",
+            icon: "💡",
+            text: "Engineers are often tempted to throw complex vector embeddings, approximate nearest neighbors (ANN), or heavy external libraries at scale problems. Often, foundational metric theorems and O(1) integer arithmetic solve the bottleneck faster, cleaner, and with zero external dependencies."
+          }
+        }
+      ]
+    },
+    {
       slug: "how-i-use-ai-in-scientific-research-auditable-pipelines",
       title: "How I Use AI in Scientific Research: Modular Pipelines and Auditable Code",
       icon: "🔬",
